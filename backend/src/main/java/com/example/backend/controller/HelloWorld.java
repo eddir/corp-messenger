@@ -21,9 +21,9 @@ public class HelloWorld
     };
 
     @PostMapping
-    public String echo(@RequestBody Map<String,String> date)
+    public String echo(@RequestBody Map<String,String> data)
     {
-        String value = new String(date.get("date"));
+        String value = new String(data.get("data"));
         messages.add(value);
         return value;
     }
