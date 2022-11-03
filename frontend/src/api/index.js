@@ -3,7 +3,7 @@ import axios from "axios"
 const
     requireService = require.context('./services', false, /.service.js$/),
     instance = axios.create({		
-        baseURL: 'http://localhost:8080/api',
+        baseURL: '/api',
         responseType: 'json',
         headers: {
             'Content-Type': 'application/json',
