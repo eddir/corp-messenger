@@ -1,0 +1,64 @@
+version: '3'
+services:
+  postgres:
+    image: postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: messenger
+      POSTGRES_PASSWORD: messenger
+      POSTGRES_DB: messenger
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    ports:
+      - "5432"
+    expose:
+      - "5432"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    restart: unless-stopped
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@messenger.rostkov.me
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - postgres
+    ports:
+      - "8000:80"
+
+  spring:
+    depends_on:
+      - postgres
+    build:
+      context: ./
+      dockerfile: ./docker/spring/Dockerfile
+    restart: on-failure
+    ports:
+      - "8080"
+    expose:
+      - "8080"
+    environment:
+      SPRING_APPLICATION_JSON: '{
+          "spring.datasource.url": "jdbc:postgresql://postgres:5432/messenger",
+          "spring.datasource.username": "messenger",
+          "spring.datasource.password": "messenger",
+          "spring.jpa.hibernate.ddl-auto": "create"
+        }'
+
+  nginx:
+    restart: always
+    build:
+      context: ./
+      dockerfile: ./docker/nginx/Dockerfile
+    ports:
+      - "8080:80"
+      - "8443:443"
+    volumes:
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf
+    depends_on:
+      - postgres
+      - spring
+
+volumes:
+  postgres-data:
+
+# Запустить nginx, spring, vue в докере
