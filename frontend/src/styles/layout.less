@@ -1,0 +1,74 @@
+.layout {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    background-color: #23242A;
+}
+
+.auth-layout {
+    &__preview {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFF;
+    }
+
+    &__content {
+        width: 600px;
+        height: 100%;
+        padding: 0 80px;
+        display: flex;
+        flex: 1 0 auto;
+        align-items: center;
+        justify-content: center;
+        background-color: #1C1C1C;
+        box-shadow: 0 0 10px 0 #000;
+
+        .auth-sider {
+            width: 100%;
+            position: relative;
+    
+            &__icon {
+                width: 100%;
+                height: 200px;
+                position: absolute;
+                top: -200px;
+                right: 0;
+                font-size: 100px;
+                color: #1890FF;
+            }
+    
+            &__title {
+                color: #1890FF;
+                font-size: 24px;
+                text-transform: uppercase;
+                border-color: #1890FF;
+                margin-bottom: 50px;
+            }
+    
+            &__form {
+                &__item /deep/ label {
+                    font-size: 16px;
+                    color: #1890FF;
+                }
+    
+                &__links {
+                    display: flex;
+                    justify-content: space-between;
+                    margin-top: -24px;
+                    margin-bottom: 50px;
+    
+                    /deep/ .ant-btn-link {
+                        padding: 0;
+                        margin: 0;
+    
+                        &:first-child {
+                            color:#8F8F8F;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

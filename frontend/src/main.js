@@ -1,7 +1,11 @@
-import { createApp } from "vue";
-import App from "./App.vue";
-import router from "@/router";
-import store from "@/store";
-import api from '@/api'
+import { createApp } from "vue"
+import Antd from "ant-design-vue"
 
-createApp(App).use(store).use(router).use(api).mount("#app");
+import App from "./App.vue";
+import router from "@/router"
+import store from "@/store"
+import api from "@/api"
+
+import "@/styles"
+
+createApp(App).use(Antd).use(store).use(router).use(api).mount("#app")
