@@ -5,5 +5,21 @@ module.exports = defineConfig({
 
     pwa: {
         name: 'corp_mes'
+    },
+    
+    devServer: {
+		proxy: {
+			'/api': {
+                target: 'http://messenger.rostkov.me',
+                pathRewriten: {
+                    '^/api': '/api',
+                },
+                changeOrigin: true,
+                secure: false
+            }
+			
+		},
+		host: 'localhost',
+		port: 8080
     }
 });
