@@ -1,5 +1,7 @@
 <template>
-    <div>Home</div>
+    <div>
+        <AButton @click="goTo('/login')" type="primary">Выйти</AButton>
+    </div>
 </template>
 
 <script>
@@ -17,6 +19,10 @@ export default {
     methods: {
         init() {
             
+        },
+
+        goTo(path) {
+            this.$router.push(path)
         }
     }
 }

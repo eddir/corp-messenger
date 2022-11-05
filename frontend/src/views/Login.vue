@@ -11,9 +11,9 @@
             </AFormItem>
             <div class="auth-sider__form__links">
                 <AButton type="link">Забыли пароль?</AButton>
-                <AButton type="link">Регистрация</AButton>
+                <AButton @click="goTo('/register')" type="link">Регистрация</AButton>
             </div>
-            <AButton type="primary">Войти</AButton>
+            <AButton @click="goTo('/')" type="primary">Войти</AButton>
         </AForm>
     </div>
 </template>
@@ -28,6 +28,12 @@ export default {
                 login: null,
                 password: null
             }
+        }
+    },
+
+    methods: {
+        goTo(path) {
+            this.$router.push(path)
         }
     },
 
