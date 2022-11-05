@@ -8,4 +8,4 @@ import api from "@/api"
 
 import "@/styles"
 
-createApp(App).use(Antd).use(store).use(router).use(api).mount("#app")
+createApp(App).use(Antd).use(store()).use(router).use(api).mount("#app")
