@@ -24,7 +24,7 @@ export default {
         ]),
 
         init() {
-            const isAuth = localStorage.getItem('IS_AUTH')
+            const isAuth = JSON.parse(localStorage.getItem('IS_AUTH'))
 
             if (isAuth)
                 return this.authorize()
@@ -33,7 +33,7 @@ export default {
         }
     },
 
-    mounted() {
+    created() {
         this.init()
     },
 
