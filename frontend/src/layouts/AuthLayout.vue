@@ -8,3 +8,27 @@
         </div>
     </div>
 </template>
+
+<script>
+import { mapGetters } from 'vuex'
+
+export default {
+    computed: {
+        ...mapGetters('AppStore', [
+            'isAuth'
+        ])
+    },
+
+    methods: {
+        init() {
+            if (this.isAuth) {
+                this.$router.push('/chats')
+            }
+        },
+    },
+
+    mounted() {
+        this.init()
+    }
+}
+</script>

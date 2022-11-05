@@ -27,8 +27,6 @@ export default {
 
     watch: {
         isAuth (newVal) {
-            console.log(newVal)
-
             if (!newVal) {
                 this.$router.push('/login')
             }

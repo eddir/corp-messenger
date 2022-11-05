@@ -19,8 +19,8 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { UserOutlined } from '@ant-design/icons-vue'
-import { mapGetters, mapActions } from 'vuex'
 
 export default {
     data() {
@@ -32,32 +32,15 @@ export default {
         }
     },
 
-    computed: {
-        ...mapGetters('AppStore', [
-            'isAuth'
-        ])
-    },
-
     methods: {
         ...mapActions('AppStore', [
             'authorize',
         ]),
 
-        init() {
-            console.log(this.isAuth)
-            if (this.isAuth) {
-                this.goTo('/chats')
-            }
-        },
-
         goTo(path) {
             this.authorize()
             this.$router.push(path)
         }
-    },
-
-    mounted() {
-        this.init()
     },
 
     components: {
