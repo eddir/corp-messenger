@@ -13,13 +13,14 @@
                 <AButton type="link">Забыли пароль?</AButton>
                 <AButton @click="goTo('/register')" type="link">Регистрация</AButton>
             </div>
-            <AButton @click="goTo('/')" type="primary">Войти</AButton>
+            <AButton @click="goTo('/chats')" type="primary">Войти</AButton>
         </AForm>
     </div>
 </template>
 
 <script>
 import { UserOutlined } from '@ant-design/icons-vue'
+import { mapGetters, mapActions } from 'vuex'
 
 export default {
     data() {
@@ -31,10 +32,32 @@ export default {
         }
     },
 
+    computed: {
+        ...mapGetters('AppStore', [
+            'isAuth'
+        ])
+    },
+
     methods: {
+        ...mapActions('AppStore', [
+            'authorize',
+        ]),
+
+        init() {
+            console.log(this.isAuth)
+            if (this.isAuth) {
+                this.goTo('/chats')
+            }
+        },
+
         goTo(path) {
+            this.authorize()
             this.$router.push(path)
         }
+    },
+
+    mounted() {
+        this.init()
     },
 
     components: {
