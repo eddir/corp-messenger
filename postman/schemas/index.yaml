@@ -1,0 +1,69 @@
+openapi: '3.0.0'
+info:
+  version: '1.0.0'
+  title: 'Corp Messenger API'
+  description: Retrieve and send messages
+
+paths:
+  /api/chat/{chatId}/:
+    parameters:
+      - name: chatId
+        description: The unique identifier of the chat
+        in: path
+        required: true
+        schema:
+          $ref: '#/components/schemas/ChatId'
+    get:
+      summary: Get chat info
+      responses:
+        '200':
+          description: The chat corresponding to the provided `chatId`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
+        404:
+          description: No chat found for the provided `chatId`
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        500:
+          description: Unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  schemas:
+    ChatId:
+      description: The unique identifier of a chat
+      type: string
+    Chat:
+      type: object
+      required:
+        - id
+        - title
+        - description
+      properties:
+        id:
+          $ref: '#/components/schemas/ChatId'
+        title:
+          type: string
+        description:
+          type: string
+    Error:
+      type: object
+      required:
+        - message
+      properties:
+        message:
+          description: A human readable error message
+          type: string
+  securitySchemes:
+    ApiKey:
+      type: apiKey
+      in: header
+      name: X-Api-Key
+security:
+  - ApiKey: []
