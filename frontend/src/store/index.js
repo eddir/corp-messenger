@@ -1,9 +1,13 @@
-import { createStore } from "vuex";
+import Vuex from 'vuex'
 
-export default createStore({
-    state: {},
-    getters: {},
-    mutations: {},
-    actions: {},
-    modules: {},
-});
+import { AppStore } from './modules'
+
+const store = () => {
+    return new Vuex.Store({
+        modules: {
+            AppStore
+        }
+    })
+}
+
+export default store

@@ -14,11 +14,33 @@ const routes = [
 		component: () => import("@/views/Register.vue"),
 	},
 	{
-		path: "/",
-		name: "home",
+		path: "/chats",
+		name: "chats",
 		meta: { layout: 'main' },
-		component: () => import("@/views/Home.vue"),
+		component: () => import("@/views/Chats.vue"),
 	},
+	{
+		path: "/profile",
+		name: "profile",
+		meta: { layout: 'main' },
+		component: () => import("@/views/Profile.vue"),
+	},
+	{
+		path: "/contacts",
+		name: "contacts",
+		meta: { layout: 'main' },
+		component: () => import("@/views/Contacts.vue"),
+	},
+	{
+		path: "/settings",
+		name: "settings",
+		meta: { layout: 'main' },
+		component: () => import("@/views/Settings.vue"),
+	},
+	{
+		path: "/",
+		redirect: "/login"
+	}
 ];
 
 const router = createRouter({

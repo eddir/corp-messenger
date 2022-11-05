@@ -24,9 +24,9 @@
                 <AInput :v-model:value="formState.rePassword" type="password" placeholder="Пароль" />
             </AFormItem>
             <div class="auth-sider__form__links">
-                <AButton type="link">Есть учетная запись?</AButton>
+                <AButton @click="goTo('/login')" type="link">Есть учетная запись?</AButton>
             </div>
-            <AButton type="primary">Зарегистрироваться</AButton>
+            <AButton @click="goTo('/login')" type="primary">Зарегистрироваться</AButton>
         </AForm>
     </div>
 </template>
@@ -48,6 +48,12 @@ export default {
             }
         }
     },
+
+    methods: {
+        goTo(path) {
+            this.$router.push(path)
+        }
+    }
 
     // components: {
     //     UserOutlined
