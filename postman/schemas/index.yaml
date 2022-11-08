@@ -5,53 +5,144 @@ info:
   description: Retrieve and send messages
 
 paths:
-  /api/chat/{chatId}/:
-    parameters:
-      - name: chatId
-        description: The unique identifier of the chat
-        in: path
+  /api/auth/register/:
+    post:
+      summary: Регистрация нового пользователя
+      description: Регистрация нового пользователя в системе
+      operationId: registerUser
+      requestBody:
+        description: Данные для регистрации нового пользователя
         required: true
-        schema:
-          $ref: '#/components/schemas/ChatId'
-    get:
-      summary: Get chat info
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
       responses:
-        '200':
-          description: The chat corresponding to the provided `chatId`
+        '201':
+          description: Пользователь успешно зарегистрирован
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Chat'
-        404:
-          description: No chat found for the provided `chatId`
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
-        500:
-          description: Unexpected error
+                $ref: '#/components/schemas/User'
+        '400':
+          description: Некорректные данные
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+        '409':
+          description: Пользователь с таким username уже существует
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/auth/login/:
+    post:
+      summary: "Авторизация"
+      description: "Авторизация пользователя в системе и получение токена"
+      parameters: [
+        {
+          "name": "username",
+          "in": "query",
+          "description": "Имя пользователя, который проходит авторизацию",
+          "required": true,
+          "schema":
+            "type": "string"
+        },
+        {
+          "name": "password",
+          "in": "query",
+          "description": "Пользовательский пароль",
+          "required": true,
+          "schema":
+            "type": "string"
+        }
+      ]
+      responses:
+        200:
+          description: "Авторизация прошла успешно"
+          content:
+            application/json:
+            schema:
+              type: object
+              properties: [
+                {
+                  "name": "accessToken",
+                  "type": "string",
+                  "description": "Токен доступа JWT"
+                },
+                {
+                  "name": "refreshToken",
+                  "type": "string",
+                  "description": "Токен обновления"
+                }
+              ]
+        401:
+          description: "Неверный логин или пароль"
+          content:
+            application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+  /api/auth/renew/:
+    post:
+      summary: "Обновление токена"
+      description: "Обновление токена доступа"
+      parameters: [
+        {
+          "name": "refreshToken",
+          "in": "query",
+          "description": "Токен обновления",
+          "required": true,
+          "schema":
+            "type": "string"
+        }
+      ]
+      responses:
+        200:
+          description: "Токен обновлен"
+          content:
+            application/json:
+            schema:
+              type: object
+              properties: [
+                {
+                  "name": "accessToken",
+                  "type": "string",
+                  "description": "Токен доступа JWT"
+                },
+                {
+                  "name": "refreshToken",
+                  "type": "string",
+                  "description": "Токен обновления"
+                }
+              ]
+        401:
+          description: "Неверный токен обновления"
+          content:
+            application/json:
+            schema:
+              $ref: "#/components/schemas/Error"
+
 components:
   schemas:
-    ChatId:
-      description: The unique identifier of a chat
-      type: string
-    Chat:
+    User:
       type: object
       required:
-        - id
-        - title
-        - description
+        - username
+        - password
       properties:
         id:
-          $ref: '#/components/schemas/ChatId'
-        title:
+          type: integer
+          format: int64
+        username:
           type: string
-        description:
+        password:
           type: string
+          format: password
+        company_id:
+          type: integer
+          format: string
+          description: ID компании, к которой принадлежит пользователь (шестнадцатеричный UUID)
     Error:
       type: object
       required:
@@ -66,4 +157,4 @@ components:
       in: header
       name: X-Api-Key
 security:
-  - ApiKey: []
+  - ApiKey: [ ]
