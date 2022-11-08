@@ -1,348 +1,326 @@
-openapi: '3.0.0'
+openapi: 3.0.0
 info:
-  version: '1.0.0'
-  title: 'Corp Messenger API'
+  title: Corp Messenger API
+  version: 1.0.0
   description: Retrieve and send messages
 servers:
-  - url: http://messenger.rostkov.me/api
+  - url: "http://messenger.rostkov.me/api"
     description: Продуктовый сервер
-
 paths:
   /auth/register/:
     post:
-      summary: Регистрация нового пользователя
-      description: Регистрация нового пользователя в системе
-      operationId: registerUser
       requestBody:
         description: Данные для регистрации нового пользователя
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/User"
+        required: true
       responses:
-        '201':
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
           description: Пользователь успешно зарегистрирован
+        "400":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-        '400':
+                $ref: "#/components/schemas/Error"
           description: Некорректные данные
+        "409":
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Error'
-        '409':
+                $ref: "#/components/schemas/Error"
           description: Пользователь с таким username уже существует
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+      operationId: registerUser
+      summary: Регистрация нового пользователя
+      description: Регистрация нового пользователя в системе
   /auth/login/:
     post:
-      summary: "Авторизация"
-      description: "Авторизация пользователя в системе и получение токена"
-      parameters: [
-        {
-          "name": "username",
-          "in": "query",
-          "description": "Имя пользователя, который проходит авторизацию",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        },
-        {
-          "name": "password",
-          "in": "query",
-          "description": "Пользовательский пароль",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-      responses:
-        200:
-          description: "Авторизация прошла успешно"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Tokens"
-        401:
-          description: "Неверный логин или пароль"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-  /auth/renew/:
-    post:
-      summary: "Обновление токена"
-      description: "Обновление токена доступа"
-      parameters: [
-        {
-          "name": "refreshToken",
-          "in": "query",
-          "description": "Токен обновления",
-          "required": true,
-          "schema": {
-            "type": "string"
-          }
-        }
-      ]
-      responses:
-        200:
-          description: "Токен обновлен"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Tokens"
-        401:
-          description: "Неверный токен обновления"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /chats/:
-    get:
-      summary: Получение списка чатов
-      description: Получение списка чатов пользователя
-      responses:
-        200:
-          description: "Список чатов"
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                $ref: "#/components/schemas/Chat"
-        401:
-          description: "Неверный токен доступа"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-    post:
-      summary: Создание нового чата
-      description: Создание нового чата
       requestBody:
-        description: Данные для создания нового чата
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Chat'
+              $ref: "#/components/schemas/UserCredentials"
+        required: true
       responses:
-        201:
-          description: "Чат успешно создан"
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+          description: Авторизация прошла успешно
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный логин или пароль
+      summary: Авторизация
+      description: Авторизация пользователя в системе и получение токена
+  /auth/renew/:
+    post:
+      parameters:
+        - name: refreshToken
+          description: Токен обновления
+          schema:
+            type: string
+          in: query
+          required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Tokens"
+          description: Токен обновлен
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен обновления
+      summary: Обновление токена
+      description: Обновление токена доступа
+  /chats/:
+    get:
+      responses:
+        "200":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Chat"
-        400:
-          description: "Некорректные данные"
+                type: array
+          description: Список чатов
+        "401":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        401:
-          description: "Неверный токен доступа"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
-  /chats/{chatId}/:
-    get:
-      summary: Получение информации о чате
-      description: Получение информации о чате
-      parameters: [
-        {
-          "name": "chatId",
-          "in": "path",
-          "description": "Идентификатор чата",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          }
-        }
-      ]
+          description: Неверный токен доступа
+      summary: Получение списка чатов
+      description: Получение списка чатов пользователя
+    post:
+      requestBody:
+        description: Данные для создания нового чата
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Chat"
+        required: true
       responses:
-        200:
-          description: "Информация о чате"
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chat"
+          description: Чат успешно создан
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Некорректные данные
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+      summary: Создание нового чата
+      description: Создание нового чата
+  "/chats/{chatId}/":
+    get:
+      parameters:
+        - name: chatId
+          description: Идентификатор чата
+          schema:
+            type: integer
+          in: path
+          required: true
+      responses:
+        "200":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/ChatInstance"
-        401:
-          description: "Неверный токен доступа"
+          description: Информация о чате
+        "401":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        404:
-          description: "Чат не найден"
+          description: Неверный токен доступа
+        "404":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+          description: Чат не найден
+      summary: Получение информации о чате
+      description: Получение информации о чате
     put:
-      summary: Обновление информации о чате
-      description: Обновление информации о чате
-      parameters: [
-        {
-          "name": "chatId",
-          "in": "path",
-          "description": "Идентификатор чата",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          }
-        }
-      ]
       requestBody:
         description: Данные для обновления информации о чате
-        required: true
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/ChatInstance'
+              $ref: "#/components/schemas/ChatInstance"
+        required: true
+      parameters:
+        - name: chatId
+          description: Идентификатор чата
+          schema:
+            type: integer
+          in: path
+          required: true
       responses:
-        200:
-          description: "Информация о чате успешно обновлена"
+        "200":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Chat"
-        400:
-          description: "Некорректные данные"
+          description: Информация о чате успешно обновлена
+        "400":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        401:
-          description: "Неверный токен доступа"
+          description: Некорректные данные
+        "401":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        404:
-          description: "Чат не найден"
+          description: Неверный токен доступа
+        "404":
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+          description: Чат не найден
+      summary: Обновление информации о чате
+      description: Обновление информации о чате
     delete:
+      parameters:
+        - name: chatId
+          description: Идентификатор чата
+          schema:
+            type: integer
+          in: path
+          required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chat"
+          description: Чат успешно удален
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Чат не найден
       summary: Удаление чата
       description: Удаление чата
-      parameters: [
-        {
-          "name": "chatId",
-          "in": "path",
-          "description": "Идентификатор чата",
-          "required": true,
-          "schema": {
-            "type": "integer"
-          }
-        }
-      ]
-      responses:
-        200:
-          description: "Чат успешно удален"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Chat"
-        401:
-          description: "Неверный токен доступа"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-        404:
-          description: "Чат не найден"
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-
 components:
   schemas:
     Tokens:
       type: object
       properties:
         accessToken:
-          type: string
           description: Токен доступа
-        refreshToken:
           type: string
+        refreshToken:
           description: Токен обновления
+          type: string
     User:
-      type: object
       required:
         - username
         - password
+      type: object
       properties:
         id:
-          type: integer
           format: int64
+          type: integer
         username:
           type: string
         password:
-          type: string
           format: password
+          type: string
         company_id:
-          type: integer
           format: string
-          description: ID компании, к которой принадлежит пользователь (шестнадцатеричный UUID)
+          description: "ID компании, к которой принадлежит пользователь (шестнадцатеричный UUID)"
+          type: integer
     Chat:
-      type: object
-      description: "Краткая информация о чате"
+      description: Краткая информация о чате
       required:
         - name
+      type: object
       properties:
         id:
-          type: integer
           format: int64
+          type: integer
         name:
           type: string
         company_id:
-          type: integer
           format: string
-          description: ID компании, к которой принадлежит чат (шестнадцатеричный UUID)
+          description: "ID компании, к которой принадлежит чат (шестнадцатеричный UUID)"
+          type: integer
     ChatInstance:
-      type: object
       description: "Полная информация о чате, включая список участников"
       required:
         - name
+      type: object
       properties:
         id:
-          type: integer
           format: int64
+          type: integer
         name:
           type: string
         company_id:
-          type: integer
           format: string
-          description: ID компании, к которой принадлежит чат (шестнадцатеричный UUID)
+          description: "ID компании, к которой принадлежит чат (шестнадцатеричный UUID)"
+          type: integer
         users:
           type: array
           items:
             $ref: "#/components/schemas/User"
     Error:
-      type: object
       required:
         - message
+      type: object
       properties:
         message:
           description: A human readable error message
           type: string
+    UserCredentials:
+      description: Данные для авторизации пользователя
+      required:
+        - username
+        - password
+      type: object
+      properties:
+        username:
+          description: Имя пользователя
+          type: string
+        password:
+          description: Пароль пользователя
+          type: string
   securitySchemes:
     AccessToken:
       type: apiKey
-      in: query
       name: AccessToken
+      in: header
 security:
   - AccessToken: [ ]
