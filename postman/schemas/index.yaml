@@ -3,9 +3,12 @@ info:
   version: '1.0.0'
   title: 'Corp Messenger API'
   description: Retrieve and send messages
+servers:
+  - url: http://messenger.rostkov.me/api
+    description: Продуктовый сервер
 
 paths:
-  /api/auth/register/:
+  /auth/register/:
     post:
       summary: Регистрация нового пользователя
       description: Регистрация нового пользователя в системе
@@ -36,7 +39,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
-  /api/auth/login/:
+  /auth/login/:
     post:
       summary: "Авторизация"
       description: "Авторизация пользователя в системе и получение токена"
@@ -46,16 +49,18 @@ paths:
           "in": "query",
           "description": "Имя пользователя, который проходит авторизацию",
           "required": true,
-          "schema":
+          "schema": {
             "type": "string"
+          }
         },
         {
           "name": "password",
           "in": "query",
           "description": "Пользовательский пароль",
           "required": true,
-          "schema":
+          "schema": {
             "type": "string"
+          }
         }
       ]
       responses:
@@ -63,27 +68,15 @@ paths:
           description: "Авторизация прошла успешно"
           content:
             application/json:
-            schema:
-              type: object
-              properties: [
-                {
-                  "name": "accessToken",
-                  "type": "string",
-                  "description": "Токен доступа JWT"
-                },
-                {
-                  "name": "refreshToken",
-                  "type": "string",
-                  "description": "Токен обновления"
-                }
-              ]
+              schema:
+                $ref: "#/components/schemas/Token"
         401:
           description: "Неверный логин или пароль"
           content:
             application/json:
-            schema:
-              $ref: "#/components/schemas/Error"
-  /api/auth/renew/:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /auth/renew/:
     post:
       summary: "Обновление токена"
       description: "Обновление токена доступа"
@@ -93,8 +86,9 @@ paths:
           "in": "query",
           "description": "Токен обновления",
           "required": true,
-          "schema":
+          "schema": {
             "type": "string"
+          }
         }
       ]
       responses:
@@ -102,26 +96,14 @@ paths:
           description: "Токен обновлен"
           content:
             application/json:
-            schema:
-              type: object
-              properties: [
-                {
-                  "name": "accessToken",
-                  "type": "string",
-                  "description": "Токен доступа JWT"
-                },
-                {
-                  "name": "refreshToken",
-                  "type": "string",
-                  "description": "Токен обновления"
-                }
-              ]
+              schema:
+                $ref: "#/components/schemas/Token"
         401:
           description: "Неверный токен обновления"
           content:
             application/json:
-            schema:
-              $ref: "#/components/schemas/Error"
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   schemas:
@@ -152,9 +134,9 @@ components:
           description: A human readable error message
           type: string
   securitySchemes:
-    ApiKey:
+    AccessToken:
       type: apiKey
-      in: header
-      name: X-Api-Key
+      in: query
+      name: AccessToken
 security:
-  - ApiKey: [ ]
+  - AccessToken: [ ]
