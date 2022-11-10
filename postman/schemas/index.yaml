@@ -14,7 +14,28 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              type: object
+              required:
+                - username
+                - password
+                - first_name
+                - last_name
+              properties:
+                username:
+                  type: string
+                  description: Имя пользователя
+                password:
+                  type: string
+                  description: Пароль
+                first_name:
+                  type: string
+                  description: Имя
+                last_name:
+                  type: string
+                  description: Фамилия
+                middle_name:
+                  type: string
+                  description: Отчество
         required: true
       responses:
         "201":
