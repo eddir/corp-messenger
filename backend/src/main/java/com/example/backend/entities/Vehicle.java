@@ -7,11 +7,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "vehicles")
-public class Vehicle
+public class Vehicle extends BaseEntity
 {
-    @Id
-    @GeneratedValue()
-    protected Long id;
     protected String number;
     protected String brand;
     protected String model;
@@ -26,13 +23,7 @@ public class Vehicle
         this.year = year;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getNumber() {
         return number;
