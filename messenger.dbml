@@ -1,0 +1,88 @@
+Table messenger.messages {
+  id int
+  created_at datetime
+  updated_at datetime
+  sender_id int
+  chat_id int
+  text text
+  pinned bool
+}
+
+Table messenger.chats {
+  id int
+  created_at datetime
+  title varchar
+  description text
+  company_id int
+  is_public bool
+  pinned bool
+}
+
+Table messenger.users {
+  id int
+  created_at datetime
+  last_visited datetime
+  name varchar
+  login varchar
+  password hash
+  role Enum
+  company_id int
+}
+
+Table messenger.chats_users {
+  chat_id int
+  user_id int
+  is_owner bool
+  is_admin bool
+}
+
+Table messenger.attachments {
+  id int
+  created_at datetime
+  url varchar
+  size int
+  is_image bool
+  is_file bool
+  is_voice bool
+  duration int [null]
+}
+
+Table messenger.users_messages_read {
+  user_id int
+  message_id int
+}
+
+Table messenger.companies {
+  id int
+  name varchar
+}
+
+Table messenger.chat_events {
+  id int
+  created_at datetime
+  type varchar
+  chat_id int
+  user_id int
+  payload json
+}
+
+
+Ref: "messenger"."chats"."id" < "messenger"."messages"."chat_id"
+
+Ref: "messenger"."chats"."id" < "messenger"."chats_users"."chat_id"
+
+Ref: "messenger"."chats_users"."user_id" < "messenger"."users"."id"
+
+Ref: "messenger"."attachments"."id" <> "messenger"."messages"."id"
+
+Ref: "messenger"."users_messages_read"."user_id" < "messenger"."users"."id"
+
+Ref: "messenger"."users_messages_read"."message_id" < "messenger"."messages"."id"
+
+Ref: "messenger"."companies"."id" < "messenger"."chats"."company_id"
+
+Ref: "messenger"."companies"."id" <> "messenger"."users"."company_id"
+
+Ref: "messenger"."chats"."id" < "messenger"."chat_events"."chat_id"
+
+Ref: "messenger"."users"."id" < "messenger"."chat_events"."user_id"
