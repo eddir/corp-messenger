@@ -72,11 +72,13 @@ Table messenger.chat_events {
   payload json
 }
 
-Table messenger.conference {
+Table messenger.conferences {
   id int
   chat_id int
   start_time datetime
+  end_time datetime
   call_url varchar
+
 }
 
 
@@ -102,4 +104,4 @@ Ref: "messenger"."messages"."id" < "messenger"."messages"."parent_id"
 
 Ref: "messenger"."messages"."id" < "messenger"."chat_events"."message_id"
 
-Ref: "messenger"."chats"."id" <> "messenger"."conference"."chat_id"
+Ref: "messenger"."chats"."id" <> "messenger"."conferences"."chat_id"
