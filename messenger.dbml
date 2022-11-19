@@ -1,12 +1,16 @@
 Table messenger.messages {
   id int
-  parent_id int
   created_at datetime
   updated_at datetime
   sender_id int
   chat_id int
   text text
   pinned bool
+}
+
+Table messenger.messages_forward {
+  parent_id int
+  child_id int
 }
 
 Table messenger.chats {
@@ -100,7 +104,8 @@ Ref: "messenger"."companies"."id" <> "messenger"."users"."company_id"
 
 Ref: "messenger"."users"."id" < "messenger"."messages"."sender_id"
 
-Ref: "messenger"."messages"."id" < "messenger"."messages"."parent_id"
+Ref: "messenger"."messages"."id" < "messenger"."messages_forward"."parent_id"
+Ref: "messenger"."messages_forward"."child_id" > "messenger"."messages"."id"
 
 Ref: "messenger"."messages"."id" < "messenger"."chat_events"."message_id"
 
