@@ -64,11 +64,4 @@ public class AuthController
         }
     }
 
-    @GetMapping
-    @RequestMapping("/refresh")
-    public ResponseEntity<AuthenticationResponseDto> listUsers(@RequestParam("refresh-token") String refreshToken)
-    {
-        jwtTokenProvider.isValidRefreshToken(refreshToken)
-        return ResponseEntity.ok().body();
-    }
 }

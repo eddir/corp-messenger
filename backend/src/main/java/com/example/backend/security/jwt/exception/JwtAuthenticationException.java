@@ -5,7 +5,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
-@ResponseStatus(code = HttpStatus.UNAUTHORIZED)
+@ResponseStatus(value = HttpStatus.UNAUTHORIZED)
 public class JwtAuthenticationException extends AuthenticationException {
     public JwtAuthenticationException(String msg, Throwable cause) {
         super(msg, cause);
