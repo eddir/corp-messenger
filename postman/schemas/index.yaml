@@ -167,7 +167,7 @@ paths:
         - chats
       summary: Создание нового чата
       description: Создание нового чата
-  "/chats/{chatId}/":
+  "/chat/{chatId}/":
     get:
       parameters:
         - name: chatId
@@ -277,6 +277,39 @@ paths:
           - chats
       summary: Удаление чата
       description: Удаление чата
+  "/search/":
+    get:
+      parameters:
+        - name: query
+          description: Поисковый запрос
+          schema:
+            type: string
+          in: query
+          required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SearchResult"
+          description: Результаты поиска
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Некорректные данные
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+      operationId: search
+      tags:
+          - search
+      summary: Поиск
+      description: Поиск по названиям чатов и сообщениям
 components:
   schemas:
     Tokens:
@@ -366,6 +399,111 @@ components:
         password:
           description: Пароль пользователя
           type: string
+    Message:
+      description: Сообщение
+      required:
+          - text
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+        parent_id:
+          format: int64
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        updated_at:
+          format: date-time
+          type: string
+        text:
+          type: string
+        user_id:
+          format: int64
+          type: integer
+        chat_id:
+          format: int64
+          type: integer
+        is_pinned:
+          type: boolean
+        attachments:
+          type: array
+          items:
+            $ref: "#/components/schemas/Attachment"
+        event:
+          $ref: "#/components/schemas/Event"
+    Attachment:
+      description: Вложение
+      required:
+        - type
+        - url
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        type:
+          enum:
+            - image
+            - video
+            - audio
+            - file
+        url:
+          type: string
+        thumbnail_url:
+          type: string
+        size:
+          format: int64
+          type: integer
+        name:
+          type: string
+    Event:
+        description: Событие
+        required:
+            - type
+        type: object
+        properties:
+          id:
+            format: int64
+            type: integer
+          created_at:
+            format: date-time
+            type: string
+          type:
+            enum:
+              - user_joined
+              - user_left
+              - chat_created
+              - chat_updated
+              - chat_deleted
+              - chat_renamed
+              - chat_avatar_updated
+              - chat_avatar_deleted
+              - chat_description_updated
+              - chat_description_deleted
+              - chat_user_added
+              - chat_user_removed
+          message_id:
+            format: int64
+            type: integer
+          payload:
+            type: string
+    SearchResult:
+      description: Результаты поиска
+      type: object
+      properties:
+        chats:
+          type: array
+          items:
+            $ref: "#/components/schemas/Chat"
+        messages:
+          type: array
+          items:
+            $ref: "#/components/schemas/Message"
   securitySchemes:
     AccessToken:
       type: apiKey
