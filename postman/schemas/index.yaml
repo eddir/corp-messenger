@@ -7,7 +7,7 @@ servers:
   - url: "http://messenger.rostkov.me/api"
     description: Продуктовый сервер
 paths:
-  /auth/register/:
+  /auth/register:
     post:
       requestBody:
         description: Данные для регистрации нового пользователя
@@ -62,7 +62,7 @@ paths:
         - auth
       summary: Регистрация нового пользователя
       description: Регистрация нового пользователя в системе
-  /auth/login/:
+  /auth/login:
     post:
       requestBody:
         content:
@@ -88,7 +88,7 @@ paths:
         - auth
       summary: Авторизация
       description: Авторизация пользователя в системе и получение токена
-  /auth/renew/:
+  /auth/renew:
     post:
       parameters:
         - name: refreshToken
@@ -115,7 +115,7 @@ paths:
         - auth
       summary: Обновление токена
       description: Обновление токена доступа
-  /chats/:
+  /chats:
     get:
       responses:
         "200":
@@ -167,7 +167,7 @@ paths:
         - chats
       summary: Создание нового чата
       description: Создание нового чата
-  "/chat/{chatId}/":
+  "/chat/{chatId}":
     get:
       parameters:
         - name: chatId
@@ -277,7 +277,7 @@ paths:
         - chats
       summary: Удаление чата
       description: Удаление чата
-  "/chat/{chatId}/pin/":
+  "/chat/{chatId}/pin":
     post:
       requestBody:
         description: Данные для закрепления сообщения в чате
@@ -355,7 +355,7 @@ paths:
         - chats
       summary: Открепление сообщения в чате
       description: Открепление сообщения в чат
-  "/chat/{chatId}/messages/":
+  "/chat/{chatId}/messages":
     get:
       parameters:
         - name: chatId
@@ -563,7 +563,39 @@ paths:
         - messages
       summary: Закрепление сообщения
       description: Закрепление сообщения
-  "/messages/read/":
+    delete:
+      parameters:
+      - name: messageId
+        description: Идентификатор сообщения
+        schema:
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+          description: Сообщение успешно откреплено
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Сообщение не найдено
+      operationId: unpinMessage
+      tags:
+          - messages
+      summary: Открепление сообщения
+      description: Открепление сообщения
+  "/messages/read":
     post:
       requestBody:
         description: Данные для отметки сообщений прочитанными
@@ -596,7 +628,7 @@ paths:
         - messages
       summary: Отметка сообщений прочитанными
       description: Отметка сообщений прочитанными
-  "/search/":
+  "/search":
     get:
       parameters:
         - name: query
