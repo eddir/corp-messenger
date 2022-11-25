@@ -356,11 +356,11 @@ components:
     UserCredentials:
       description: Данные для авторизации пользователя
       required:
-        - username
+        - login
         - password
       type: object
       properties:
-        username:
+        login:
           description: Имя пользователя
           type: string
         password:
