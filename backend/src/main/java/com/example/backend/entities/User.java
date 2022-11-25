@@ -1,20 +1,57 @@
 package com.example.backend.entities;
 
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.JoinColumnOrFormula;
+import org.hibernate.annotations.UpdateTimestamp;
+
 import javax.persistence.*;
+import java.util.Calendar;
 
 @Entity
 @Table(name = "users")
-public class User extends BaseEntity
+public class User
 {
-    @Column(name = "login")
+    @Id
+    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    Long id;
+
+    @Column(name = "login", unique = true, nullable = false)
     protected String login;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     protected String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "app_role")
+    @Column(name = "app_role", nullable = false)
     protected ApplicationRole applicationRole;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    @Column(name = "create_date", updatable = false)
+    protected Calendar create;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    @Column(name = "last_update")
+    protected Calendar lastUpdate;
+
+    public User() {
+
+    }
+
+    public User(String login, String password, ApplicationRole applicationRole) {
+        this.login = login;
+        this.password = password;
+        this.applicationRole = applicationRole;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getLogin() {
         return login;
@@ -39,4 +76,7 @@ public class User extends BaseEntity
     public void setApplicationRole(ApplicationRole applicationRole) {
         this.applicationRole = applicationRole;
     }
+
+
+
 }

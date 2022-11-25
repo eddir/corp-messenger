@@ -25,4 +25,23 @@ public class BaseEntity
     @Column(name = "last_update_date")
     protected Calendar lastUpdate;
 
+    public Long getId() {
+        return id;
+    }
+
+    public Calendar getCreate() {
+        return create;
+    }
+
+    public void setCreate(Calendar create) {
+        this.create = create;
+    }
+
+    public Calendar getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public void setLastUpdate(Calendar lastUpdate) {
+        this.lastUpdate = lastUpdate;
+    }
 }

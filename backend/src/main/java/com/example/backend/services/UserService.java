@@ -2,15 +2,20 @@ package com.example.backend.services;
 
 import com.example.backend.entities.User;
 import com.example.backend.repositories.UserRepo;
+import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
+@Transactional
 public class UserService
 {
     protected UserRepo userRepo;
-    @Autowired
+
     protected BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
@@ -20,9 +25,20 @@ public class UserService
         this.passwordEncoder = bCryptPasswordEncoder;
     }
 
-    public User register(User user)
+    public User save(User user)
     {
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setPassword((user.getPassword()));
         return userRepo.save(user);
+    }
+
+    public List<User> findAll()
+    {
+        return userRepo.findAll();
+    }
+
+    public User findUserByLogin(String login)
+    {
+        User user = userRepo.findUserByLogin(login);
+        return user;
     }
 }
