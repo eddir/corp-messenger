@@ -277,6 +277,132 @@ paths:
         - chats
       summary: Удаление чата
       description: Удаление чата
+  "/chat/{chatId}/leave":
+    post:
+      parameters:
+      - name: chatId
+        description: Идентификатор чата
+        schema:
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chat"
+          description: Пользователь успешно покинул чат
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Чат не найден
+      operationId: leaveChat
+      tags:
+        - chats
+      summary: Покинуть чат
+      description: Покинуть чат
+  "/chat/{chatId}/invite":
+    post:
+      parameters:
+      - name: chatId
+        description: Идентификатор чата
+        schema:
+          type: integer
+        in: path
+        required: true
+      requestBody:
+        description: Данные о пользователе, которого нужно пригласить в чат
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chat"
+          description: Пользователь успешно приглашен в чат
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Некорректные данные
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Чат не найден
+      operationId: inviteUser
+      tags:
+        - chats
+      summary: Приглашение пользователя в чат
+      description: Приглашение пользователя в чат
+  "/chat/{chatId}/kick":
+    post:
+      parameters:
+      - name: chatId
+        description: Идентификатор чата
+        schema:
+          type: integer
+        in: path
+        required: true
+      requestBody:
+        description: Данные о пользователе, которого нужно исключить из чата
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chat"
+          description: Пользователь успешно исключен из чата
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Некорректные данные
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Чат не найден
+      operationId: kickUser
+      tags:
+        - chats
+      summary: Исключение пользователя из чата
+      description: Исключение пользователя из чата
+
   "/chat/{chatId}/pin":
     post:
       requestBody:
