@@ -16,12 +16,13 @@ paths:
             schema:
               type: object
               required:
-                - username
+                - login
                 - password
                 - first_name
+                - middle_name
                 - last_name
               properties:
-                username:
+                login:
                   type: string
                   description: Имя пользователя
                 password:
@@ -30,12 +31,12 @@ paths:
                 first_name:
                   type: string
                   description: Имя
-                last_name:
-                  type: string
-                  description: Фамилия
                 middle_name:
                   type: string
                   description: Отчество
+                last_name:
+                  type: string
+                  description: Фамилия
         required: true
       responses:
         "201":
