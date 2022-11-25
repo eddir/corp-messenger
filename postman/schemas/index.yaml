@@ -132,7 +132,7 @@ paths:
           description: Неверный токен доступа
       operationId: getChats
       tags:
-          - chats
+        - chats
       summary: Получение списка чатов
       description: Получение списка чатов пользователя
     post:
@@ -197,7 +197,7 @@ paths:
           description: Чат не найден
       operationId: getChat
       tags:
-          - chats
+        - chats
       summary: Получение информации о чате
       description: Получение информации о чате
     put:
@@ -242,7 +242,7 @@ paths:
           description: Чат не найден
       operationId: updateChat
       tags:
-          - chats
+        - chats
       summary: Обновление информации о чате
       description: Обновление информации о чате
     delete:
@@ -274,9 +274,105 @@ paths:
           description: Чат не найден
       operationId: deleteChat
       tags:
-          - chats
+        - chats
       summary: Удаление чата
       description: Удаление чата
+  "/chat/{chatId}/messages/":
+    get:
+      parameters:
+        - name: chatId
+          description: Идентификатор чата
+          schema:
+            type: integer
+          in: path
+          required: true
+        - name: count
+          description: Количество сообщений, которое необходимо получить
+          schema:
+            type: integer
+          in: query
+          required: false
+        - name: startMessageId
+          description: Идентификатор сообщения, с которого необходимо начать получение
+          schema:
+            type: integer
+          in: query
+          required: false
+        - name: offset
+          description: Смещение относительно startMessageId
+          schema:
+            type: integer
+          in: query
+          required: false
+      responses:
+        "200":
+          description: Список сообщений чата
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Messages"
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Чат не найден
+      operationId: getChatMessages
+      tags:
+        - chats
+      summary: Получение списка сообщений чата
+      description: Получение списка сообщений чата
+    post:
+      requestBody:
+        description: Данные для создания нового сообщения
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Message"
+        required: true
+      parameters:
+      - name: chatId
+        description: Идентификатор чата
+        schema:
+          type: integer
+        in: path
+        required: true
+      responses:
+        "201":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+          description: Сообщение успешно создано
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Некорректные данные
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Чат не найден
+      operationId: createMessage
+      tags:
+        - chats
+      summary: Создание нового сообщения
+      description: Создание нового сообщения
   "/search/":
     get:
       parameters:
@@ -307,7 +403,7 @@ paths:
           description: Неверный токен доступа
       operationId: search
       tags:
-          - search
+        - search
       summary: Поиск
       description: Поиск по названиям чатов и сообщениям
 components:
@@ -402,7 +498,7 @@ components:
     Message:
       description: Сообщение
       required:
-          - text
+        - text
       type: object
       properties:
         id:
@@ -419,12 +515,15 @@ components:
           type: string
         text:
           type: string
+          required: true
         user_id:
           format: int64
           type: integer
+          required: true
         chat_id:
           format: int64
           type: integer
+          required: true
         is_pinned:
           type: boolean
         attachments:
@@ -462,36 +561,41 @@ components:
         name:
           type: string
     Event:
-        description: Событие
-        required:
-            - type
-        type: object
-        properties:
-          id:
-            format: int64
-            type: integer
-          created_at:
-            format: date-time
-            type: string
-          type:
-            enum:
-              - user_joined
-              - user_left
-              - chat_created
-              - chat_updated
-              - chat_deleted
-              - chat_renamed
-              - chat_avatar_updated
-              - chat_avatar_deleted
-              - chat_description_updated
-              - chat_description_deleted
-              - chat_user_added
-              - chat_user_removed
-          message_id:
-            format: int64
-            type: integer
-          payload:
-            type: string
+      description: Событие
+      required:
+        - type
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+        created_at:
+          format: date-time
+          type: string
+        type:
+          enum:
+            - user_joined
+            - user_left
+            - chat_created
+            - chat_updated
+            - chat_deleted
+            - chat_renamed
+            - chat_avatar_updated
+            - chat_avatar_deleted
+            - chat_description_updated
+            - chat_description_deleted
+            - chat_user_added
+            - chat_user_removed
+        message_id:
+          format: int64
+          type: integer
+        payload:
+          type: string
+    Messages:
+      description: Список сообщений
+      type: array
+      items:
+        $ref: "#/components/schemas/Message"
     SearchResult:
       description: Результаты поиска
       type: object
