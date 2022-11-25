@@ -114,8 +114,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Chat"
-                type: array
+                $ref: "#/components/schemas/Chats"
           description: Список чатов
         "401":
           content:
@@ -299,6 +298,11 @@ components:
           format: string
           description: "ID компании, к которой принадлежит чат (шестнадцатеричный UUID)"
           type: integer
+    Chats:
+      description: Список чатов
+      type: array
+      items:
+        $ref: "#/components/schemas/Chat"
     ChatInstance:
       description: "Полная информация о чате, включая список участников"
       required:
