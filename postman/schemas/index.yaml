@@ -200,7 +200,7 @@ paths:
         - chats
       summary: Получение информации о чате
       description: Получение информации о чате
-    put:
+    post:
       requestBody:
         description: Данные для обновления информации о чате
         content:
@@ -277,6 +277,84 @@ paths:
         - chats
       summary: Удаление чата
       description: Удаление чата
+  "/chat/{chatId}/pin/":
+    post:
+      requestBody:
+        description: Данные для закрепления сообщения в чате
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Chat"
+        required: true
+      parameters:
+        - name: chatId
+          description: Идентификатор чата
+          schema:
+            type: integer
+          in: path
+          required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chat"
+          description: Сообщение успешно закреплено
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Некорректные данные
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Чат не найден
+      operationId: pinChatMessage
+      tags:
+        - chats
+      summary: Закрепление сообщения в чате
+      description: Закрепление сообщения в чате
+    delete:
+      parameters:
+        - name: chatId
+          description: Идентификатор чата
+          schema:
+            type: integer
+          in: path
+          required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Chat"
+          description: Сообщение успешно откреплено
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Чат не найден
+      operationId: unpinChatMessage
+      tags:
+        - chats
+      summary: Открепление сообщения в чате
+      description: Открепление сообщения в чат
   "/chat/{chatId}/messages/":
     get:
       parameters:
@@ -452,6 +530,39 @@ paths:
         - messages
       summary: Редактирование сообщения
       description: Редактирование сообщения
+  "/message/{messageId}/pin":
+    post:
+      parameters:
+      - name: messageId
+        description: Идентификатор сообщения
+        schema:
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+          description: Сообщение успешно закреплено
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Сообщение не найдено
+      operationId: pinMessage
+      tags:
+        - messages
+      summary: Закрепление сообщения
+      description: Закрепление сообщения
   "/messages/read/":
     post:
       requestBody:
@@ -611,6 +722,8 @@ components:
       description: Сообщение
       required:
         - text
+        - user_id
+        - chat_id
       type: object
       properties:
         id:
@@ -627,15 +740,12 @@ components:
           type: string
         text:
           type: string
-          required: true
         user_id:
           format: int64
           type: integer
-          required: true
         chat_id:
           format: int64
           type: integer
-          required: true
         is_pinned:
           type: boolean
         attachments:
