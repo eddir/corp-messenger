@@ -325,7 +325,7 @@ paths:
           description: Чат не найден
       operationId: getChatMessages
       tags:
-        - chats
+        - messages
       summary: Получение списка сообщений чата
       description: Получение списка сообщений чата
     post:
@@ -370,9 +370,121 @@ paths:
           description: Чат не найден
       operationId: createMessage
       tags:
-        - chats
+        - messages
       summary: Создание нового сообщения
       description: Создание нового сообщения
+  "/message/{messageId}":
+    delete:
+      parameters:
+      - name: messageId
+        description: Идентификатор сообщения
+        schema:
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+          description: Сообщение успешно удалено
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Сообщение не найдено
+      operationId: deleteMessage
+      tags:
+        - messages
+      summary: Удаление сообщения
+      description: Удаление сообщения
+  "/message/{messageId}/edit":
+    post:
+      requestBody:
+        description: Данные для редактирования сообщения
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Message"
+        required: true
+      parameters:
+      - name: messageId
+        description: Идентификатор сообщения
+        schema:
+          type: integer
+        in: path
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Message"
+          description: Сообщение успешно отредактировано
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Некорректные данные
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Сообщение не найдено
+      operationId: editMessage
+      tags:
+        - messages
+      summary: Редактирование сообщения
+      description: Редактирование сообщения
+  "/messages/read/":
+    post:
+      requestBody:
+        description: Данные для отметки сообщений прочитанными
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Messages"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Success"
+          description: Сообщения успешно отмечены прочитанными
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Некорректные данные
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+      operationId: readMessages
+      tags:
+        - messages
+      summary: Отметка сообщений прочитанными
+      description: Отметка сообщений прочитанными
   "/search/":
     get:
       parameters:
@@ -608,6 +720,12 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Message"
+    Success:
+      description: Успешный ответ
+      type: object
+      properties:
+        success:
+          type: boolean
   securitySchemes:
     AccessToken:
       type: apiKey
