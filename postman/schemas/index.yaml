@@ -45,7 +45,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserInstance"
           description: Пользователь успешно зарегистрирован
         "400":
           content:
@@ -222,7 +222,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Chat"
+                $ref: "#/components/schemas/ChatInstance"
           description: Информация о чате успешно обновлена
         "400":
           content:
@@ -260,7 +260,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Chat"
+                $ref: "#/components/schemas/ChatInstance"
           description: Чат успешно удален
         "401":
           content:
@@ -332,7 +332,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Chat"
+                $ref: "#/components/schemas/ChatInstance"
           description: Пользователь успешно приглашен в чат
         "400":
           content:
@@ -376,7 +376,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Chat"
+                $ref: "#/components/schemas/ChatInstance"
           description: Пользователь успешно исключен из чата
         "400":
           content:
@@ -415,7 +415,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Chat"
+                $ref: "#/components/schemas/ChatInstance"
           description: Чат успешно закреплен
         "400":
           content:
@@ -453,7 +453,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Chat"
+                $ref: "#/components/schemas/ChatInstance"
           description: Чат успешно откреплен
         "401":
           content:
@@ -719,7 +719,9 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Messages"
+              type: array
+              items:
+                type: integer
         required: true
       responses:
         "200":
@@ -839,7 +841,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserInstance"
           description: Пользователь успешно найден
         "401":
           content:
@@ -871,7 +873,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/UserInstance"
           description: Пользователь успешно обновлен
         "400":
           content:
@@ -907,7 +909,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/User"
+              $ref: "#/components/schemas/UserInstance"
         required: true
 components:
   schemas:
@@ -917,9 +919,11 @@ components:
         accessToken:
           description: Токен доступа
           type: string
+          format: uuid
         refreshToken:
           description: Токен обновления
           type: string
+          format: uuid
     User:
       required:
         - username
@@ -956,6 +960,8 @@ components:
           type: string
         company:
           $ref: "#/components/schemas/Company"
+        img_url:
+          type: string
     Users:
       type: array
       items:
@@ -1161,7 +1167,7 @@ components:
         chats:
           type: array
           items:
-            $ref: "#/components/schemas/Chat"
+            $ref: "#/components/schemas/ChatInstance"
         messages:
           type: array
           items:
