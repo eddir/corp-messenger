@@ -6,6 +6,8 @@ info:
 servers:
   - url: "http://messenger.rostkov.me/api"
     description: Продуктовый сервер
+  - url: "http://beta.messenger.rostkov.me/api"
+    description: Тестовый сервер
 paths:
   /auth/register:
     post:
