@@ -944,7 +944,7 @@ components:
       description: Список чатов
       type: array
       items:
-        $ref: "#/components/schemas/Chat"
+        $ref: "#/components/schemas/ChatInstance"
     ChatInstance:
       description: "Полная информация о чате, включая список участников"
       required:
@@ -966,6 +966,8 @@ components:
             $ref: "#/components/schemas/User"
         unread:
           type: integer
+        last_message:
+          $ref: "#/components/schemas/Message"
     Error:
       required:
         - message
