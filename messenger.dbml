@@ -1,7 +1,7 @@
 Table messenger.messages {
-  id int
-  created_at datetime
-  updated_at datetime
+  message_id int
+  created_date datetime
+  updated_date datetime
   sender_id int
   chat_id int
   text text
@@ -9,14 +9,14 @@ Table messenger.messages {
   is_deleted bool
 }
 
-Table messenger.messages_forward {
+Table messenger.forwarding {
   parent_id int
   child_id int
 }
 
 Table messenger.chats {
-  id int
-  created_at datetime
+  chat_id int
+  created_date datetime
   title varchar
   description text
   img_url varchar
@@ -28,9 +28,9 @@ Table messenger.chats {
 }
 
 Table messenger.users {
-  id int
-  created_at datetime
-  last_visited datetime
+  user_id int
+  created_date datetime
+  last_visit_date datetime
   first_name varchar
   middle_name varchar
   last_name varchar
@@ -41,7 +41,7 @@ Table messenger.users {
   img_url varchar
 }
 
-Table messenger.chats_users {
+Table messenger.members {
   chat_id int
   user_id int
   is_owner bool
@@ -56,63 +56,64 @@ Enum messenger.attachment_type {
 }
 
 Table messenger.attachments {
-  id int
-  created_at datetime
+  attachment_id int
+  created_date datetime
   url varchar
   thumb_url varchar
-  size int
+  file_size int
   type messenger.attachment_type
 }
 
-Table messenger.users_messages_read {
+Table messenger.readers {
   user_id int
   message_id int
 }
 
 Table messenger.companies {
-  id int
+  company_id int
   name varchar
+  owner_id int
 }
 
-Table messenger.chat_events {
-  id int
-  created_at datetime
+Table messenger.events {
+  event_id int
+  created_date datetime
   type varchar
   message_id int
   payload json
 }
 
 Table messenger.conferences {
-  id int
+  conference_id int
   chat_id int
-  start_time datetime
-  end_time datetime
+  start_date datetime
+  end_date datetime
   call_url varchar
 }
 
 
-Ref: "messenger"."chats"."id" < "messenger"."messages"."chat_id"
+Ref: "messenger"."chats"."chat_id" < "messenger"."messages"."chat_id"
 
-Ref: "messenger"."chats"."id" < "messenger"."chats_users"."chat_id"
+Ref: "messenger"."chats"."chat_id" < "messenger"."members"."chat_id"
 
-Ref: "messenger"."chats_users"."user_id" < "messenger"."users"."id"
+Ref: "messenger"."members"."user_id" < "messenger"."users"."user_id"
 
-Ref: "messenger"."attachments"."id" <> "messenger"."messages"."id"
+Ref: "messenger"."attachments"."attachment_id" <> "messenger"."messages"."message_id"
 
-Ref: "messenger"."users_messages_read"."user_id" < "messenger"."users"."id"
+Ref: "messenger"."readers"."user_id" < "messenger"."users"."user_id"
 
-Ref: "messenger"."companies"."id" < "messenger"."chats"."company_id"
+Ref: "messenger"."companies"."company_id" < "messenger"."chats"."company_id"
 
-Ref: "messenger"."companies"."id" <> "messenger"."users"."company_id"
+Ref: "messenger"."companies"."company_id" <> "messenger"."users"."company_id"
 
-Ref: "messenger"."users"."id" < "messenger"."messages"."sender_id"
+Ref: "messenger"."users"."user_id" < "messenger"."messages"."sender_id"
 
-Ref: "messenger"."messages"."id" < "messenger"."messages_forward"."parent_id"
+Ref: "messenger"."messages"."message_id" < "messenger"."forwarding"."parent_id"
 
-Ref: "messenger"."messages_forward"."child_id" > "messenger"."messages"."id"
+Ref: "messenger"."forwarding"."child_id" > "messenger"."messages"."message_id"
 
-Ref: "messenger"."messages"."id" < "messenger"."chat_events"."message_id"
+Ref: "messenger"."messages"."message_id" < "messenger"."events"."message_id"
 
-Ref: "messenger"."chats"."id" < "messenger"."conferences"."chat_id"
+Ref: "messenger"."chats"."chat_id" < "messenger"."conferences"."chat_id"
 
-Ref: "messenger"."users_messages_read"."message_id" > "messenger"."messages"."id"
+Ref: "messenger"."readers"."message_id" > "messenger"."messages"."message_id"
