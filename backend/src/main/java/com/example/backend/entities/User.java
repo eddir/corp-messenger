@@ -13,7 +13,20 @@ public class User
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Column(name = "user_id")
     Long id;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
+    @Column(name = "created_date", updatable = false)
+    protected Calendar create;
+
+    @Temporal(TemporalType.TIMESTAMP)
+    @Column(name = "last_visit_date")
+    protected Calendar lastVisitDate;
+
+    @Embedded
+    protected Profile profile;
 
     @Column(name = "login", unique = true, nullable = false)
     protected String login;
@@ -22,13 +35,64 @@ public class User
     protected String password;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "app_role", nullable = false)
+    @Column(name = "role", nullable = false)
     protected ApplicationRole applicationRole;
 
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
-    @Column(name = "create_date", updatable = false)
-    protected Calendar create;
+    protected Object company_id;
+
+    @Column(name = "img_url")
+    protected String imgUrl;
+
+    public Calendar getCreate() {
+        return create;
+    }
+
+    public Calendar getLastUpdate() {
+        return lastUpdate;
+    }
+
+    public Calendar getLastVisitDate() {
+        return lastVisitDate;
+    }
+
+    public void setLastVisitDate(Calendar lastVisitDate) {
+        this.lastVisitDate = lastVisitDate;
+    }
+    /*
+    public String getFirstName() {
+        return firstName;
+    }
+
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
+    }
+
+    public String getMiddleName() {
+        return middleName;
+    }
+
+    public void setMiddleName(String middleName) {
+        this.middleName = middleName;
+    }
+
+    public String getLastName() {
+        return lastName;
+    }
+
+
+
+    public void setLastName(String lastName) {
+        this.lastName = lastName;
+    }
+    */
+
+    public Profile getProfile() {
+        return profile;
+    }
+
+    public void setProfile(Profile profile) {
+        this.profile = profile;
+    }
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
