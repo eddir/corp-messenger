@@ -2,20 +2,20 @@ package com.example.backend.dto;
 
 public class AuthenticationResponseDto
 {
-    private String jwtToken;
+    private String accessToken;
     private String refreshToken;
 
-    public AuthenticationResponseDto(String jwtToken, String refreshToken) {
-        this.jwtToken = jwtToken;
+    public AuthenticationResponseDto(String accessToken, String refreshToken) {
+        this.accessToken = accessToken;
         this.refreshToken = refreshToken;
     }
 
-    public String getJwtToken() {
-        return jwtToken;
+    public String getAccessToken() {
+        return accessToken;
     }
 
-    public void setJwtToken(String jwtToken) {
-        this.jwtToken = jwtToken;
+    public void setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
     }
 
     public String getRefreshToken() {

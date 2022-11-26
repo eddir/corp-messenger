@@ -47,24 +47,16 @@ public class JwtTokenProvider
     private void init()
     {
         this.secretJwt = Base64.getEncoder().encodeToString(secretJwt.getBytes());
-        this.secretRefresh = Base64.getEncoder().encodeToString(secretJwt.getBytes());
+        this.secretRefresh = Base64.getEncoder().encodeToString(secretRefresh.getBytes());
     }
 
     public String createJwtToken(String login,Collection<? extends GrantedAuthority> roles)
     {
-        Claims claim = Jwts.claims().setSubject(login);
-        /*
-        List<String> roles = new ArrayList<>();
-        for(GrantedAuthority authority : applicationRole)
-        {
-            roles.add(authority.getAuthority());
-        }
-        */
 
+        Claims claim = Jwts.claims().setSubject(login);
         claim.put("role",roles);
         Date now = new Date();
         Date valid = new Date(now.getTime() + timeOfValideJwtToken);
-
         return Jwts.builder()
                             .setClaims(claim)
                             .setIssuedAt(now)
@@ -76,13 +68,6 @@ public class JwtTokenProvider
     public String createRefreshToken(String login,Collection<? extends GrantedAuthority> applicationRole)
     {
         Claims claim = Jwts.claims().setSubject(login);
-        /*
-        List<String> roles = new ArrayList<>();
-        for(GrantedAuthority authority : applicationRole)
-        {
-            roles.add(authority.getAuthority());
-        }
-         */
         claim.put("role", applicationRole);
 
         Date now = new Date();
@@ -91,7 +76,7 @@ public class JwtTokenProvider
                 .setClaims(claim)
                 .setIssuedAt(now)
                 .setExpiration(valid)
-                .signWith(SignatureAlgorithm.HS256,secretJwt)
+                .signWith(SignatureAlgorithm.HS256,secretRefresh)
                 .compact();
     }
 
@@ -104,6 +89,12 @@ public class JwtTokenProvider
     public String getLogin(String token)
     {
         return parserBuilder().setSigningKey(secretJwt).build().parseClaimsJws(token).getBody().getSubject();
+        //return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
+    }
+
+    public String getLoginFromRefreshToken(String token)
+    {
+        return parserBuilder().setSigningKey(secretRefresh).build().parseClaimsJws(token).getBody().getSubject();
         //return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody().getSubject();
     }
 
@@ -135,7 +126,7 @@ public class JwtTokenProvider
     }
 
 
-    public boolean isValidRefreshToken(String token)
+    public boolean isValidRefreshToken(String token) throws JwtAuthenticationException
     {
         try
         {

@@ -3,9 +3,13 @@ package com.example.backend.controller;
 import com.example.backend.dto.AuthenticationRequestDto;
 import com.example.backend.dto.AuthenticationResponseDto;
 import com.example.backend.entities.User;
+import com.example.backend.security.JwtUserDetailsService;
 import com.example.backend.security.jwt.providers.JwtTokenProvider;
+import com.example.backend.security.jwt.user.UserDetailsFactory;
 import com.example.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -15,6 +19,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,12 +41,11 @@ public class AuthController
         this.userService = userService;
     }
 
-    @PostMapping
+    @PostMapping("/login")
     public ResponseEntity<AuthenticationResponseDto> login(@RequestBody AuthenticationRequestDto authReqDto)
     {
         try{
             String userLogin = authReqDto.getLogin();
-            //authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(userLogin, authReqDto.getPassword()));
             User user = userService.findUserByLogin(userLogin);
             if(user == null)
             {
@@ -62,6 +66,35 @@ public class AuthController
             throw new BadCredentialsException(err.getMessage());
             //return R
         }
+    }
+
+    @GetMapping("/renew")
+    public ResponseEntity<?> refresh(@RequestBody Map<String,String> body)
+    {
+        try {
+            String accessToken = body.get("accessToken");
+            String refreshToken = body.get("refreshToken");
+            if (jwtTokenProvider.isValidRefreshToken(refreshToken)) {
+                String userLogin = jwtTokenProvider.getLoginFromRefreshToken(refreshToken);
+                User user = userService.findUserByLogin(userLogin);
+                if (user == null)
+                    throw new UsernameNotFoundException("User is deleted");
+                UserDetails userDetails = UserDetailsFactory.convertUserToUserDetails(user);
+                String newAccessToken = jwtTokenProvider.createJwtToken(userLogin, userDetails.getAuthorities());
+                String newRefreshToken = jwtTokenProvider.createRefreshToken(userLogin, userDetails.getAuthorities());
+                AuthenticationResponseDto authResponseDto = new AuthenticationResponseDto(newAccessToken, newRefreshToken);
+                return ResponseEntity.ok().body(authResponseDto);
+            }
+        }
+        catch (AuthenticationException err)
+        {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(err.getMessage());
+        }
+        catch (IllegalArgumentException err)
+        {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(err.getMessage());
+        }
+        throw new RuntimeException("Что-то пошло не так...");
     }
 
 }
