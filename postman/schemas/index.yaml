@@ -756,14 +756,26 @@ paths:
       summary: Отметка сообщений прочитанными
       description: Отметка сообщений прочитанными
   "/search":
-    get:
-      parameters:
-        - name: query
-          description: Поисковый запрос
-          schema:
-            type: string
-          in: query
-          required: true
+    post:
+      operationId: search
+      tags:
+        - search
+      summary: Поиск сообщений и чатов
+      description: Поиск по названиям чатов и сообщениям
+      requestBody:
+        description: Поисковый запрос
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: Поисковый запрос части сообщения или названия чата
+                  minLength: 3
+                  maxLength: 256
+                  example: "Привет"
+        required: true
       responses:
         "200":
           content:
@@ -783,11 +795,46 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: Неверный токен доступа
-      operationId: search
+  "/users/search":
+    post:
+      operationId: searchUsers
       tags:
         - search
-      summary: Поиск
-      description: Поиск по названиям чатов и сообщениям
+      summary: Поиск пользователей
+      description: Поиск пользователей по ФИО
+      requestBody:
+        description: Поисковый запрос
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                query:
+                  type: string
+                  description: Поисковый запрос части ФИО пользователя
+                  minLength: 3
+                  maxLength: 256
+                  example: "Иванов"
+        required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Users"
+          description: Результаты поиска
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Некорректные данные
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
 components:
   schemas:
     Tokens:
@@ -817,6 +864,38 @@ components:
           format: string
           description: "ID компании, к которой принадлежит пользователь (шестнадцатеричный UUID)"
           type: integer
+    UserInstance:
+      required:
+        - first_name
+        - last_name
+        - company
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+        first_name:
+          type: string
+        middle_name:
+          type: string
+        last_name:
+          type: string
+        company:
+          $ref: "#/components/schemas/Company"
+    Users:
+      type: array
+      items:
+          $ref: "#/components/schemas/UserInstance"
+    Company:
+      required:
+        - name
+      type: object
+      properties:
+        id:
+          format: int64
+          type: integer
+        name:
+          type: string
     Chat:
       description: Краткая информация о чате
       required:
