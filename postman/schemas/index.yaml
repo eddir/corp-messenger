@@ -858,6 +858,57 @@ paths:
         - users
       summary: Получение пользователя
       description: Получение пользователя по идентификатору
+    post:
+      parameters:
+        - name: id
+          description: Идентификатор пользователя
+          schema:
+            type: integer
+          in: path
+          required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          description: Пользователь успешно обновлен
+        "400":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Некорректные данные
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "403":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Нет прав на изменение пользователя
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Пользователь не найден
+      operationId: updateUser
+      tags:
+        - users
+      summary: Обновление пользователя
+      description: Обновление пользователя по идентификатору
+      requestBody:
+        description: Данные пользователя
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+        required: true
 components:
   schemas:
     Tokens:
