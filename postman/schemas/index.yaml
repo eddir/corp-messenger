@@ -404,7 +404,6 @@ paths:
         - chats
       summary: Исключение пользователя из чата
       description: Исключение пользователя из чата
-
   "/chat/{chatId}/pin":
     post:
       requestBody:
@@ -857,6 +856,8 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/User"
+        unread:
+          type: integer
     Error:
       required:
         - message
@@ -907,6 +908,8 @@ components:
           format: int64
           type: integer
         is_pinned:
+          type: boolean
+        is_read:
           type: boolean
         attachments:
           type: array
