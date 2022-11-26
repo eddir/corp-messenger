@@ -2,10 +2,12 @@ package com.example.backend.entities;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.JoinColumnOrFormula;
+import org.hibernate.annotations.LazyToOne;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Calendar;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -38,7 +40,8 @@ public class User
     @Column(name = "role", nullable = false)
     protected ApplicationRole applicationRole;
 
-    protected Object company_id;
+    @OneToMany(mappedBy = "userOwner")
+    protected List<Company> company;
 
     @Column(name = "img_url")
     protected String imgUrl;

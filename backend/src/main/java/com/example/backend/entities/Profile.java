@@ -15,4 +15,12 @@ public class Profile
 
     @Column(name = "last_name")
     protected String lastName;
+
+    public Profile(){}
+
+    public Profile(String firstName, String middleName, String lastName) {
+        this.firstName = firstName;
+        this.middleName = middleName;
+        this.lastName = lastName;
+    }
 }

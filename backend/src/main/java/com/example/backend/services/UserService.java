@@ -1,8 +1,7 @@
 package com.example.backend.services;
 
 import com.example.backend.entities.User;
-import com.example.backend.repositories.UserRepo;
-import org.hibernate.SessionFactory;
+import com.example.backend.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -14,31 +13,31 @@ import java.util.List;
 @Transactional
 public class UserService
 {
-    protected UserRepo userRepo;
+    protected UserRepository userRepository;
 
     protected BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public UserService(UserRepo userRepo, BCryptPasswordEncoder bCryptPasswordEncoder)
+    public UserService(UserRepository userRepository, BCryptPasswordEncoder bCryptPasswordEncoder)
     {
-        this.userRepo = userRepo;
+        this.userRepository = userRepository;
         this.passwordEncoder = bCryptPasswordEncoder;
     }
 
     public User save(User user)
     {
         user.setPassword((user.getPassword()));
-        return userRepo.save(user);
+        return userRepository.save(user);
     }
 
     public List<User> findAll()
     {
-        return userRepo.findAll();
+        return userRepository.findAll();
     }
 
     public User findUserByLogin(String login)
     {
-        User user = userRepo.findUserByLogin(login);
+        User user = userRepository.findUserByLogin(login);
         return user;
     }
 }
