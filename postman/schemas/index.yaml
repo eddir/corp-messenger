@@ -199,7 +199,7 @@ paths:
           description: Чат не найден
       operationId: getChat
       tags:
-        - chats
+        - chat
       summary: Получение информации о чате
       description: Получение информации о чате
     post:
@@ -244,7 +244,7 @@ paths:
           description: Чат не найден
       operationId: updateChat
       tags:
-        - chats
+        - chat
       summary: Обновление информации о чате
       description: Обновление информации о чате
     delete:
@@ -276,18 +276,18 @@ paths:
           description: Чат не найден
       operationId: deleteChat
       tags:
-        - chats
+        - chat
       summary: Удаление чата
       description: Удаление чата
   "/chat/{chatId}/leave":
     post:
       parameters:
-      - name: chatId
-        description: Идентификатор чата
-        schema:
-          type: integer
-        in: path
-        required: true
+        - name: chatId
+          description: Идентификатор чата
+          schema:
+            type: integer
+          in: path
+          required: true
       responses:
         "200":
           content:
@@ -309,18 +309,18 @@ paths:
           description: Чат не найден
       operationId: leaveChat
       tags:
-        - chats
+        - chat
       summary: Покинуть чат
       description: Покинуть чат
   "/chat/{chatId}/invite":
     post:
       parameters:
-      - name: chatId
-        description: Идентификатор чата
-        schema:
-          type: integer
-        in: path
-        required: true
+        - name: chatId
+          description: Идентификатор чата
+          schema:
+            type: integer
+          in: path
+          required: true
       requestBody:
         description: Данные о пользователе, которого нужно пригласить в чат
         content:
@@ -355,18 +355,18 @@ paths:
           description: Чат не найден
       operationId: inviteUser
       tags:
-        - chats
+        - chat
       summary: Приглашение пользователя в чат
       description: Приглашение пользователя в чат
   "/chat/{chatId}/kick":
     post:
       parameters:
-      - name: chatId
-        description: Идентификатор чата
-        schema:
-          type: integer
-        in: path
-        required: true
+        - name: chatId
+          description: Идентификатор чата
+          schema:
+            type: integer
+          in: path
+          required: true
       requestBody:
         description: Данные о пользователе, которого нужно исключить из чата
         content:
@@ -401,18 +401,11 @@ paths:
           description: Чат не найден
       operationId: kickUser
       tags:
-        - chats
+        - chat
       summary: Исключение пользователя из чата
       description: Исключение пользователя из чата
   "/chat/{chatId}/pin":
     post:
-      requestBody:
-        description: Данные для закрепления сообщения в чате
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/Chat"
-        required: true
       parameters:
         - name: chatId
           description: Идентификатор чата
@@ -426,7 +419,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Chat"
-          description: Сообщение успешно закреплено
+          description: Чат успешно закреплен
         "400":
           content:
             application/json:
@@ -447,9 +440,9 @@ paths:
           description: Чат не найден
       operationId: pinChatMessage
       tags:
-        - chats
-      summary: Закрепление сообщения в чате
-      description: Закрепление сообщения в чате
+        - chat
+      summary: Закрепление чата
+      description: Закрепление чата в списке чатов, чтобы он всегда был вверху
     delete:
       parameters:
         - name: chatId
@@ -464,7 +457,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Chat"
-          description: Сообщение успешно откреплено
+          description: Чат успешно откреплен
         "401":
           content:
             application/json:
@@ -479,9 +472,9 @@ paths:
           description: Чат не найден
       operationId: unpinChatMessage
       tags:
-        - chats
-      summary: Открепление сообщения в чате
-      description: Открепление сообщения в чат
+        - chat
+      summary: Открепление чата
+      description: Открепление чата из списка чатов
   "/chat/{chatId}/messages":
     get:
       parameters:
@@ -530,7 +523,7 @@ paths:
           description: Чат не найден
       operationId: getChatMessages
       tags:
-        - messages
+        - chat
       summary: Получение списка сообщений чата
       description: Получение списка сообщений чата
     post:
@@ -542,12 +535,12 @@ paths:
               $ref: "#/components/schemas/Message"
         required: true
       parameters:
-      - name: chatId
-        description: Идентификатор чата
-        schema:
-          type: integer
-        in: path
-        required: true
+        - name: chatId
+          description: Идентификатор чата
+          schema:
+            type: integer
+          in: path
+          required: true
       responses:
         "201":
           content:
@@ -575,18 +568,18 @@ paths:
           description: Чат не найден
       operationId: createMessage
       tags:
-        - messages
+        - message
       summary: Создание нового сообщения
       description: Создание нового сообщения
   "/message/{messageId}":
     delete:
       parameters:
-      - name: messageId
-        description: Идентификатор сообщения
-        schema:
-          type: integer
-        in: path
-        required: true
+        - name: messageId
+          description: Идентификатор сообщения
+          schema:
+            type: integer
+          in: path
+          required: true
       responses:
         "200":
           content:
@@ -621,12 +614,12 @@ paths:
               $ref: "#/components/schemas/Message"
         required: true
       parameters:
-      - name: messageId
-        description: Идентификатор сообщения
-        schema:
-          type: integer
-        in: path
-        required: true
+        - name: messageId
+          description: Идентификатор сообщения
+          schema:
+            type: integer
+          in: path
+          required: true
       responses:
         "200":
           content:
@@ -660,12 +653,12 @@ paths:
   "/message/{messageId}/pin":
     post:
       parameters:
-      - name: messageId
-        description: Идентификатор сообщения
-        schema:
-          type: integer
-        in: path
-        required: true
+        - name: messageId
+          description: Идентификатор сообщения
+          schema:
+            type: integer
+          in: path
+          required: true
       responses:
         "200":
           content:
@@ -692,12 +685,12 @@ paths:
       description: Закрепление сообщения
     delete:
       parameters:
-      - name: messageId
-        description: Идентификатор сообщения
-        schema:
-          type: integer
-        in: path
-        required: true
+        - name: messageId
+          description: Идентификатор сообщения
+          schema:
+            type: integer
+          in: path
+          required: true
       responses:
         "200":
           content:
@@ -719,7 +712,7 @@ paths:
           description: Сообщение не найдено
       operationId: unpinMessage
       tags:
-          - messages
+        - messages
       summary: Открепление сообщения
       description: Открепление сообщения
   "/messages/read":
@@ -795,7 +788,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: Неверный токен доступа
-  "/users/search":
+  "/search/users":
     post:
       operationId: searchUsers
       tags:
@@ -835,6 +828,39 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
           description: Неверный токен доступа
+  /user/{id}:
+    get:
+      parameters:
+        - name: id
+          description: Идентификатор пользователя
+          schema:
+            type: integer
+          in: path
+          required: true
+      responses:
+        "200":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+          description: Пользователь успешно найден
+        "401":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Неверный токен доступа
+        "404":
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+          description: Пользователь не найден
+      operationId: getUser
+      tags:
+        - users
+      summary: Получение пользователя
+      description: Получение пользователя по идентификатору
 components:
   schemas:
     Tokens:
@@ -885,7 +911,7 @@ components:
     Users:
       type: array
       items:
-          $ref: "#/components/schemas/UserInstance"
+        $ref: "#/components/schemas/UserInstance"
     Company:
       required:
         - name
@@ -911,6 +937,12 @@ components:
           format: string
           description: "ID компании, к которой принадлежит чат (шестнадцатеричный UUID)"
           type: integer
+        is_pinned:
+          type: boolean
+          description: "Признак того, что чат закреплен"
+        is_private:
+          type: boolean
+          description: "Признак того, что чат приватный (тет-а-тет)"
     Chats:
       description: Список чатов
       type: array
