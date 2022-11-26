@@ -1,11 +1,10 @@
 package com.example.backend.entities;
 
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.JoinColumnOrFormula;
-import org.hibernate.annotations.LazyToOne;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.*;
 
 import javax.persistence.*;
+import javax.persistence.Entity;
+import javax.persistence.Table;
 import java.util.Calendar;
 import java.util.List;
 
@@ -38,6 +37,7 @@ public class User
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
+    //@ColumnTransformer(write = "ROLE + ?")
     protected ApplicationRole applicationRole;
 
     @OneToMany(mappedBy = "userOwner")
@@ -61,33 +61,22 @@ public class User
     public void setLastVisitDate(Calendar lastVisitDate) {
         this.lastVisitDate = lastVisitDate;
     }
-    /*
-    public String getFirstName() {
-        return firstName;
+
+    public List<Company> getCompany() {
+        return company;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setCompany(List<Company> company) {
+        this.company = company;
     }
 
-    public String getMiddleName() {
-        return middleName;
+    public String getImgUrl() {
+        return imgUrl;
     }
 
-    public void setMiddleName(String middleName) {
-        this.middleName = middleName;
+    public void setImgUrl(String imgUrl) {
+        this.imgUrl = imgUrl;
     }
-
-    public String getLastName() {
-        return lastName;
-    }
-
-
-
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
-    }
-    */
 
     public Profile getProfile() {
         return profile;
@@ -102,14 +91,19 @@ public class User
     @Column(name = "last_update")
     protected Calendar lastUpdate;
 
-    public User() {
-
-    }
+    public User() {}
 
     public User(String login, String password, ApplicationRole applicationRole) {
         this.login = login;
         this.password = password;
         this.applicationRole = applicationRole;
+    }
+
+    public User(String login, String password, ApplicationRole applicationRole, Profile profile) {
+        this.login = login;
+        this.password = password;
+        this.applicationRole = applicationRole;
+        this.profile = profile;
     }
 
     public Long getId() {

@@ -7,6 +7,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityExistsException;
 import java.util.List;
 
 @Service
@@ -24,9 +25,11 @@ public class UserService
         this.passwordEncoder = bCryptPasswordEncoder;
     }
 
-    public User save(User user)
+    public User save(User user) throws EntityExistsException
     {
         user.setPassword((user.getPassword()));
+        if(userRepository.findUserByLogin(user.getLogin()) != null)
+            throw new EntityExistsException("Пользователь с данным логином уже зарегистрирован!");
         return userRepository.save(user);
     }
 

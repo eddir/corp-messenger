@@ -48,9 +48,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                     .authorizeRequests()
-                    .antMatchers("/api/admin/**").hasAnyRole(ApplicationRole.ADMIN.name(), ApplicationRole.SUPER_ADMIN.name())
-                    .antMatchers("/api/super-admin/**").hasRole(ApplicationRole.SUPER_ADMIN.name())
+                    .antMatchers("/api/admin/**").hasAnyAuthority(ApplicationRole.ADMIN.name(), ApplicationRole.SUPER_ADMIN.name())
+                    .antMatchers("/api/super-admin/**").hasAuthority(ApplicationRole.SUPER_ADMIN.name())
                     .antMatchers("/api/users").authenticated()
+                    .antMatchers("/api/auth/register").hasAnyAuthority(ApplicationRole.ADMIN.name(),ApplicationRole.SUPER_ADMIN.name())
                     .antMatchers("/api/auth/login").permitAll();
         http.apply(new JwtConfig(jwtTokenProvider));
 

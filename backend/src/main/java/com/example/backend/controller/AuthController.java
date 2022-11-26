@@ -2,28 +2,29 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.AuthenticationRequestDto;
 import com.example.backend.dto.AuthenticationResponseDto;
+import com.example.backend.dto.UserRequestDto;
+import com.example.backend.dto.UserResponseDto;
+import com.example.backend.entities.ApplicationRole;
+import com.example.backend.entities.Profile;
 import com.example.backend.entities.User;
-import com.example.backend.security.JwtUserDetailsService;
 import com.example.backend.security.jwt.providers.JwtTokenProvider;
 import com.example.backend.security.jwt.user.UserDetailsFactory;
 import com.example.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import javax.swing.text.html.parser.Entity;
+import javax.persistence.EntityExistsException;
+import java.net.URI;
 import java.util.*;
 
 @RestController
@@ -97,4 +98,18 @@ public class AuthController
         throw new RuntimeException("Что-то пошло не так...");
     }
 
+    @PostMapping("/register")
+    public ResponseEntity<?> register(@RequestBody UserRequestDto userRequestDto)
+    {
+        try{
+            User user = new User(userRequestDto.getLogin(),userRequestDto.getPassword(), ApplicationRole.USER, new Profile(userRequestDto.getFirst_name(),userRequestDto.getMiddle_name(),userRequestDto.getLast_name()));
+            //URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/auth/register").toUriString());
+            //return ResponseEntity.created(uri).body(new UserResponseDto(userService.save(user)));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDto(userService.save(user)));
+        }
+        catch (EntityExistsException err)
+        {
+            return ResponseEntity.status(409).body(err.getMessage());
+        }
+    }
 }

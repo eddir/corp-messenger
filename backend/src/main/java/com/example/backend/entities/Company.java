@@ -24,4 +24,24 @@ public class Company {
         this.name = name;
         this.userOwner = userOwner;
     }
+
+    public Long getId() {
+        return id;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public User getUserOwner() {
+        return userOwner;
+    }
+
+    public void setUserOwner(User userOwner) {
+        this.userOwner = userOwner;
+    }
 }
