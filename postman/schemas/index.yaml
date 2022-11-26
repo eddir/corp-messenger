@@ -312,7 +312,7 @@ paths:
         - chat
       summary: Покинуть чат
       description: Покинуть чат
-  "/chat/{chatId}/invite":
+  "/chat/{chatId}/member/{userId}":
     post:
       parameters:
         - name: chatId
@@ -321,13 +321,12 @@ paths:
             type: integer
           in: path
           required: true
-      requestBody:
-        description: Данные о пользователе, которого нужно пригласить в чат
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/User"
-        required: true
+        - name: userId
+          description: Идентификатор пользователя
+          schema:
+            type: integer
+          in: path
+          required: true
       responses:
         "200":
           content:
@@ -358,8 +357,7 @@ paths:
         - chat
       summary: Приглашение пользователя в чат
       description: Приглашение пользователя в чат
-  "/chat/{chatId}/kick":
-    post:
+    delete:
       parameters:
         - name: chatId
           description: Идентификатор чата
@@ -367,13 +365,12 @@ paths:
             type: integer
           in: path
           required: true
-      requestBody:
-        description: Данные о пользователе, которого нужно исключить из чата
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/User"
-        required: true
+        - name: userId
+          description: Идентификатор пользователя
+          schema:
+            type: integer
+          in: path
+          required: true
       responses:
         "200":
           content:
@@ -523,7 +520,7 @@ paths:
           description: Чат не найден
       operationId: getChatMessages
       tags:
-        - chat
+        - messages
       summary: Получение списка сообщений чата
       description: Получение списка сообщений чата
     post:
@@ -568,7 +565,7 @@ paths:
           description: Чат не найден
       operationId: createMessage
       tags:
-        - message
+        - messages
       summary: Создание нового сообщения
       description: Создание нового сообщения
   "/message/{messageId}":
