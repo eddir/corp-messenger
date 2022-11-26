@@ -956,6 +956,9 @@ components:
           type: integer
         name:
           type: string
+        img_url:
+          type: string
+          description: "URL изображения чата или профиля пользователя. Если нет изображения, то null"
         company_id:
           format: string
           description: "ID компании, к которой принадлежит чат (шестнадцатеричный UUID)"
@@ -968,6 +971,15 @@ components:
           type: integer
         last_message:
           $ref: "#/components/schemas/Message"
+        is_pinned:
+          type: boolean
+          description: "Признак того, что чат закреплен"
+        is_private:
+          type: boolean
+          description: "Признак того, что чат приватный (тет-а-тет)"
+        is_online:
+          type: boolean
+          description: "Признак того, что пользователь в сети"
     Error:
       required:
         - message
