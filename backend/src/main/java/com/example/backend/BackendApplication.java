@@ -23,9 +23,9 @@ public class BackendApplication {
     {
         return (args) -> {
             if(userService.findUserByLogin("anton") == null)
-                userService.save(new User("anton", "1", ApplicationRole.ADMIN));
+                userService.save(new User("anton", "1", ApplicationRole.USER));
             if(userService.findUserByLogin("mihail") == null)
-                userService.save(new User("mihail", "1", ApplicationRole.SUPER_ADMIN));
+                userService.save(new User("mikhail", "1", ApplicationRole.ADMIN));
             User Ed = new User("eduard", "1", ApplicationRole.SUPER_ADMIN);
             if(userService.findUserByLogin("eduard") == null)
                 userService.save(Ed);
