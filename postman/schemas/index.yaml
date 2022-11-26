@@ -962,6 +962,7 @@ components:
           $ref: "#/components/schemas/Company"
         img_url:
           type: string
+          format: url
     Users:
       type: array
       items:
@@ -1015,6 +1016,7 @@ components:
           type: string
         img_url:
           type: string
+          format: url
           description: "URL изображения чата или профиля пользователя. Если нет изображения, то null"
         company_id:
           format: string
@@ -1117,11 +1119,14 @@ components:
             - file
         url:
           type: string
+          format: url
         thumbnail_url:
           type: string
+          format: url
         size:
           format: int64
           type: integer
+          description: Размер вложения в байтах
         name:
           type: string
     Event:
