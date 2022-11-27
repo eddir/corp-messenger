@@ -5,7 +5,9 @@ import org.hibernate.annotations.*;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.LinkedList;
 import java.util.List;
 
 @Entity
@@ -63,7 +65,10 @@ public class User
     }
 
     public List<Company> getCompany() {
-        return company;
+        if(company != null)
+            return company;
+        else
+            return new LinkedList<Company>();
     }
 
     public void setCompany(List<Company> company) {

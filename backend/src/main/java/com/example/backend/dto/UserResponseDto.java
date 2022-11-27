@@ -27,12 +27,12 @@ public class UserResponseDto
         this.imgUrl = user.getImgUrl();
         this.company = new LinkedList<>();
         List<Company> companies = user.getCompany();
-        if(companies != null){
+        //if(companies != null){
             for(Company comp : companies)
             {
                 this.company.add(new CompanyResponseDto(comp));
             }
-        }
+        //}
 
     }
 

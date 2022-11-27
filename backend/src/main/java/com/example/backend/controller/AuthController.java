@@ -69,7 +69,7 @@ public class AuthController
         }
     }
 
-    @GetMapping("/renew")
+    @PostMapping("/renew")
     public ResponseEntity<?> refresh(@RequestBody Map<String,String> body)
     {
         try {
