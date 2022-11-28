@@ -5,10 +5,7 @@ import org.hibernate.annotations.*;
 import javax.persistence.*;
 import javax.persistence.Entity;
 import javax.persistence.Table;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "users")
@@ -43,7 +40,7 @@ public class User
     protected ApplicationRole applicationRole;
 
     @OneToMany(mappedBy = "userOwner")
-    protected List<Company> company;
+    protected Set<Company> company = new HashSet<>();
 
     @Column(name = "img_url")
     protected String imgUrl;
@@ -64,14 +61,14 @@ public class User
         this.lastVisitDate = lastVisitDate;
     }
 
-    public List<Company> getCompany() {
+    public Set<Company> getCompany() {
         if(company != null)
             return company;
         else
-            return new LinkedList<Company>();
+            return new HashSet<>();
     }
 
-    public void setCompany(List<Company> company) {
+    public void setCompany(Set<Company> company) {
         this.company = company;
     }
 

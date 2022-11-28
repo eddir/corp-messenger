@@ -3,8 +3,7 @@ package com.example.backend.dto;
 import com.example.backend.entities.Company;
 import com.example.backend.entities.User;
 
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 
 public class UserResponseDto
 {
@@ -21,12 +20,13 @@ public class UserResponseDto
     public UserResponseDto(User user)
     {
         this.id = user.getId();
+        this.login = user.getLogin();
         this.first_name = user.getProfile().getFirstName();
         this.last_name = user.getProfile().getLastName();
         this.middle_name = user.getProfile().getMiddleName();
         this.imgUrl = user.getImgUrl();
         this.company = new LinkedList<>();
-        List<Company> companies = user.getCompany();
+        Set<Company> companies = user.getCompany();
         //if(companies != null){
             for(Company comp : companies)
             {
