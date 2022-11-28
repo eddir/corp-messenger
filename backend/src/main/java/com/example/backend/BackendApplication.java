@@ -34,8 +34,8 @@ public class BackendApplication {
     }
 
     @Bean
-    public BCryptPasswordEncoder bCryptPasswordEncoder() {
-        return new BCryptPasswordEncoder();
+    public BCryptPasswordEncoder customBCryptPasswordEncoder() {
+        return new BCryptPasswordEncoder(10);
     }
 
 

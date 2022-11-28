@@ -11,6 +11,7 @@ import com.example.backend.security.jwt.providers.JwtTokenProvider;
 import com.example.backend.security.jwt.user.UserDetailsFactory;
 import com.example.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -20,6 +21,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -34,12 +36,14 @@ public class AuthController
     private AuthenticationManager authManager;
     private JwtTokenProvider jwtTokenProvider;
     private UserService userService;
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
-    public AuthController(AuthenticationManager authManager, JwtTokenProvider jwtTokenProvider, UserService userService) {
+    public AuthController(AuthenticationManager authManager, JwtTokenProvider jwtTokenProvider, UserService userService, @Qualifier("customBCryptPasswordEncoder") BCryptPasswordEncoder passwordEncoder) {
         this.authManager = authManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @PostMapping("/login")
@@ -47,12 +51,14 @@ public class AuthController
     {
         try{
             String userLogin = authReqDto.getLogin();
+            //authReqDto.setPassword(passwordEncoder.encode(authReqDto.getPassword()));
             User user = userService.findUserByLogin(userLogin);
             if(user == null)
             {
                 throw new UsernameNotFoundException("\'" + userLogin + "\'" + " is not registered");
             }
-            if(!user.getPassword().equals(authReqDto.getPassword()))
+            //if(!user.getPassword().equals(authReqDto.getPassword()))
+            if(!passwordEncoder.matches(authReqDto.getPassword(),user.getPassword()))
                 throw new BadCredentialsException("Login/password is invalid!");
             Collection<GrantedAuthority> roles = new LinkedList<>();
             roles.add(new SimpleGrantedAuthority(user.getApplicationRole().name()));
@@ -102,6 +108,7 @@ public class AuthController
     public ResponseEntity<?> register(@RequestBody UserRequestDto userRequestDto)
     {
         try{
+
             User user = new User(userRequestDto.getLogin(),userRequestDto.getPassword(), ApplicationRole.USER, new Profile(userRequestDto.getFirst_name(),userRequestDto.getMiddle_name(),userRequestDto.getLast_name()));
             //URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/auth/register").toUriString());
             //return ResponseEntity.created(uri).body(new UserResponseDto(userService.save(user)));
