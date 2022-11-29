@@ -487,19 +487,14 @@ paths:
           in: path
           required: true
         - name: count
-          description: Количество сообщений, которое необходимо получить
+          description: Количество сообщений, которое необходимо получить. Если указан startMessageId и count < 0, \
+            то startMessageId будет включён в выборку
           schema:
             type: integer
           in: query
           required: false
         - name: startMessageId
           description: Идентификатор сообщения, с которого необходимо начать получение
-          schema:
-            type: integer
-          in: query
-          required: false
-        - name: offset
-          description: Смещение относительно startMessageId
           schema:
             type: integer
           in: query
