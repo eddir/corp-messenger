@@ -92,13 +92,18 @@ paths:
       description: Авторизация пользователя в системе и получение токена
   /auth/renew:
     post:
-      parameters:
-        - name: refreshToken
-          description: Токен обновления
-          schema:
-            type: string
-          in: query
-          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - refresh_token
+              properties:
+                refresh_token:
+                  type: string
+                  description: Токен для обновления
+        required: true
       responses:
         "200":
           content:
