@@ -195,7 +195,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChatInstance"
+                type: object
+                properties:
+                  chat:
+                    $ref: "#/components/schemas/Chat"
+                    description: Данные чата
+                  members:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/UserInstance"
+                    description: Список участников чата
           description: Информация о чате
         "401":
           content:
@@ -512,7 +521,16 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Messages"
+                type: object
+                properties:
+                  messages:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/Message"
+                  users:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/UserInstance"
         "401":
           content:
             application/json:
@@ -987,7 +1005,7 @@ components:
         name:
           type: string
     Chat:
-      description: Краткая информация о чате
+      description: Краткая информация о чате для заполнения
       required:
         - name
       type: object
@@ -1031,10 +1049,6 @@ components:
           format: string
           description: "ID компании, к которой принадлежит чат (шестнадцатеричный UUID)"
           type: integer
-        users:
-          type: array
-          items:
-            $ref: "#/components/schemas/User"
         unread:
           type: integer
         last_message:
