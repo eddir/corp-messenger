@@ -18,7 +18,7 @@ public class AuthenticationResponseDto
         this.userId = userId;
     }
 
-    //@JsonGetter("user_id")
+    @JsonGetter("user_id")
     public Long getUserId() {
         return userId;
     }
