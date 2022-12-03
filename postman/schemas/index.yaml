@@ -354,7 +354,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChatInstance"
+                allOf:
+                  - $ref: "#/components/schemas/Chat"
+                  - type: object
+                    properties:
+                      members_count:
+                        type: integer
+                        description: Количество участников чата
+                        example: 1
           description: Пользователь успешно приглашен в чат
         "400":
           content:
@@ -991,6 +998,8 @@ components:
         img_url:
           type: string
           format: url
+        is_online:
+          type: boolean
     Users:
       type: array
       items:
@@ -1026,6 +1035,18 @@ components:
         is_private:
           type: boolean
           description: "Признак того, что чат приватный (тет-а-тет)"
+        img_url:
+          type: string
+          format: url
+          description: "Ссылка на изображение чата"
+        type:
+          type: string
+          description: "Тип чата"
+          enum:
+            - "group"
+            - "private"
+            - "channel"
+            - "conference"
     Chats:
       description: Список чатов
       type: array
@@ -1060,9 +1081,14 @@ components:
         is_private:
           type: boolean
           description: "Признак того, что чат приватный (тет-а-тет)"
-        is_online:
-          type: boolean
-          description: "Признак того, что пользователь в сети"
+        type:
+          type: string
+          description: "Тип чата"
+          enum:
+            - "group"
+            - "private"
+            - "channel"
+            - "conference"
     Error:
       required:
         - message
