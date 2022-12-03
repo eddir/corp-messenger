@@ -77,7 +77,14 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Tokens"
+                type: object
+                properties:
+                  token:
+                    $ref: "#/components/schemas/Tokens"
+                    description: Токены для доступа к API
+                  user:
+                    $ref: "#/components/schemas/UserInstance"
+                    description: Данные пользователя
           description: Авторизация прошла успешно
         "401":
           content:
@@ -952,6 +959,8 @@ components:
         id:
           format: int64
           type: integer
+        login:
+          type: string
         first_name:
           type: string
         middle_name:
