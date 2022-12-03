@@ -64,7 +64,7 @@ public class AuthController
             roles.add(new SimpleGrantedAuthority(user.getApplicationRole().name()));
             String jwtToken = jwtTokenProvider.createJwtToken(userLogin,roles);
             String refreshToken = jwtTokenProvider.createRefreshToken(userLogin,roles);
-            AuthenticationResponseDto responseDto = new AuthenticationResponseDto(jwtToken, refreshToken);
+            AuthenticationResponseDto responseDto = new AuthenticationResponseDto(jwtToken, refreshToken,user.getId());
             return ResponseEntity.ok().body(responseDto);
         }
         catch (AuthenticationException err)
@@ -89,7 +89,7 @@ public class AuthController
                 UserDetails userDetails = UserDetailsFactory.convertUserToUserDetails(user);
                 String newAccessToken = jwtTokenProvider.createJwtToken(userLogin, userDetails.getAuthorities());
                 String newRefreshToken = jwtTokenProvider.createRefreshToken(userLogin, userDetails.getAuthorities());
-                AuthenticationResponseDto authResponseDto = new AuthenticationResponseDto(newAccessToken, newRefreshToken);
+                AuthenticationResponseDto authResponseDto = new AuthenticationResponseDto(newAccessToken, newRefreshToken, user.getId());
                 return ResponseEntity.ok().body(authResponseDto);
             }
         }
