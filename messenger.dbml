@@ -37,7 +37,6 @@ Table messenger.users {
   login varchar
   password hash
   role Enum
-  company_id int
   img_url varchar
 }
 
@@ -100,11 +99,11 @@ Ref: "messenger"."members"."user_id" < "messenger"."users"."user_id"
 
 Ref: "messenger"."attachments"."attachment_id" <> "messenger"."messages"."message_id"
 
-Ref: "messenger"."readers"."user_id" < "messenger"."users"."user_id"
+Ref: "messenger"."readers"."user_id" > "messenger"."users"."user_id"
 
 Ref: "messenger"."companies"."company_id" < "messenger"."chats"."company_id"
 
-Ref: "messenger"."companies"."company_id" <> "messenger"."users"."company_id"
+Ref: "messenger"."companies"."company_id" <> "messenger"."users"."user_id"
 
 Ref: "messenger"."users"."user_id" < "messenger"."messages"."sender_id"
 
