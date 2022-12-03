@@ -23,6 +23,7 @@ paths:
                 - first_name
                 - middle_name
                 - last_name
+                - company_id
               properties:
                 login:
                   type: string
