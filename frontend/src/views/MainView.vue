@@ -1,5 +1,5 @@
 <template>
-  <div>Hello, world! ["relative"]</div>
+  <div>Hello, world! ["parent""]</div>
 </template>
 
 <script>
