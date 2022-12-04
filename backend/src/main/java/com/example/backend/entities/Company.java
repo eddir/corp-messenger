@@ -1,6 +1,8 @@
 package com.example.backend.entities;
 
 import javax.persistence.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "companies")
@@ -13,8 +15,17 @@ public class Company {
     @Column(name = "name")
     protected String name;
 
-    @ManyToOne
-    @JoinColumn(name = "owner_id")
+    //@ManyToMany(mappedBy = "companies")
+    @ManyToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "user_company",
+            joinColumns = {@JoinColumn(name = "company_id")},
+            inverseJoinColumns = {@JoinColumn(name = "user_id")}
+    )
+    protected Set<User> users = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_owner", nullable = false)
     protected User userOwner;
 
     public Company(){}
@@ -27,6 +38,21 @@ public class Company {
 
     public Long getId() {
         return id;
+    }
+
+    public Set<User> getUsers() {
+        return users;
+    }
+
+    public void setUsers(Set<User> users)
+    {
+        this.users = users;
+    }
+
+    public void addUserIntoCompany(User user)
+    {
+        users.add(user);
+        user.addCompany(this);
     }
 
     public String getName() {

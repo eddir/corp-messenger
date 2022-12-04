@@ -44,4 +44,10 @@ public class UserService
         User user = userRepository.findUserByLogin(login);
         return user;
     }
+
+    public User findUserById(Long id)
+    {
+        User user = userRepository.findUserById(id);
+        return user;
+    }
 }

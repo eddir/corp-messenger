@@ -26,7 +26,7 @@ public class UserResponseDto
         this.middle_name = user.getProfile().getMiddleName();
         this.imgUrl = user.getImgUrl();
         this.company = new LinkedList<>();
-        Set<Company> companies = user.getCompany();
+        Set<Company> companies = user.getCompanies();
         //if(companies != null){
             for(Company comp : companies)
             {

@@ -1,16 +1,23 @@
 package com.example.backend.services;
 
 import com.example.backend.entities.Company;
+import com.example.backend.entities.User;
 import com.example.backend.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.EntityTransaction;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Service
 public class CompanyService
 {
     private CompanyRepository companyRepository;
+    @PersistenceContext
+    private EntityManager em;
 
     @Autowired
     public CompanyService(CompanyRepository companyRepository) {
@@ -22,8 +29,12 @@ public class CompanyService
         return companyRepository.findAll();
     }
 
+    @Transactional
     public Company save(Company company)
     {
-        return companyRepository.save(company);
+        companyRepository.save(company);
+        company.addUserIntoCompany(company.getUserOwner());
+        return company;
     }
+
 }
