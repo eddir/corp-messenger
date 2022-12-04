@@ -1,6 +1,5 @@
 <template>
-    <div>Hello, world!</div>
-    <p v-for="vehicle in vehicles" v-text="vehicle"></p>
+  <div>Hello, world!</div>
 </template>
 
 <script>
