@@ -19,14 +19,14 @@
         methods: {
             init() {
                 this.$api.echo.test({ data: 'hello men!!!' }).then((res) => {
-                    console.log('test rest:', res)
+                    alert('test rest:' + res)
                 }).catch((e) => {
-                    console.error(e)
+                    alert(e)
                 })
                 this.$api.vehicles.test().then((res) => {
                     this.vehicles = res.data
                 }).catch((e) => {
-                    console.error(e)
+                    alert(e)
                 })
             }
         }
