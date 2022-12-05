@@ -1,5 +1,5 @@
 <template>
-  <div>Hello, world! "asleep"</div>
+  <div>Hello, world! "dream"</div>
 </template>
 
 <script>
