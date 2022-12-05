@@ -26,16 +26,14 @@ services:
       - "8000:80"
 
   spring:
-    depends_on:
-      - postgres
-    build:
-      context: ./
-      dockerfile: ./docker/spring/Dockerfile
+    image: eddir/corp-messenger-webapp:github-actions
     restart: on-failure
     ports:
       - "8080"
     expose:
       - "8080"
+    depends_on:
+      - postgres
     environment:
       SPRING_APPLICATION_JSON: '{
           "spring.datasource.url": "jdbc:postgresql://postgres:5432/messenger",
@@ -49,10 +47,8 @@ services:
         }'
 
   nginx:
+    image: eddir/corp-messenger-restapp:github-actions
     restart: always
-    build:
-      context: ./
-      dockerfile: ./docker/nginx/Dockerfile
     ports:
       - "8080:80"
       - "8443:443"
@@ -64,5 +60,3 @@ services:
 
 volumes:
   postgres-data:
-
-# Запустить nginx, spring, vue в докере
