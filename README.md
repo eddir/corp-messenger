@@ -1,5 +1,6 @@
 # corp-messenger
-
+[![Project check](https://github.com/eddir/corp-messenger/actions/workflows/deployment.yml/badge.svg)](https://github.com/eddir/corp-messenger/actions/workflows/deployment.yml)
+![Codacy grade](https://img.shields.io/codacy/grade/9edfafacb39f4a688102ee109f155140)
 ## Установка
 
 ```bash
