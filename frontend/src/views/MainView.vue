@@ -1,5 +1,5 @@
 <template>
-  <div>Hello, world! selfish</div>
+  <div>Hello, world! "point"</div>
 </template>
 
 <script>
