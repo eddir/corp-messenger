@@ -5,7 +5,8 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="16000188-a1e9-4c71-bae7-f9453cd29b32" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/frontend/src/views/MainView.vue" beforeDir="false" afterPath="$PROJECT_DIR$/frontend/src/views/MainView.vue" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.github/workflows/project-checks.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/project-checks.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -82,7 +83,10 @@
       <workItem from="1667289630529" duration="7783000" />
       <workItem from="1667463729811" duration="17379000" />
       <workItem from="1670138995200" duration="9590000" />
-      <workItem from="1670168443671" duration="5723000" />
+      <workItem from="1670168443671" duration="6993000" />
+      <workItem from="1670183153717" duration="869000" />
+      <workItem from="1670185162934" duration="1014000" />
+      <workItem from="1670234042525" duration="1336000" />
     </task>
     <servers />
   </component>
