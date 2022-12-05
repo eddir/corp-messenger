@@ -1,5 +1,5 @@
 <template>
-  <div>Hello, world! "point"</div>
+  <div>Hello, world! "branch"</div>
 </template>
 
 <script>
