@@ -44,7 +44,7 @@ jobs:
 
   publish-backend:
     runs-on: ubuntu-latest
-    needs: [ front, back ]
+    needs: [ test-frontend, test-backend ]
     steps:
       - uses: actions/checkout@v1
 
@@ -71,7 +71,7 @@ jobs:
 
   publish-frontent:
     runs-on: ubuntu-latest
-    needs: [ front, back ]
+    needs: [ test-frontend, test-backend ]
     steps:
       - uses: actions/checkout@v1
 
