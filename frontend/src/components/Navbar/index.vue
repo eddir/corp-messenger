@@ -1,38 +1,54 @@
 <template>
     <div class="navbar">
-        <div class="navbar__title">
-            <ADropdown class="navbar__title__menu" :trigger="['click']" placement="bottomLeft">
-                <AButton class="navbar__title__menu-trigger" type="link" @click.prevent>{{ title() }} <RightOutlined class="navbar__title__menu-trigger-icon" /></AButton>
-                <template #overlay>
-                    <AMenu class="navbar__title__menu-dropdown" theme="dark" v-model:selectedKeys="selectedKeys" selectable>
-                        <AMenuItem key="profile" class="navbar__title__menu-dropdown-item" @click="goTo('/profile')">Профиль</AMenuItem>
-                        <AMenuItem key="chats" class="navbar__title__menu-dropdown-item" @click="goTo('/chats')">Чаты</AMenuItem>
-                        <AMenuItem key="contacts" class="navbar__title__menu-dropdown-item" @click="goTo('/contacts')">Контакты</AMenuItem>
-                    </AMenu>
+        <AMenu class="navbar__menu" theme="dark" v-model:selectedKeys="selectedKeys" selectable mode="inline" :inline-collapsed="collapsed">
+            <AMenuItem key="profile" class="navbar__menu__item" @click="goTo('/profile')">
+                <template :v-show="collapsed" #icon>
+                    <div class="avatar"><UserOutlined /></div>
                 </template>
-            </ADropdown>
-            <ADropdown class="navbar__title__settings" :trigger="['click']" placement="bottomLeft">
-                <AButton class="navbar__title__settings-trigger" type="link" @click.prevent><SettingOutlined class="navbar__title__settings-trigger-icon" /></AButton>
-                <template #overlay>
-                    <AMenu class="navbar__title__settings-dropdown" theme="dark">
-                        <AMenuItem class="navbar__title__settings-dropdown-item" @click="goTo('/settings')">Настройки</AMenuItem>
-                        <AMenuItem class="navbar__title__settings-dropdown-item" @click="goTo('/login')"><AButton class="exit" type="link" size="small" danger>Выйти</AButton></AMenuItem>
-                    </AMenu>
-                </template>
-            </ADropdown>
-        </div>
+                <span class="username">{{ login }}</span>
+            </AMenuItem>
+            <AMenuItem key="chats" class="navbar__menu__item" @click="goTo('/chats')">
+                <template #icon><WechatOutlined /></template>
+                <span>Чаты</span>
+            </AMenuItem>
+            <AMenuItem key="contacts" class="navbar__menu__item" @click="goTo('/contacts')">
+                <template #icon><PhoneOutlined /></template>
+                <span>Контакты</span>
+            </AMenuItem>
+            <AMenuItem class="navbar__menu__item" @click.native.stop="exit()">
+                <template #icon><ExportOutlined /></template>
+                <span>Выход</span>
+            </AMenuItem>
+        </AMenu>
+        <ChatsNavbar v-show="viewChatsNavbar" />
     </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
-import { RightOutlined, SettingOutlined } from '@ant-design/icons-vue'
-import { MenuItemsEn } from './types'
+import { mapActions, mapGetters } from 'vuex'
+import { UserOutlined, WechatOutlined, PhoneOutlined, ExportOutlined } from '@ant-design/icons-vue'
+
+import { ChatsNavbar } from '@/components'
 
 export default {
     data() {
         return {
-            selectedKeys: [ 'chats' ]
+            selectedKeys: [ 'chats' ],
+            collapsed: true
+        }
+    },
+
+    computed: {
+        ...mapGetters('AppStore', [
+            'userLogin'
+        ]),
+
+        viewChatsNavbar() {
+            return this.selectedKeys.includes('chats')
+        },
+        
+        login() {
+            return this.userLogin || 'user'
         }
     },
 
@@ -46,8 +62,9 @@ export default {
             this.selectedKeys = [ path ]
         },
 
-        title() {
-            return MenuItemsEn[this.selectedKeys[0]]
+        exit() {
+            //TODO: выход из системы
+            this.goTo('/login')
         },
 
         goTo(path) {
@@ -63,82 +80,135 @@ export default {
         this.init()
     },
 
+    watch: {
+        selectedKeys(val) {
+            if (val.includes('chats')) {
+                this.collapsed = true
+            } else {
+                this.collapsed = false
+            }
+        }
+    },
+
     components: {
-        RightOutlined, SettingOutlined
-    }    
+        UserOutlined, WechatOutlined, PhoneOutlined, ExportOutlined, ChatsNavbar
+    }
 }
 </script>
 
 <style lang="less" scoped>
     .navbar {
-        width: 350px;
-        padding: 0 25px;
-        flex: 1 0 auto;
-        background-color: #1C1C1C;
-        box-shadow: 0 0 10px 0 #000;
+        height: 100vh;
+        display: flex;
 
-        &__title {
-            width: 100%;
-            height: 80px;
+        &__menu {
             display: flex;
-            align-items: center;
-            justify-content: space-between;
+            flex-direction: column;
+            width: 300px;
+            height: 100%;
 
-            &__menu {
-                /deep/ &-trigger {
-                    font-size: 22px;
-                    padding: 0;
-                    color: #FFF;
+            /deep/ &.ant-menu {
+                background-color: #1c1c1c;
+            }
 
-                    .navbar__title__menu-trigger-icon {
-                        font-size: 16px;
-                        transition: transform .2s ease-in-out;
-                    }
+            /deep/ &.ant-menu-inline-collapsed > .ant-menu-item {
+                padding: 0 0 0 28px;
 
-                    &:focus {
-                        .navbar__title__menu-trigger-icon {
-                            transform: rotate(90deg);
-                            transition: transform .2s ease-in-out;
+                &:first-child {
+                    height: 80px;
+
+                    .avatar {
+                        width: 50px;
+                        height: 50px;
+                        top: 15px;
+                        left: 15px;
+                    
+                        .anticon {
+                            width: 50px;
+                            height: 50px;
+                            font-size: 24px;
                         }
                     }
                 }
+
+                .anticon {
+                    font-size: 24px;
+                }
             }
 
-            &__settings {
-                /deep/ &-trigger {
-                    padding: 0;
+            /deep/ &__item.ant-menu-item {
+                display: flex;
+                align-items: center;
+                height: 60px;
+                margin: 0;
+                padding: 0;
+                font-size: 14px;
+                font-weight: 500;
+
+                &:not(:first-child) {
+                    text-transform: uppercase;
+                    
+                    .ant-menu-title-content {
+                        margin-left: 24px;    
+                    }
+                }
+
+                &:not(:last-child) {
+                    margin-bottom: 0;
+                }
+
+                &:first-child {
+                    position: relative;
                     display: flex;
-                    align-items: flex-end;
-                    font-size: 18px;
-                    color: #FFF;
+                    justify-content: center;
+                    align-items: center;
+                    height: 200px;
 
-                    .navbar__title__settings-trigger-icon {
-                        transition: transform .2s ease-in-out;                        
+                    .avatar {
+                        width: 100px;
+                        height: 100px;
+                        top: 24px;
+                        left: calc(50% - 50px);
                     }
 
-                    &:focus {
-                        .navbar__title__settings-trigger-icon {
-                            transform: rotate(-90deg);
-                            transition: transform .2s ease-in-out;
-                        }
+                    .anticon {
+                        width: 100px;
+                        height: 100px;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 50px;
+                        color: #8F8F8F;
                     }
+
+                    .ant-menu-title-content {
+                        margin-top: 100px;
+                        font-size: 18px;
+                        text-align: center;
+                        margin-left: -24px;
+                        width: 100%;
+                    }
+                }
+
+                &:last-child {
+                    margin-top: auto;
+                    color: red;
+                }
+
+                .anticon {
+                    font-size: 24px;
                 }
             }
         }
-    }
 
-    .navbar__title__menu-dropdown,
-    .navbar__title__settings-dropdown {
-        background-color: #1C1C1C;
-        box-shadow: 0 0 10px 0 #000;
-    }
-    
-    .navbar__title__menu-dropdown {
-        width: 300px;
-    }
-
-    .exit {
-        padding: 0;
-        border: none;
+        .avatar {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: #FFF;
+        }
     }
 </style>

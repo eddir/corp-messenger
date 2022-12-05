@@ -3,17 +3,17 @@
         <UserOutlined class="auth-sider__icon" />
         <ADivider class="auth-sider__title">Авторизация</ADivider>
         <AForm class="auth-sider__form" :v-model="formState" layout="vertical">
-            <AFormItem class="auth-sider__form__item" label="Логин" name="login" >
-                <AInput :v-model:value="formState.login" placeholder="Логин" />
+            <AFormItem class="auth-sider__form__item" label="Логин" name="login">
+                <AInput v-model:value="formState.login" placeholder="Логин" />
             </AFormItem>
             <AFormItem class="auth-sider__form__item" label="Пароль" name="password">
-                <AInput :v-model:value="formState.password" type="password" placeholder="Пароль" />
+                <AInput v-model:value="formState.password" type="password" placeholder="Пароль" />
             </AFormItem>
             <div class="auth-sider__form__links">
                 <AButton type="link">Забыли пароль?</AButton>
                 <AButton @click="goTo('/register')" type="link">Регистрация</AButton>
             </div>
-            <AButton @click="goTo('/chats')" type="primary">Войти</AButton>
+            <AButton @click="login()" type="primary" :disabled="!formState.login || !formState.password">Войти</AButton>
         </AForm>
     </div>
 </template>
@@ -34,11 +34,21 @@ export default {
 
     methods: {
         ...mapActions('AppStore', [
-            'authorize',
+            'authorize'
         ]),
 
+        login() {
+            // this.authorize({ accessToken: '123', refreshToken: '123' })
+            // this.goTo('/chats')
+            this.$api.app.login(this.formState)
+                .then(({ data }) => {
+                    this.authorize(data)
+                })
+                .then(() => this.goTo('/chats'))
+                .catch((e) => console.error(e))
+        },
+
         goTo(path) {
-            this.authorize()
             this.$router.push(path)
         }
     },

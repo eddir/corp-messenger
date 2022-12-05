@@ -25,9 +25,10 @@ export default {
 
         init() {
             const isAuth = JSON.parse(localStorage.getItem('IS_AUTH'))
+            const tokens = JSON.parse(localStorage.getItem('TOKENS'))
 
-            if (isAuth)
-                return this.authorize()
+            if (isAuth && tokens)
+                return this.authorize(tokens)
             else 
                 return this.unauthorize()
         }
