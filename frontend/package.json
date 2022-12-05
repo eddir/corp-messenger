@@ -4,7 +4,8 @@
     "private": true,
     "scripts": {
         "serve": "vue-cli-service serve",
-        "build": "vue-cli-service build"
+        "build": "vue-cli-service build",
+        "test:unit": "vue-cli-service test:unit --passWithNoTests"
     },
     "dependencies": {
         "@ant-design/icons-vue": "^6.1.0",
@@ -22,6 +23,7 @@
         "@vue/cli-plugin-pwa": "~5.0.0",
         "@vue/cli-plugin-router": "~5.0.0",
         "@vue/cli-plugin-vuex": "~5.0.0",
+        "@vue/cli-plugin-unit-jest": "^5.0.8",
         "@vue/cli-service": "~5.0.0",
         "less": "^4.0.0",
         "less-loader": "^8.0.0",
