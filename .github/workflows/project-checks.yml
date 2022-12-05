@@ -6,7 +6,7 @@ on:
       - '*'
 
 jobs:
-  front:
+  test-frontend:
     runs-on: ubuntu-latest
 
     defaults:
@@ -27,7 +27,7 @@ jobs:
           npm run lint
           npm run test:unit
 
-  back:
+  test-backend:
     runs-on: ubuntu-latest
     defaults:
       run:
