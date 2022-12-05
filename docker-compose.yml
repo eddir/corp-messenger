@@ -46,7 +46,7 @@ services:
           "jwt.token.expired.refresh": "86400"
         }'
     env_file:
-      - stack.env
+      - ../stack.env
 
   nginx:
     image: eddir/corp-messenger-webapp:master
