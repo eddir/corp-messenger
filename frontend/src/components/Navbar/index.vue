@@ -5,7 +5,7 @@
                 <template :v-show="collapsed" #icon>
                     <div class="avatar"><UserOutlined /></div>
                 </template>
-                <span class="username">Кузнецов Михаил</span>
+                <span class="username">{{ login }}</span>
             </AMenuItem>
             <AMenuItem key="chats" class="navbar__menu__item" @click="goTo('/chats')">
                 <template #icon><WechatOutlined /></template>
@@ -15,23 +15,40 @@
                 <template #icon><PhoneOutlined /></template>
                 <span>Контакты</span>
             </AMenuItem>
-            <AMenuItem class="navbar__menu__item" @click="exit()">
+            <AMenuItem class="navbar__menu__item" @click.native.stop="exit()">
                 <template #icon><ExportOutlined /></template>
                 <span>Выход</span>
             </AMenuItem>
         </AMenu>
+        <ChatsNavbar v-show="viewChatsNavbar" />
     </div>
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import { UserOutlined, WechatOutlined, PhoneOutlined, ExportOutlined } from '@ant-design/icons-vue'
+
+import { ChatsNavbar } from '@/components'
 
 export default {
     data() {
         return {
             selectedKeys: [ 'chats' ],
             collapsed: true
+        }
+    },
+
+    computed: {
+        ...mapGetters('AppStore', [
+            'userLogin'
+        ]),
+
+        viewChatsNavbar() {
+            return this.selectedKeys.includes('chats')
+        },
+        
+        login() {
+            return this.userLogin || 'user'
         }
     },
 
@@ -74,7 +91,7 @@ export default {
     },
 
     components: {
-        UserOutlined, WechatOutlined, PhoneOutlined, ExportOutlined
+        UserOutlined, WechatOutlined, PhoneOutlined, ExportOutlined, ChatsNavbar
     }
 }
 </script>
@@ -82,6 +99,7 @@ export default {
 <style lang="less" scoped>
     .navbar {
         height: 100vh;
+        display: flex;
 
         &__menu {
             display: flex;
@@ -125,9 +143,14 @@ export default {
                 margin: 0;
                 padding: 0;
                 font-size: 14px;
+                font-weight: 500;
 
                 &:not(:first-child) {
                     text-transform: uppercase;
+                    
+                    .ant-menu-title-content {
+                        margin-left: 24px;    
+                    }
                 }
 
                 &:not(:last-child) {
@@ -155,7 +178,7 @@ export default {
                         justify-content: center;
                         align-items: center;
                         font-size: 50px;
-                        color: #000;
+                        color: #8F8F8F;
                     }
 
                     .ant-menu-title-content {

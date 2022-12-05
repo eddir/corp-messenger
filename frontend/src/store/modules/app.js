@@ -10,6 +10,7 @@ export default {
 
 	state: {
         isAuth: false,
+        userLogin: null,
         access_token: null,
         refresh_token: null,
         checkAuthInterval: 60,
@@ -19,6 +20,10 @@ export default {
  	getters: {
         isAuth: state => {
             return state.isAuth
+        },
+
+        userLogin: state => {
+            return state.userLogin
         },
 
         getTokens: state => {
@@ -36,6 +41,8 @@ export default {
                 state.access_token = payload.accessToken
                 state.refresh_token = payload.refreshToken
                 localStorage.setItem('TOKENS', JSON.stringify(payload))
+
+                state.userLogin = parseJWT(payload.accessToken).sub
             } else {
                 state.access_token = null
                 state.refresh_token = null
