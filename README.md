@@ -1,5 +1,7 @@
 # corp-messenger
 
+[![Codacy Badge](https://api.codacy.com/project/badge/Grade/4bdde9f2ecf7449c935f57de299c21bf)](https://app.codacy.com/gh/eddir/corp-messenger?utm_source=github.com&utm_medium=referral&utm_content=eddir/corp-messenger&utm_campaign=Badge_Grade_Settings)
+
 ## Установка
 
 ```bash
