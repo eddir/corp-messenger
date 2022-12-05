@@ -42,8 +42,8 @@ services:
           "spring.jpa.hibernate.ddl-auto": "create",
           "jwt.token.secret.jwt": "$${random.value}",
           "jwt.token.secret.refresh": "$${random.value}",
-          "jwt.token.expired.jwt": "3600",
-          "jwt.token.expired.refresh": "86400"
+          "jwt.token.expired.jwt": "3600000",
+          "jwt.token.expired.refresh": "86400000"
         }'
 
   nginx:
