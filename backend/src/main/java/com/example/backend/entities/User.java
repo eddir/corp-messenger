@@ -39,14 +39,7 @@ public class User
     protected ApplicationRole applicationRole;
 
     @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
-    /*
-    @JoinTable(
-            name = "user_company",
-            joinColumns = {@JoinColumn(name = "user_id")},
-            inverseJoinColumns = {@JoinColumn(name = "company_id")}
-    )
 
-     */
     protected Set<Company> companies = new HashSet<>();
 
     @Column(name = "img_url")
@@ -57,13 +50,6 @@ public class User
     }
 
     public void setCompanies(Set<Company> companies) {
-        /*
-        this.companies = companies;
-        for(Company company : companies)
-        {
-            company.addUserIntoCompany(this);
-        }
-         */
         this.companies = companies;
     }
 
