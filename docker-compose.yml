@@ -26,7 +26,7 @@ services:
       - "8000:80"
 
   spring:
-    image: eddir/corp-messenger-restapp:github-actions
+    image: eddir/corp-messenger-restapp:master
     restart: on-failure
     ports:
       - "8080"
@@ -47,7 +47,7 @@ services:
         }'
 
   nginx:
-    image: eddir/corp-messenger-webapp:github-actions
+    image: eddir/corp-messenger-webapp:master
     restart: always
     ports:
       - "8080:80"
