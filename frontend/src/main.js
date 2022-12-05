@@ -8,4 +8,6 @@ import api from "@/api"
 
 import "@/styles"
 
+require('@/utils/register-assets')
+
 createApp(App).use(Antd).use(store()).use(router).use(api).mount("#app")

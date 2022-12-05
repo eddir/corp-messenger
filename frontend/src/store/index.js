@@ -1,11 +1,12 @@
 import Vuex from 'vuex'
 
-import { AppStore } from './modules'
+import { AppStore, ChatsStore } from './modules'
 
 const store = () => {
     return new Vuex.Store({
         modules: {
-            AppStore
+            AppStore,
+            ChatsStore
         }
     })
 }
