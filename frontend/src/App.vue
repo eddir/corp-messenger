@@ -24,7 +24,7 @@ export default {
         ]),
 
         init() {
-      const isAuth = JSON.parse(localStorage.getItem("IS_AUTH"));
+            const isAuth = JSON.parse(localStorage.getItem('IS_AUTH'))
             const tokens = JSON.parse(localStorage.getItem('TOKENS'))
 
             if (isAuth && tokens)

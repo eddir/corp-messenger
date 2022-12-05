@@ -24,7 +24,7 @@
 
 <script>
 import { PlusOutlined } from '@ant-design/icons-vue'
-import { InputSearch, EditChatModal, EditChanelModal } from "@/components";
+import { InputSearch, EditChatModal, EditChanelModal } from '@/components'
 
 export default {
     data() {
