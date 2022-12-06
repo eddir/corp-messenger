@@ -71,7 +71,7 @@ export default {
             clearInterval()
 
             if (state.isAuth) {
-                setInterval(dispatch('checkToken'), state.checkAuthInterval * 1000)
+                setInterval(() => dispatch('checkToken'), state.checkAuthInterval * 1000)
             }
         },
         
