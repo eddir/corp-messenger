@@ -22,7 +22,7 @@ export default {
     methods: {
         init() {
             if (this.isAuth) {
-                this.$router.push('/chats')
+                this.$router.push(window.location.pathname)
             }
         },
     },
