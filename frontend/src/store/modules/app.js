@@ -70,7 +70,7 @@ export default {
         startTokenTracking: ({ dispatch, state }) => {
             clearInterval()
 
-            if (state.isAuth) {
+            if (state.isAuth && state.access_token) {
                 setInterval(() => dispatch('checkToken'), state.checkAuthInterval * 1000)
             }
         },

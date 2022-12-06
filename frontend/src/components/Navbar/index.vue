@@ -104,8 +104,11 @@ export default {
         &__menu {
             display: flex;
             flex-direction: column;
-            width: 300px;
             height: 100%;
+
+            &:not(.ant-menu-inline-collapsed) {
+                width: 300px;
+            }
 
             /deep/ &.ant-menu {
                 background-color: #1c1c1c;
