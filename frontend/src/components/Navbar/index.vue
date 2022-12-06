@@ -178,7 +178,7 @@ export default {
                         justify-content: center;
                         align-items: center;
                         font-size: 50px;
-                        color: #8F8F8F;
+                        color: #D9D9D9;
                     }
 
                     .ant-menu-title-content {
