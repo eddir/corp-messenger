@@ -1,5 +1,45 @@
 <template>
-  <router-view />
+    <component :is="layout">
+        <router-view />
+    </component>
 </template>
 
-<style lang="less" />
+<script>
+import { mapActions } from 'vuex'
+
+import AuthLayout from "@/layouts/AuthLayout.vue"
+import MainLayout from "@/layouts/MainLayout.vue"
+
+export default {
+    computed: {
+        layout() {
+            return `${this.$route.meta.layout || 'auth'}-layout`
+        }
+    },
+
+    methods: {
+        ...mapActions('AppStore', [
+            'authorize',
+            'unauthorize'
+        ]),
+
+        init() {
+            const isAuth = JSON.parse(localStorage.getItem('IS_AUTH'))
+            const tokens = JSON.parse(localStorage.getItem('TOKENS'))
+
+            if (isAuth && tokens)
+                return this.authorize(tokens)
+            else 
+                return this.unauthorize()
+        }
+    },
+
+    created() {
+        this.init()
+    },
+
+    components: {
+        AuthLayout, MainLayout
+    }
+}
+</script>
