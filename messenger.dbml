@@ -38,6 +38,12 @@ Table messenger.users {
   password hash
   role Enum
   img_url varchar
+  email varchar
+  phone varchar
+  position varchar
+  department varchar
+  division varchar
+  team varchar
 }
 
 Table messenger.members {
