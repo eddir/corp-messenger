@@ -73,6 +73,11 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/UserCredentials'
+            examples:
+              Example 1:
+                value:
+                  login: Steve
+                  password: qwerty
         required: true
       responses:
         '200':
@@ -87,6 +92,23 @@ paths:
                   user:
                     $ref: '#/components/schemas/UserInstance'
                     description: Данные пользователя
+              examples:
+                Example 1:
+                  value:
+                    token:
+                      accessToken: 73d65aec-8431-447f-a163-1c1838b51d82
+                      refreshToken: 786e91a0-1be4-4328-96f7-3539bbbfa9f9
+                    user:
+                      id: 0
+                      login: Steve
+                      first_name: Steve
+                      middle_name: Paul
+                      last_name: Jobs
+                      company:
+                        id: 1
+                        name: Apple
+                      img_url: string
+                      is_online: true
           description: Авторизация прошла успешно
         '401':
           content:
