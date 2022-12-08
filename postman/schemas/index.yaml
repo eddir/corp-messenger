@@ -981,6 +981,7 @@ components:
       required:
         - username
         - password
+      title: ''
     UserInstance:
       required:
         - first_name
