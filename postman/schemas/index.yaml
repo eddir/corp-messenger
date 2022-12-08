@@ -959,9 +959,6 @@ components:
           type: string
           format: uuid
     User:
-      required:
-        - username
-        - password
       type: object
       properties:
         id:
@@ -969,6 +966,9 @@ components:
           type: integer
         username:
           type: string
+          example: Steve
+          minLength: 2
+          maxLength: 32
         password:
           format: password
           type: string
@@ -976,6 +976,11 @@ components:
           format: string
           description: 'ID компании, к которой принадлежит пользователь (шестнадцатеричный UUID)'
           type: integer
+          example: 21
+          minimum: 1
+      required:
+        - username
+        - password
     UserInstance:
       required:
         - first_name
