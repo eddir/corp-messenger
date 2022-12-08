@@ -4,9 +4,9 @@ info:
   version: 1.0.0
   description: Retrieve and send messages
 servers:
-  - url: "http://messenger.rostkov.me/api"
+  - url: 'http://messenger.rostkov.me/api'
     description: Продуктовый сервер
-  - url: "http://beta.messenger.rostkov.me/api"
+  - url: 'http://beta.messenger.rostkov.me/api'
     description: Тестовый сервер
 paths:
   /auth/register:
@@ -42,62 +42,64 @@ paths:
                   description: Фамилия
         required: true
       responses:
-        "201":
+        '201':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserInstance"
+                $ref: '#/components/schemas/UserInstance'
           description: Пользователь успешно зарегистрирован
-        "400":
+        '400':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Некорректные данные
-        "409":
+        '409':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Пользователь с таким username уже существует
       operationId: registerUser
       tags:
         - auth
       summary: Регистрация нового пользователя
       description: Регистрация нового пользователя в системе
+      security: []
   /auth/login:
     post:
       requestBody:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserCredentials"
+              $ref: '#/components/schemas/UserCredentials'
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   token:
-                    $ref: "#/components/schemas/Tokens"
+                    $ref: '#/components/schemas/Tokens'
                     description: Токены для доступа к API
                   user:
-                    $ref: "#/components/schemas/UserInstance"
+                    $ref: '#/components/schemas/UserInstance'
                     description: Данные пользователя
           description: Авторизация прошла успешно
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный логин или пароль
       operationId: loginUser
       tags:
         - auth
       summary: Авторизация
       description: Авторизация пользователя в системе и получение токена
+      security: []
   /auth/renew:
     post:
       requestBody:
@@ -113,17 +115,17 @@ paths:
                   description: Токен для обновления
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Tokens"
+                $ref: '#/components/schemas/Tokens'
           description: Токен обновлен
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен обновления
       operationId: renewToken
       tags:
@@ -133,17 +135,17 @@ paths:
   /chats:
     get:
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Chats"
+                $ref: '#/components/schemas/Chats'
           description: Список чатов
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
       operationId: getChats
       tags:
@@ -156,33 +158,33 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Chat"
+              $ref: '#/components/schemas/Chat'
         required: true
       responses:
-        "201":
+        '201':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Chat"
+                $ref: '#/components/schemas/Chat'
           description: Чат успешно создан
-        "400":
+        '400':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Некорректные данные
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
       operationId: createChat
       tags:
         - chats
       summary: Создание нового чата
       description: Создание нового чата
-  "/chat/{chatId}":
+  '/chat/{chatId}':
     get:
       parameters:
         - name: chatId
@@ -192,32 +194,32 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 type: object
                 properties:
                   chat:
-                    $ref: "#/components/schemas/Chat"
+                    $ref: '#/components/schemas/Chat'
                     description: Данные чата
                   members:
                     type: array
                     items:
-                      $ref: "#/components/schemas/UserInstance"
+                      $ref: '#/components/schemas/UserInstance'
                     description: Список участников чата
           description: Информация о чате
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Чат не найден
       operationId: getChat
       tags:
@@ -230,7 +232,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/ChatInstance"
+              $ref: '#/components/schemas/ChatInstance'
         required: true
       parameters:
         - name: chatId
@@ -240,29 +242,29 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChatInstance"
+                $ref: '#/components/schemas/ChatInstance'
           description: Информация о чате успешно обновлена
-        "400":
+        '400':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Некорректные данные
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Чат не найден
       operationId: updateChat
       tags:
@@ -278,30 +280,30 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChatInstance"
+                $ref: '#/components/schemas/ChatInstance'
           description: Чат успешно удален
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Чат не найден
       operationId: deleteChat
       tags:
         - chat
       summary: Удаление чата
       description: Удаление чата
-  "/chat/{chatId}/leave":
+  '/chat/{chatId}/leave':
     post:
       parameters:
         - name: chatId
@@ -311,30 +313,30 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Chat"
+                $ref: '#/components/schemas/Chat'
           description: Пользователь успешно покинул чат
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Чат не найден
       operationId: leaveChat
       tags:
         - chat
       summary: Покинуть чат
       description: Покинуть чат
-  "/chat/{chatId}/member/{userId}":
+  '/chat/{chatId}/member/{userId}':
     post:
       parameters:
         - name: chatId
@@ -350,12 +352,12 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
                 allOf:
-                  - $ref: "#/components/schemas/Chat"
+                  - $ref: '#/components/schemas/Chat'
                   - type: object
                     properties:
                       members_count:
@@ -363,23 +365,23 @@ paths:
                         description: Количество участников чата
                         example: 1
           description: Пользователь успешно приглашен в чат
-        "400":
+        '400':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Некорректные данные
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Чат не найден
       operationId: inviteUser
       tags:
@@ -401,36 +403,36 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChatInstance"
+                $ref: '#/components/schemas/ChatInstance'
           description: Пользователь успешно исключен из чата
-        "400":
+        '400':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Некорректные данные
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Чат не найден
       operationId: kickUser
       tags:
         - chat
       summary: Исключение пользователя из чата
       description: Исключение пользователя из чата
-  "/chat/{chatId}/pin":
+  '/chat/{chatId}/pin':
     post:
       parameters:
         - name: chatId
@@ -440,35 +442,35 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChatInstance"
+                $ref: '#/components/schemas/ChatInstance'
           description: Чат успешно закреплен
-        "400":
+        '400':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Некорректные данные
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Чат не найден
       operationId: pinChatMessage
       tags:
         - chat
       summary: Закрепление чата
-      description: Закрепление чата в списке чатов, чтобы он всегда был вверху
+      description: 'Закрепление чата в списке чатов, чтобы он всегда был вверху'
     delete:
       parameters:
         - name: chatId
@@ -478,30 +480,30 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/ChatInstance"
+                $ref: '#/components/schemas/ChatInstance'
           description: Чат успешно откреплен
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Чат не найден
       operationId: unpinChatMessage
       tags:
         - chat
       summary: Открепление чата
       description: Открепление чата из списка чатов
-  "/chat/{chatId}/messages":
+  '/chat/{chatId}/messages':
     get:
       parameters:
         - name: chatId
@@ -511,20 +513,19 @@ paths:
           in: path
           required: true
         - name: count
-          description: Количество сообщений, которое необходимо получить. Если указан startMessageId и count < 0, \
-            то startMessageId будет включён в выборку
+          description: 'Количество сообщений, которое необходимо получить. Если указан startMessageId и count < 0, \ то startMessageId будет включён в выборку'
           schema:
             type: integer
           in: query
           required: false
         - name: startMessageId
-          description: Идентификатор сообщения, с которого необходимо начать получение
+          description: 'Идентификатор сообщения, с которого необходимо начать получение'
           schema:
             type: integer
           in: query
           required: false
       responses:
-        "200":
+        '200':
           description: Список сообщений чата
           content:
             application/json:
@@ -534,22 +535,22 @@ paths:
                   messages:
                     type: array
                     items:
-                      $ref: "#/components/schemas/Message"
+                      $ref: '#/components/schemas/Message'
                   users:
                     type: array
                     items:
-                      $ref: "#/components/schemas/UserInstance"
-        "401":
+                      $ref: '#/components/schemas/UserInstance'
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Чат не найден
       operationId: getChatMessages
       tags:
@@ -562,7 +563,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Message"
+              $ref: '#/components/schemas/Message'
         required: true
       parameters:
         - name: chatId
@@ -572,36 +573,36 @@ paths:
           in: path
           required: true
       responses:
-        "201":
+        '201':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Message"
+                $ref: '#/components/schemas/Message'
           description: Сообщение успешно создано
-        "400":
+        '400':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Некорректные данные
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Чат не найден
       operationId: createMessage
       tags:
         - messages
       summary: Создание нового сообщения
       description: Создание нового сообщения
-  "/message/{messageId}":
+  '/message/{messageId}':
     delete:
       parameters:
         - name: messageId
@@ -611,37 +612,37 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Success"
+                $ref: '#/components/schemas/Success'
           description: Сообщение успешно удалено
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Сообщение не найдено
       operationId: deleteMessage
       tags:
         - messages
       summary: Удаление сообщения
       description: Удаление сообщения
-  "/message/{messageId}/edit":
+  '/message/{messageId}/edit':
     post:
       requestBody:
         description: Данные для редактирования сообщения
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/Message"
+              $ref: '#/components/schemas/Message'
         required: true
       parameters:
         - name: messageId
@@ -651,36 +652,36 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Message"
+                $ref: '#/components/schemas/Message'
           description: Сообщение успешно отредактировано
-        "400":
+        '400':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Некорректные данные
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Сообщение не найдено
       operationId: editMessage
       tags:
         - messages
       summary: Редактирование сообщения
       description: Редактирование сообщения
-  "/message/{messageId}/pin":
+  '/message/{messageId}/pin':
     post:
       parameters:
         - name: messageId
@@ -690,23 +691,23 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Message"
+                $ref: '#/components/schemas/Message'
           description: Сообщение успешно закреплено
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Сообщение не найдено
       operationId: pinMessage
       tags:
@@ -722,30 +723,30 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Message"
+                $ref: '#/components/schemas/Message'
           description: Сообщение успешно откреплено
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Сообщение не найдено
       operationId: unpinMessage
       tags:
         - messages
       summary: Открепление сообщения
       description: Открепление сообщения
-  "/messages/read":
+  /messages/read:
     post:
       requestBody:
         description: Данные для отметки сообщений прочитанными
@@ -757,30 +758,30 @@ paths:
                 type: integer
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Success"
+                $ref: '#/components/schemas/Success'
           description: Сообщения успешно отмечены прочитанными
-        "400":
+        '400':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Некорректные данные
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
       operationId: readMessages
       tags:
         - messages
       summary: Отметка сообщений прочитанными
       description: Отметка сообщений прочитанными
-  "/search":
+  /search:
     post:
       operationId: search
       tags:
@@ -799,28 +800,28 @@ paths:
                   description: Поисковый запрос части сообщения или названия чата
                   minLength: 3
                   maxLength: 256
-                  example: "Привет"
+                  example: Привет
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/SearchResult"
+                $ref: '#/components/schemas/SearchResult'
           description: Результаты поиска
-        "400":
+        '400':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Некорректные данные
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-  "/search/users":
+  /search/users:
     post:
       operationId: searchUsers
       tags:
@@ -839,28 +840,28 @@ paths:
                   description: Поисковый запрос части ФИО пользователя
                   minLength: 3
                   maxLength: 256
-                  example: "Иванов"
+                  example: Иванов
         required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Users"
+                $ref: '#/components/schemas/Users'
           description: Результаты поиска
-        "400":
+        '400':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Некорректные данные
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-  /user/{id}:
+  '/user/{id}':
     get:
       parameters:
         - name: id
@@ -870,23 +871,23 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserInstance"
+                $ref: '#/components/schemas/UserInstance'
           description: Пользователь успешно найден
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Пользователь не найден
       operationId: getUser
       tags:
@@ -902,35 +903,35 @@ paths:
           in: path
           required: true
       responses:
-        "200":
+        '200':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/UserInstance"
+                $ref: '#/components/schemas/UserInstance'
           description: Пользователь успешно обновлен
-        "400":
+        '400':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Некорректные данные
-        "401":
+        '401':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Неверный токен доступа
-        "403":
+        '403':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Нет прав на изменение пользователя
-        "404":
+        '404':
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: '#/components/schemas/Error'
           description: Пользователь не найден
       operationId: updateUser
       tags:
@@ -942,7 +943,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/UserInstance"
+              $ref: '#/components/schemas/UserInstance'
         required: true
 components:
   schemas:
@@ -973,7 +974,7 @@ components:
           type: string
         company_id:
           format: string
-          description: "ID компании, к которой принадлежит пользователь (шестнадцатеричный UUID)"
+          description: 'ID компании, к которой принадлежит пользователь (шестнадцатеричный UUID)'
           type: integer
     UserInstance:
       required:
@@ -994,7 +995,7 @@ components:
         last_name:
           type: string
         company:
-          $ref: "#/components/schemas/Company"
+          $ref: '#/components/schemas/Company'
         img_url:
           type: string
           format: url
@@ -1003,7 +1004,7 @@ components:
     Users:
       type: array
       items:
-        $ref: "#/components/schemas/UserInstance"
+        $ref: '#/components/schemas/UserInstance'
     Company:
       required:
         - name
@@ -1027,33 +1028,33 @@ components:
           type: string
         company_id:
           format: string
-          description: "ID компании, к которой принадлежит чат (шестнадцатеричный UUID)"
+          description: 'ID компании, к которой принадлежит чат (шестнадцатеричный UUID)'
           type: integer
         is_pinned:
           type: boolean
-          description: "Признак того, что чат закреплен"
+          description: 'Признак того, что чат закреплен'
         is_private:
           type: boolean
-          description: "Признак того, что чат приватный (тет-а-тет)"
+          description: 'Признак того, что чат приватный (тет-а-тет)'
         img_url:
           type: string
           format: url
-          description: "Ссылка на изображение чата"
+          description: Ссылка на изображение чата
         type:
           type: string
-          description: "Тип чата"
+          description: Тип чата
           enum:
-            - "group"
-            - "private"
-            - "channel"
-            - "conference"
+            - group
+            - private
+            - channel
+            - conference
     Chats:
       description: Список чатов
       type: array
       items:
-        $ref: "#/components/schemas/ChatInstance"
+        $ref: '#/components/schemas/ChatInstance'
     ChatInstance:
-      description: "Полная информация о чате, включая список участников"
+      description: 'Полная информация о чате, включая список участников'
       required:
         - name
       type: object
@@ -1066,29 +1067,29 @@ components:
         img_url:
           type: string
           format: url
-          description: "URL изображения чата или профиля пользователя. Если нет изображения, то null"
+          description: 'URL изображения чата или профиля пользователя. Если нет изображения, то null'
         company_id:
           format: string
-          description: "ID компании, к которой принадлежит чат (шестнадцатеричный UUID)"
+          description: 'ID компании, к которой принадлежит чат (шестнадцатеричный UUID)'
           type: integer
         unread:
           type: integer
         last_message:
-          $ref: "#/components/schemas/Message"
+          $ref: '#/components/schemas/Message'
         is_pinned:
           type: boolean
-          description: "Признак того, что чат закреплен"
+          description: 'Признак того, что чат закреплен'
         is_private:
           type: boolean
-          description: "Признак того, что чат приватный (тет-а-тет)"
+          description: 'Признак того, что чат приватный (тет-а-тет)'
         type:
           type: string
-          description: "Тип чата"
+          description: Тип чата
           enum:
-            - "group"
-            - "private"
-            - "channel"
-            - "conference"
+            - group
+            - private
+            - channel
+            - conference
     Error:
       required:
         - message
@@ -1145,9 +1146,9 @@ components:
         attachments:
           type: array
           items:
-            $ref: "#/components/schemas/Attachment"
+            $ref: '#/components/schemas/Attachment'
         event:
-          $ref: "#/components/schemas/Event"
+          $ref: '#/components/schemas/Event'
     Attachment:
       description: Вложение
       required:
@@ -1214,7 +1215,7 @@ components:
       description: Список сообщений
       type: array
       items:
-        $ref: "#/components/schemas/Message"
+        $ref: '#/components/schemas/Message'
     SearchResult:
       description: Результаты поиска
       type: object
@@ -1222,11 +1223,11 @@ components:
         chats:
           type: array
           items:
-            $ref: "#/components/schemas/ChatInstance"
+            $ref: '#/components/schemas/ChatInstance'
         messages:
           type: array
           items:
-            $ref: "#/components/schemas/Message"
+            $ref: '#/components/schemas/Message'
     Success:
       description: Успешный ответ
       type: object
@@ -1239,4 +1240,4 @@ components:
       name: AccessToken
       in: header
 security:
-  - AccessToken: [ ]
+  - AccessToken: []
