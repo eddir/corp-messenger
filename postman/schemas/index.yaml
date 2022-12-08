@@ -691,16 +691,140 @@ paths:
                 properties:
                   messages:
                     type: array
+                    minItems: 2
+                    maxItems: 20
                     items:
                       $ref: '#/components/schemas/Message'
                   users:
                     type: array
+                    minItems: 1
+                    maxItems: 20
                     items:
                       $ref: '#/components/schemas/UserInstance'
               examples:
                 Example 1:
                   value:
                     messages:
+                      - id: 1
+                        parent_id: 0
+                        created_at: '2019-08-24T14:15:22Z'
+                        updated_at: '2019-08-24T14:15:22Z'
+                        text: Все
+                        user_id: 1
+                        chat_id: 1
+                        is_pinned: true
+                        is_read: true
+                        attachments:
+                          - id: 1
+                            created_at: '2019-08-24T14:15:22Z'
+                            type: image
+                            url: 'https://picsum.photos/200'
+                            thumbnail_url: 'https://picsum.photos/200'
+                            size: 1
+                            name: image.jpeg
+                        event:
+                          id: 1
+                          created_at: '2019-08-24T14:15:22Z'
+                          type: user_joined
+                          message_id: 1
+                          payload: '{}'
+                    users:
+                      - id: 0
+                        login: string
+                        first_name: Steve
+                        middle_name: Paul
+                        last_name: Jobs
+                        company:
+                          id: 1
+                          name: string
+                        img_url: 'https://picsum.photos/200'
+                        is_online: true
+                Example 3:
+                  value:
+                    messages:
+                      - id: 1
+                        parent_id: 0
+                        created_at: '2019-08-24T14:15:22Z'
+                        updated_at: '2019-08-24T14:15:22Z'
+                        text: Все
+                        user_id: 1
+                        chat_id: 1
+                        is_pinned: true
+                        is_read: true
+                        attachments:
+                          - id: 1
+                            created_at: '2019-08-24T14:15:22Z'
+                            type: image
+                            url: 'https://picsum.photos/200'
+                            thumbnail_url: 'https://picsum.photos/200'
+                            size: 1
+                            name: image.jpeg
+                        event:
+                          id: 1
+                          created_at: '2019-08-24T14:15:22Z'
+                          type: user_joined
+                          message_id: 1
+                          payload: '{}'
+                      - id: 1
+                        parent_id: 0
+                        created_at: '2019-08-24T14:15:22Z'
+                        updated_at: '2019-08-24T14:15:22Z'
+                        text: Все
+                        user_id: 1
+                        chat_id: 1
+                        is_pinned: true
+                        is_read: true
+                        attachments:
+                          - id: 1
+                            created_at: '2019-08-24T14:15:22Z'
+                            type: image
+                            url: 'https://picsum.photos/200'
+                            thumbnail_url: 'https://picsum.photos/200'
+                            size: 1
+                            name: image.jpeg
+                        event:
+                          id: 1
+                          created_at: '2019-08-24T14:15:22Z'
+                          type: user_joined
+                          message_id: 1
+                          payload: '{}'
+                    users:
+                      - id: 0
+                        login: string
+                        first_name: Steve
+                        middle_name: Paul
+                        last_name: Jobs
+                        company:
+                          id: 1
+                          name: string
+                        img_url: 'https://picsum.photos/200'
+                        is_online: true
+                Example 2:
+                  value:
+                    messages:
+                      - id: 1
+                        parent_id: 0
+                        created_at: '2019-08-24T14:15:22Z'
+                        updated_at: '2019-08-24T14:15:22Z'
+                        text: Все
+                        user_id: 1
+                        chat_id: 1
+                        is_pinned: true
+                        is_read: true
+                        attachments:
+                          - id: 1
+                            created_at: '2019-08-24T14:15:22Z'
+                            type: image
+                            url: 'https://picsum.photos/200'
+                            thumbnail_url: 'https://picsum.photos/200'
+                            size: 1
+                            name: image.jpeg
+                        event:
+                          id: 1
+                          created_at: '2019-08-24T14:15:22Z'
+                          type: user_joined
+                          message_id: 1
+                          payload: '{}'
                       - id: 1
                         parent_id: 0
                         created_at: '2019-08-24T14:15:22Z'
@@ -839,6 +963,32 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/Message'
+            examples:
+              Example 1:
+                value:
+                  id: 1
+                  parent_id: 0
+                  created_at: '2019-08-24T14:15:22Z'
+                  updated_at: '2019-08-24T14:15:22Z'
+                  text: Все
+                  user_id: 1
+                  chat_id: 1
+                  is_pinned: true
+                  is_read: true
+                  attachments:
+                    - id: 1
+                      created_at: '2019-08-24T14:15:22Z'
+                      type: image
+                      url: 'https://picsum.photos/200'
+                      thumbnail_url: 'https://picsum.photos/200'
+                      size: 1
+                      name: image.jpeg
+                  event:
+                    id: 1
+                    created_at: '2019-08-24T14:15:22Z'
+                    type: user_joined
+                    message_id: 1
+                    payload: '{}'
         required: true
       parameters:
         - name: messageId
@@ -1052,7 +1202,7 @@ paths:
                   example: Привет
         required: true
       responses:
-        '200':
+        '400':
           content:
             application/json:
               schema:
@@ -1060,69 +1210,7 @@ paths:
               examples:
                 Example 1:
                   value:
-                    chats:
-                      - id: 1
-                        name: Общий чат
-                        img_url: 'https://picsum.photos/200'
-                        company_id: 1
-                        unread: 0
-                        last_message:
-                          id: 1
-                          parent_id: 0
-                          created_at: '2019-08-24T14:15:22Z'
-                          updated_at: '2019-08-24T14:15:22Z'
-                          text: Все
-                          user_id: 1
-                          chat_id: 1
-                          is_pinned: true
-                          is_read: true
-                          attachments:
-                            - id: 1
-                              created_at: '2019-08-24T14:15:22Z'
-                              type: image
-                              url: 'https://picsum.photos/200'
-                              thumbnail_url: 'https://picsum.photos/200'
-                              size: 1
-                              name: image.jpeg
-                          event:
-                            id: 1
-                            created_at: '2019-08-24T14:15:22Z'
-                            type: user_joined
-                            message_id: 1
-                            payload: '{}'
-                        is_pinned: true
-                        is_private: true
-                        type: group
-                    messages:
-                      - id: 1
-                        parent_id: 0
-                        created_at: '2019-08-24T14:15:22Z'
-                        updated_at: '2019-08-24T14:15:22Z'
-                        text: Все
-                        user_id: 1
-                        chat_id: 1
-                        is_pinned: true
-                        is_read: true
-                        attachments:
-                          - id: 1
-                            created_at: '2019-08-24T14:15:22Z'
-                            type: image
-                            url: 'https://picsum.photos/200'
-                            thumbnail_url: 'https://picsum.photos/200'
-                            size: 1
-                            name: image.jpeg
-                        event:
-                          id: 1
-                          created_at: '2019-08-24T14:15:22Z'
-                          type: user_joined
-                          message_id: 1
-                          payload: '{}'
-          description: Результаты поиска
-        '400':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Error'
+                    message: string
           description: Некорректные данные
         '401':
           content:
@@ -1783,15 +1871,6 @@ components:
     SearchResult:
       description: Результаты поиска
       type: object
-      properties:
-        chats:
-          type: array
-          items:
-            $ref: '#/components/schemas/ChatInstance'
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
       x-examples:
         Example 1:
           chats:
@@ -1851,6 +1930,19 @@ components:
                 type: user_joined
                 message_id: 1
                 payload: '{}'
+      properties:
+        chats:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/ChatInstance'
+        messages:
+          type: array
+          minItems: 1
+          maxItems: 100
+          items:
+            $ref: '#/components/schemas/Message'
     Success:
       description: Успешный ответ
       type: object
