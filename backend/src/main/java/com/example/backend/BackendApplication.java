@@ -29,7 +29,13 @@ public class BackendApplication {
             User Ed = new User("eduard", "1", ApplicationRole.SUPER_ADMIN);
             if(userService.findUserByLogin("eduard") == null)
                 userService.save(Ed);
-            companyService.save(new Company("Microsoft", Ed));
+            if(companyService.getCompanyByName("Microsoft") == null)
+            {
+                if (userService.findUserByLogin("eduard") != null)
+                {
+                    companyService.save(new Company("Microsoft", Ed));
+                }
+            }
         };
     }
 

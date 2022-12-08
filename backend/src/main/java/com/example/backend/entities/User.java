@@ -38,8 +38,7 @@ public class User
     @Column(name = "role", nullable = false)
     protected ApplicationRole applicationRole;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.EAGER)
-
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
     protected Set<Company> companies = new HashSet<>();
 
     @Column(name = "img_url")
@@ -83,6 +82,8 @@ public class User
     }
 
     public Profile getProfile() {
+        if(this.profile == null)
+            return Profile.emptyProfile;
         return profile;
     }
 

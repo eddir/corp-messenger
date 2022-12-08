@@ -12,11 +12,11 @@ public class Company {
     @Column(name = "company_id")
     Long id;
 
-    @Column(name = "name")
+    @Column(name = "name",unique = true)
     protected String name;
 
     //@ManyToMany(mappedBy = "companies")
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "user_company",
             joinColumns = {@JoinColumn(name = "company_id")},

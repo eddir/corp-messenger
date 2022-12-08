@@ -1,5 +1,6 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.UserResponseDto;
 import com.example.backend.entities.User;
 import com.example.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,10 +31,13 @@ public class UserController
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<User> getUserById(@PathVariable("id") Long id)
+    public ResponseEntity<UserResponseDto> getUserById(@PathVariable("id") Long id)
     {
         User user = userService.findUserById(id);
-        return ResponseEntity.ok().body(user);
+        //Если User не найден, какой код ошибки выкидывать?
+        if(user == null)
+            ResponseEntity.ok().body(null);
+        return ResponseEntity.ok().body(new UserResponseDto(user));
     }
 
 }

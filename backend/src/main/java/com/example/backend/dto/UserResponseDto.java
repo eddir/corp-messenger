@@ -2,6 +2,7 @@ package com.example.backend.dto;
 
 import com.example.backend.entities.Company;
 import com.example.backend.entities.User;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.*;
 
@@ -12,8 +13,9 @@ public class UserResponseDto
     protected String first_name;
     protected String middle_name;
     protected String last_name;
+    @JsonProperty("img_url")
     protected String imgUrl;
-    List<CompanyResponseDto> company;
+    Set<CompanyResponseDto> company;
 
     public UserResponseDto(){}
 
@@ -25,15 +27,12 @@ public class UserResponseDto
         this.last_name = user.getProfile().getLastName();
         this.middle_name = user.getProfile().getMiddleName();
         this.imgUrl = user.getImgUrl();
-        this.company = new LinkedList<>();
+        this.company = new HashSet<>();
         Set<Company> companies = user.getCompanies();
-        //if(companies != null){
             for(Company comp : companies)
             {
                 this.company.add(new CompanyResponseDto(comp));
             }
-        //}
-
     }
 
     public Long getId() {
@@ -84,11 +83,11 @@ public class UserResponseDto
         this.imgUrl = imgUrl;
     }
 
-    public List<CompanyResponseDto> getCompany() {
+    public Set<CompanyResponseDto> getCompany() {
         return company;
     }
 
-    public void setCompany(List<CompanyResponseDto> company) {
+    public void setCompany(Set<CompanyResponseDto> company) {
         this.company = company;
     }
 }

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
 import javax.persistence.PersistenceContext;
@@ -30,11 +31,18 @@ public class CompanyService
     }
 
     @Transactional
-    public Company save(Company company)
+    public Company save(Company company) throws EntityExistsException
     {
-        companyRepository.save(company);
+        if(companyRepository.getCompanyByName(company.getName()) != null)
+            throw new EntityExistsException("Компания с таким названием уже существует.");
+        company = companyRepository.save(company);
         company.addUserIntoCompany(company.getUserOwner());
         return company;
     }
 
+    @Transactional
+    public Company getCompanyByName(String name)
+    {
+        return companyRepository.getCompanyByName(name);
+    }
 }
