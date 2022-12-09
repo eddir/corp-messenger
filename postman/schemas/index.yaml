@@ -93,7 +93,7 @@ paths:
       operationId: registerUser
       tags:
         - auth
-      summary: Регистрация нового пользователя
+      summary: Самостоятельная регистрация
       description: Регистрация нового пользователя в системе
       security: []
   /auth/login:
@@ -1404,9 +1404,9 @@ paths:
         required: true
   '/user/{id}/approve':
     post:
-      summary: ''
+      summary: Подтверждение пользователя
       operationId: post-users-approve
-      tags: 
+      tags:
         - auth
       responses:
         '200':
@@ -1436,7 +1436,7 @@ paths:
         required: true
   /users/create:
     post:
-      summary: ''
+      summary: Регистрация пользователя от админа
       operationId: post-users-create
       tags:
         - auth
