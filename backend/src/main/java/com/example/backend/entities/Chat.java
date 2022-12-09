@@ -10,7 +10,7 @@ public class Chat
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     @Column(name = "chat_id")
-    protected Long chatId;
+    protected Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
@@ -106,8 +106,8 @@ public class Chat
         isPinned = pinned;
     }
 
-    public Long getChatId() {
-        return chatId;
+    public Long getId() {
+        return id;
     }
 
     public Calendar getCreatedDate() {
