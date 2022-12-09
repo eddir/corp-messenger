@@ -1,11 +1,10 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.AuthenticationRequestDto;
-import com.example.backend.dto.AuthenticationResponseDto;
-import com.example.backend.dto.UserRequestDto;
-import com.example.backend.dto.UserResponseDto;
+import com.example.backend.dto.auth.AuthenticationRequestDto;
+import com.example.backend.dto.auth.AuthenticationResponseDto;
+import com.example.backend.dto.user.UserRequestDto;
+import com.example.backend.dto.user.UserResponseDto;
 import com.example.backend.entities.ApplicationRole;
-import com.example.backend.entities.Company;
 import com.example.backend.entities.Profile;
 import com.example.backend.entities.User;
 import com.example.backend.security.jwt.providers.JwtTokenProvider;
@@ -25,11 +24,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityNotFoundException;
-import java.net.URI;
 import java.util.*;
 
 @RestController

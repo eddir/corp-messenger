@@ -1,4 +1,4 @@
-package com.example.backend.dto;
+package com.example.backend.dto.company;
 
 import com.example.backend.entities.Company;
 import com.example.backend.entities.User;
