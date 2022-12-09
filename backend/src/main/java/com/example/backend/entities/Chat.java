@@ -5,6 +5,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.util.Calendar;
 
+@Entity
+@Table()
 public class Chat
 {
     @Id
@@ -14,7 +16,7 @@ public class Chat
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
-    @Column(name = "created_date", updatable = false)
+    @Column(name = "created_dateaa", updatable = false)
     protected Calendar createdDate;
 
     @Column(name = "title")
@@ -33,13 +35,13 @@ public class Chat
     @Column(name = "is_public")
     protected Boolean isPublic;
 
-    @Column(name = "is_public")
+    @Column(name = "is_closed")
     protected Boolean isClosed;
 
-    @Column(name = "is_public")
+    @Column(name = "is_private")
     protected Boolean isPrivate;
 
-    @Column(name = "is_public")
+    @Column(name = "is_pinned")
     protected Boolean isPinned;
 
     public String getTitle() {

@@ -5,41 +5,12 @@ import org.hibernate.annotations.Immutable;
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Entity
+@Table
 @Immutable
 public class Member
 {
-    @Embeddable
-    public static class PrimaryKey implements Serializable
-    {
-        @Column(name = "chat_id")
-        protected Long chatId;
 
-        @Column(name = "user_id")
-        protected Long userId;
-
-        public Long getChatId() {
-            return chatId;
-        }
-
-        public void setChatId(Long chatId) {
-            this.chatId = chatId;
-        }
-
-        public Long getUserId() {
-            return userId;
-        }
-
-        public void setUserId(Long userId) {
-            this.userId = userId;
-        }
-
-        public PrimaryKey(){}
-
-        public PrimaryKey(Long chatId, Long userId) {
-            this.chatId = chatId;
-            this.userId = userId;
-        }
-    }
 
     @EmbeddedId
     protected PrimaryKey id = new PrimaryKey();

@@ -3,6 +3,7 @@ package com.example.backend.controller;
 import com.example.backend.entities.Chat;
 import com.example.backend.services.ChatService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -22,8 +23,8 @@ public class ChatController
     }
 
     @GetMapping
-    public List<Chat> chats()
+    public ResponseEntity<String> chats()
     {
-        return chatService.getAllChats();
+        return ResponseEntity.ok().body("test");
     }
 }
