@@ -1,0 +1,134 @@
+Table messenger.messages {
+  message_id int
+  created_date datetime
+  updated_date datetime
+  sender_id int
+  chat_id int
+  text text
+  is_pinned bool
+  is_deleted bool
+}
+
+Table messenger.forwarding {
+  parent_id int
+  child_id int
+}
+
+Table messenger.chats {
+  chat_id int
+  created_date datetime
+  title varchar
+  description text
+  img_url varchar
+  company_id int
+  is_public bool
+  is_closed bool
+  is_private bool
+  is_pinned bool
+}
+
+Table messenger.users {
+  user_id int
+  created_date datetime
+  last_visit_date datetime
+  first_name varchar
+  middle_name varchar
+  last_name varchar
+  login varchar
+  password hash
+  role Enum
+  img_url varchar
+  email varchar
+  phone varchar
+  position varchar
+  department varchar
+  division varchar
+  team varchar
+}
+
+Table messenger.members {
+  chat_id int
+  user_id int
+  is_owner bool
+  is_admin bool
+  is_pinned bool
+}
+
+Enum messenger.attachment_type {
+  file
+  image
+  voice
+}
+
+Table messenger.attachments {
+  attachment_id int
+  created_date datetime
+  url varchar
+  thumb_url varchar
+  file_size int
+  type messenger.attachment_type
+}
+
+Table messenger.readers {
+  user_id int
+  message_id int
+}
+
+Table messenger.companies {
+  company_id int
+  name varchar
+  owner_id int
+}
+
+Table messenger.events {
+  event_id int
+  created_date datetime
+  type varchar
+  message_id int
+  payload json
+}
+
+Table messenger.conferences {
+  conference_id int
+  chat_id int
+  start_date datetime
+  end_date datetime
+  call_url varchar
+}
+
+Table messenger.hrs {
+  user_id int
+  company_id int
+}
+
+
+Ref: "messenger"."chats"."chat_id" < "messenger"."messages"."chat_id"
+
+Ref: "messenger"."chats"."chat_id" < "messenger"."members"."chat_id"
+
+Ref: "messenger"."members"."user_id" < "messenger"."users"."user_id"
+
+Ref: "messenger"."attachments"."attachment_id" <> "messenger"."messages"."message_id"
+
+Ref: "messenger"."readers"."user_id" > "messenger"."users"."user_id"
+
+Ref: "messenger"."companies"."company_id" < "messenger"."chats"."company_id"
+
+Ref: "messenger"."companies"."company_id" <> "messenger"."users"."user_id"
+
+Ref: "messenger"."users"."user_id" < "messenger"."messages"."sender_id"
+
+Ref: "messenger"."messages"."message_id" < "messenger"."forwarding"."parent_id"
+
+Ref: "messenger"."forwarding"."child_id" > "messenger"."messages"."message_id"
+
+Ref: "messenger"."messages"."message_id" < "messenger"."events"."message_id"
+
+Ref: "messenger"."chats"."chat_id" < "messenger"."conferences"."chat_id"
+
+Ref: "messenger"."readers"."message_id" > "messenger"."messages"."message_id"
+
+Ref: "messenger"."users"."user_id" < "messenger"."hrs"."user_id"
+
+
+Ref: "messenger"."companies"."company_id" < "messenger"."hrs"."company_id"
