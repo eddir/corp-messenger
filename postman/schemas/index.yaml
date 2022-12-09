@@ -12,18 +12,11 @@ paths:
   /auth/register:
     post:
       requestBody:
-        description: Данные для регистрации нового пользователя
+        description: 'Новый сотрудник компании ТОЛЬКО что устроился на работу и стучится в бэк, умоляет зарегистрировать ему учётку, шоб он мог наконец-то приступить к работе над проектами и заработать свои кровные рубли. У меня семья и кот. Ему говорит HR: регайся ТВАРЬ. А тот слёхно умоляет - пощадите!! я хочу устроится(( дайте учётку... Вот пароль, вот логин. ПЖЖЖЖЖЖ.'
         content:
           application/json:
             schema:
               type: object
-              required:
-                - login
-                - password
-                - first_name
-                - middle_name
-                - last_name
-                - company_id
               properties:
                 login:
                   type: string
@@ -40,6 +33,15 @@ paths:
                 last_name:
                   type: string
                   description: Фамилия
+                company_id:
+                  type: integer
+                  minimum: 1
+              required:
+                - login
+                - password
+                - first_name
+                - middle_name
+                - last_name
         required: true
       responses:
         '201':
@@ -1368,6 +1370,97 @@ paths:
             schema:
               $ref: '#/components/schemas/UserInstance'
         required: true
+  '/user/{id}/approve':
+    post:
+      summary: ''
+      operationId: post-users-approve
+      responses:
+        '200':
+          description: OK
+        '':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInstance'
+          description: ''
+      description: 'Подтверждение аккаунта. Пользователь зарегистрировался. Нужно, чтобы HR подтвердил его аккаунт, убедился в личности и выдал тем самым права к чатам компании. '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                company_id:
+                  type: integer
+                  minimum: 1
+                  description: По этому company_id пользователь получит доступ
+              required:
+                - company_id
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+  /users/create:
+    post:
+      summary: ''
+      operationId: post-users-create
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInstance'
+              examples:
+                Example 1:
+                  value:
+                    id: 0
+                    login: string
+                    first_name: Steve
+                    middle_name: Paul
+                    last_name: Jobs
+                    company:
+                      id: 1
+                      name: string
+                    img_url: 'https://picsum.photos/200'
+                    is_online: true
+      description: 'Создание нового пользователя. Админ решил зарегать сам учётку для нового сотрудника. Прямо вот так лично в руки выдать распечатку с логином и паролем. И этот пользователь будет сразу же подтверждён. '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+                first_name:
+                  type: string
+                middle_name:
+                  type: string
+                last_name:
+                  type: string
+                company_id:
+                  type: integer
+                  minimum: 1
+              required:
+                - login
+                - password
+                - first_name
+                - last_name
+                - company_id
+            examples:
+              Example 1:
+                value:
+                  login: string
+                  password: string
+                  first_name: string
+                  middle_name: string
+                  last_name: string
+                  company_id: 1
 components:
   schemas:
     Tokens:
