@@ -26,29 +26,29 @@ services:
       - "8000:80"
 
   spring:
-    depends_on:
-      - postgres
-    build:
-      context: ./
-      dockerfile: ./docker/spring/Dockerfile
+    image: eddir/corp-messenger-restapp:master
     restart: on-failure
     ports:
       - "8080"
     expose:
       - "8080"
+    depends_on:
+      - postgres
     environment:
       SPRING_APPLICATION_JSON: '{
           "spring.datasource.url": "jdbc:postgresql://postgres:5432/messenger",
           "spring.datasource.username": "messenger",
           "spring.datasource.password": "messenger",
-          "spring.jpa.hibernate.ddl-auto": "create-drop"
+          "spring.jpa.hibernate.ddl-auto": "create-drop",
+          "jwt.token.secret.jwt": "$${random.value}",
+          "jwt.token.secret.refresh": "$${random.value}",
+          "jwt.token.expired.jwt": "3600000",
+          "jwt.token.expired.refresh": "86400000"
         }'
 
   nginx:
+    image: eddir/corp-messenger-webapp:master
     restart: always
-    build:
-      context: ./
-      dockerfile: ./docker/nginx/Dockerfile
     ports:
       - "8080:80"
       - "8443:443"
@@ -60,5 +60,3 @@ services:
 
 volumes:
   postgres-data:
-
-# Запустить nginx, spring, vue в докере
