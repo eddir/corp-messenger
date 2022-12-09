@@ -96,6 +96,11 @@ Table messenger.conferences {
   call_url varchar
 }
 
+Table messenger.hrs {
+  user_id int
+  company_id int
+}
+
 
 Ref: "messenger"."chats"."chat_id" < "messenger"."messages"."chat_id"
 
@@ -122,3 +127,8 @@ Ref: "messenger"."messages"."message_id" < "messenger"."events"."message_id"
 Ref: "messenger"."chats"."chat_id" < "messenger"."conferences"."chat_id"
 
 Ref: "messenger"."readers"."message_id" > "messenger"."messages"."message_id"
+
+Ref: "messenger"."users"."user_id" < "messenger"."hrs"."user_id"
+
+
+Ref: "messenger"."companies"."company_id" < "messenger"."hrs"."company_id"
