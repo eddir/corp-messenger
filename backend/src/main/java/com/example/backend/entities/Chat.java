@@ -33,13 +33,13 @@ public class Chat
     @Column(name = "is_public")
     protected Boolean isPublic;
 
-    @Column(name = "is_public")
+    @Column(name = "is_closed")
     protected Boolean isClosed;
 
-    @Column(name = "is_public")
+    @Column(name = "is_private")
     protected Boolean isPrivate;
 
-    @Column(name = "is_public")
+    @Column(name = "is_pinned")
     protected Boolean isPinned;
 
     public String getTitle() {
