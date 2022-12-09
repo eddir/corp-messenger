@@ -1,5 +1,7 @@
 package com.example.backend.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class UserRequestDto
 {
    protected String login;
@@ -7,15 +9,18 @@ public class UserRequestDto
    protected String first_name;
    protected String middle_name;
    protected String last_name;
+   @JsonProperty("company_id")
+   protected Long companyId;
 
 
-   public UserRequestDto(String login, String password, String first_name, String middle_name, String last_name)
+   public UserRequestDto(String login, String password, String first_name, String middle_name, String last_name, Long companyId)
    {
       this.login = login;
       this.password = password;
       this.first_name = first_name;
       this.middle_name = middle_name;
       this.last_name = last_name;
+      this.companyId = companyId;
    }
 
    public String getLogin() {
@@ -56,5 +61,13 @@ public class UserRequestDto
 
    public void setLast_name(String last_name) {
       this.last_name = last_name;
+   }
+
+   public Long getCompanyId() {
+      return companyId;
+   }
+
+   public void setCompanyId(Long companyId) {
+      this.companyId = companyId;
    }
 }

@@ -9,8 +9,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface CompanyRepository extends JpaRepository<Company, Long>
 {
-    //public User addUserIntoCompany();
-
     public Company getCompanyById(Long id);
 
     @Query("select c from Company c where c.name = :name")

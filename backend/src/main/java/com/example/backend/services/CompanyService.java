@@ -7,10 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityExistsException;
-import javax.persistence.EntityManager;
-import javax.persistence.EntityTransaction;
-import javax.persistence.PersistenceContext;
+import javax.persistence.*;
 import java.util.List;
 
 @Service
@@ -38,6 +35,22 @@ public class CompanyService
         company = companyRepository.save(company);
         company.addUserIntoCompany(company.getUserOwner());
         return company;
+    }
+
+    @Transactional
+    public User addUserIntoCompany(User user, Long companyId) throws EntityNotFoundException
+    {
+        Company company = companyRepository.getCompanyById(companyId);
+        if(company == null)
+            throw new EntityNotFoundException("Компания с id = \'" + companyId + "\'не существует.");
+        company.addUserIntoCompany(user);
+        return user;
+    }
+
+    @Transactional
+    public Company getCompanyById(Long id)
+    {
+        return companyRepository.getCompanyById(id);
     }
 
     @Transactional

@@ -13,8 +13,12 @@ public class UserResponseDto
     protected String first_name;
     protected String middle_name;
     protected String last_name;
+
     @JsonProperty("img_url")
     protected String imgUrl;
+
+    protected boolean isOnline;
+
     Set<CompanyResponseDto> company;
 
     public UserResponseDto(){}
@@ -81,6 +85,15 @@ public class UserResponseDto
 
     public void setImgUrl(String imgUrl) {
         this.imgUrl = imgUrl;
+    }
+
+    @JsonProperty("is_online")
+    public boolean isOnline() {
+        return isOnline;
+    }
+
+    public void setOnline(boolean online) {
+        isOnline = online;
     }
 
     public Set<CompanyResponseDto> getCompany() {
