@@ -1400,7 +1400,17 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserInstance'
+              $ref: '#/components/schemas/User'
+            examples:
+              Example 1:
+                value:
+                  login: steve
+                  first_name: Steve
+                  middle_name: Paul
+                  last_name: Jobs
+                  img_url: null
+                  compaines:
+                    - 1
         required: true
   '/user/{id}/approve':
     post:
@@ -2255,6 +2265,41 @@ components:
         - id
         - name
         - owner
+    User:
+      title: User
+      x-stoplight:
+        id: r3mmj42i966rl
+      type: object
+      x-examples:
+        Example 1:
+          login: steve
+          first_name: Steve
+          middle_name: Paul
+          last_name: Jobs
+          img_url: null
+          compaines:
+            - 1
+      properties:
+        login:
+          type: string
+          example: steve
+        first_name:
+          type: string
+          example: Steve
+        middle_name:
+          type: string
+          example: Paul
+        last_name:
+          type: string
+          example: Jobs
+        img_url:
+          type: string
+          default: null
+        compaines:
+          type: array
+          items:
+            type: integer
+            minimum: 1
   securitySchemes:
     AccessToken:
       type: apiKey
