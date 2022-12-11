@@ -14,6 +14,14 @@ export default api => {
                 url: 'auth/renew',
                 data
             })
+        },
+
+        register(data) {
+            return api.instance.request({
+                method: 'post',
+                url: 'auth/register',
+                data
+            })
         }
     }
 }

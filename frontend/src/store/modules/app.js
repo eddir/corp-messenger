@@ -1,8 +1,9 @@
 import api from '@/api'
-import { parseJWT } from '@/utils/helpers'
+import parseJWT from '@/helpers/parseJWT'
 
 export const mutation = {
 	SET_AUTHORIZATION: 'SET_AUTHORIZATION',
+    SET_USER: 'SET_USER'
 }
 
 export default {
@@ -10,7 +11,7 @@ export default {
 
 	state: {
         isAuth: false,
-        userLogin: null,
+        user: null,
         access_token: null,
         refresh_token: null,
         checkAuthInterval: 60,
@@ -22,8 +23,8 @@ export default {
             return state.isAuth
         },
 
-        userLogin: state => {
-            return state.userLogin
+        user: state => {
+            return state.user
         },
 
         getTokens: state => {
@@ -41,8 +42,6 @@ export default {
                 state.access_token = payload.accessToken
                 state.refresh_token = payload.refreshToken
                 localStorage.setItem('TOKENS', JSON.stringify(payload))
-
-                state.userLogin = parseJWT(payload.accessToken).sub
             } else {
                 state.access_token = null
                 state.refresh_token = null
@@ -51,12 +50,23 @@ export default {
             
             localStorage.setItem('IS_AUTH', isAuth);
             state.isAuth = isAuth
+        },
+
+        [mutation.SET_USER]: (state, payload) => {
+            if (payload) {
+                api.user.getById(payload)
+                    .then(({ data }) => {
+                        state.user = data
+                    })
+                    .catch((e) => console.error(e))
+            }
         }
 	},
 
 	actions: {
 		authorize: ({ dispatch, commit }, payload) => {
             commit(mutation.SET_AUTHORIZATION, payload)
+            commit(mutation.SET_USER, payload.user_id)
 
             dispatch('startTokenTracking')
         },
@@ -88,6 +98,7 @@ export default {
                 api.app.renew({ accessToken: state.access_token, refreshToken: state.refresh_token })
                     .then(({ data }) => {
                         commit(mutation.SET_AUTHORIZATION, data)
+                        commit(mutation.SET_USER, data.user_id)
                     })
                     .catch((e) => console.error(e))
             }
