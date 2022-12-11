@@ -82,9 +82,7 @@ public class User
     }
 
     public Profile getProfile() {
-        if(this.profile == null)
-            return Profile.emptyProfile;
-        return profile;
+        return this.profile == null ? Profile.emptyProfile : this.profile;
     }
 
     public void setProfile(Profile profile) {
