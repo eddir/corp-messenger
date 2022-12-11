@@ -40,10 +40,6 @@ Table messenger.users {
   img_url varchar
   email varchar
   phone varchar
-  position varchar
-  department varchar
-  division varchar
-  team varchar
 }
 
 Table messenger.members {
@@ -96,9 +92,14 @@ Table messenger.conferences {
   call_url varchar
 }
 
-Table messenger.hrs {
+Table messenger.staff {
   user_id int
   company_id int
+  is_hr bool
+  position varchar
+  department varchar
+  division varchar
+  team varchar
 }
 
 
@@ -128,7 +129,6 @@ Ref: "messenger"."chats"."chat_id" < "messenger"."conferences"."chat_id"
 
 Ref: "messenger"."readers"."message_id" > "messenger"."messages"."message_id"
 
-Ref: "messenger"."users"."user_id" < "messenger"."hrs"."user_id"
+Ref: "messenger"."users"."user_id" < "messenger"."staff"."user_id"
 
-
-Ref: "messenger"."companies"."company_id" < "messenger"."hrs"."company_id"
+Ref: "messenger"."companies"."company_id" < "messenger"."staff"."company_id"
