@@ -24,12 +24,18 @@ public class BackendApplication {
         return (args) -> {
             if(userService.findUserByLogin("anton") == null)
                 userService.save(new User("anton", "1", ApplicationRole.USER));
-            if(userService.findUserByLogin("mihail") == null)
+            if(userService.findUserByLogin("mikhail") == null)
                 userService.save(new User("mikhail", "1", ApplicationRole.ADMIN));
             User Ed = new User("eduard", "1", ApplicationRole.SUPER_ADMIN);
             if(userService.findUserByLogin("eduard") == null)
                 userService.save(Ed);
-            companyService.save(new Company("Microsoft", Ed));
+            if(companyService.getCompanyByName("Microsoft") == null)
+            {
+                if (userService.findUserByLogin("eduard") != null)
+                {
+                    companyService.save(new Company("Microsoft", Ed));
+                }
+            }
         };
     }
 

@@ -39,7 +39,7 @@ services:
           "spring.datasource.url": "jdbc:postgresql://postgres:5432/messenger",
           "spring.datasource.username": "messenger",
           "spring.datasource.password": "messenger",
-          "spring.jpa.hibernate.ddl-auto": "create",
+          "spring.jpa.hibernate.ddl-auto": "create-drop",
           "jwt.token.secret.jwt": "$${random.value}",
           "jwt.token.secret.refresh": "$${random.value}",
           "jwt.token.expired.jwt": "3600000",

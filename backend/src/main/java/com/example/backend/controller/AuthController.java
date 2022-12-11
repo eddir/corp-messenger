@@ -1,14 +1,15 @@
 package com.example.backend.controller;
 
-import com.example.backend.dto.AuthenticationRequestDto;
-import com.example.backend.dto.AuthenticationResponseDto;
-import com.example.backend.dto.UserRequestDto;
-import com.example.backend.dto.UserResponseDto;
+import com.example.backend.dto.auth.AuthenticationRequestDto;
+import com.example.backend.dto.auth.AuthenticationResponseDto;
+import com.example.backend.dto.user.UserRequestDto;
+import com.example.backend.dto.user.UserResponseDto;
 import com.example.backend.entities.ApplicationRole;
 import com.example.backend.entities.Profile;
 import com.example.backend.entities.User;
 import com.example.backend.security.jwt.providers.JwtTokenProvider;
 import com.example.backend.security.jwt.user.UserDetailsFactory;
+import com.example.backend.services.CompanyService;
 import com.example.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -23,10 +24,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.persistence.EntityExistsException;
-import java.net.URI;
+import javax.persistence.EntityNotFoundException;
 import java.util.*;
 
 @RestController
@@ -37,13 +37,15 @@ public class AuthController
     private JwtTokenProvider jwtTokenProvider;
     private UserService userService;
     private BCryptPasswordEncoder passwordEncoder;
+    private CompanyService companyService;
 
     @Autowired
-    public AuthController(AuthenticationManager authManager, JwtTokenProvider jwtTokenProvider, UserService userService, @Qualifier("customBCryptPasswordEncoder") BCryptPasswordEncoder passwordEncoder) {
+    public AuthController(AuthenticationManager authManager, JwtTokenProvider jwtTokenProvider, UserService userService, @Qualifier("customBCryptPasswordEncoder") BCryptPasswordEncoder passwordEncoder, CompanyService companyService) {
         this.authManager = authManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
+        this.companyService = companyService;
     }
 
     @PostMapping("/login")
@@ -64,7 +66,7 @@ public class AuthController
             roles.add(new SimpleGrantedAuthority(user.getApplicationRole().name()));
             String jwtToken = jwtTokenProvider.createJwtToken(userLogin,roles);
             String refreshToken = jwtTokenProvider.createRefreshToken(userLogin,roles);
-            AuthenticationResponseDto responseDto = new AuthenticationResponseDto(jwtToken, refreshToken);
+            AuthenticationResponseDto responseDto = new AuthenticationResponseDto(jwtToken, refreshToken,user.getId());
             return ResponseEntity.ok().body(responseDto);
         }
         catch (AuthenticationException err)
@@ -89,7 +91,7 @@ public class AuthController
                 UserDetails userDetails = UserDetailsFactory.convertUserToUserDetails(user);
                 String newAccessToken = jwtTokenProvider.createJwtToken(userLogin, userDetails.getAuthorities());
                 String newRefreshToken = jwtTokenProvider.createRefreshToken(userLogin, userDetails.getAuthorities());
-                AuthenticationResponseDto authResponseDto = new AuthenticationResponseDto(newAccessToken, newRefreshToken);
+                AuthenticationResponseDto authResponseDto = new AuthenticationResponseDto(newAccessToken, newRefreshToken, user.getId());
                 return ResponseEntity.ok().body(authResponseDto);
             }
         }
@@ -110,13 +112,23 @@ public class AuthController
         try{
 
             User user = new User(userRequestDto.getLogin(),userRequestDto.getPassword(), ApplicationRole.USER, new Profile(userRequestDto.getFirst_name(),userRequestDto.getMiddle_name(),userRequestDto.getLast_name()));
-            //URI uri = URI.create(ServletUriComponentsBuilder.fromCurrentContextPath().path("/api/auth/register").toUriString());
-            //return ResponseEntity.created(uri).body(new UserResponseDto(userService.save(user)));
-            return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDto(userService.save(user)));
+            if(userRequestDto.getCompanyId() != null)
+                userService.save(user, userRequestDto.getCompanyId());
+            else
+                userService.save(user);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDto(user));
         }
         catch (EntityExistsException err)
         {
             return ResponseEntity.status(409).body(err.getMessage());
         }
+        catch (EntityNotFoundException err)
+        {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err.getMessage());
+        }
+        //catch (IllegalArgumentException err)
+        //{
+            //return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
+        //}
     }
 }
