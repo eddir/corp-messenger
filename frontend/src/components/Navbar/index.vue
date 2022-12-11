@@ -40,7 +40,7 @@ export default {
 
     computed: {
         ...mapGetters('AppStore', [
-            'userLogin'
+            'user'
         ]),
 
         viewChatsNavbar() {
@@ -48,7 +48,7 @@ export default {
         },
         
         login() {
-            return this.userLogin || 'user'
+            return `${this.user?.last_name} ${this.user?.first_name}` || 'User'
         }
     },
 

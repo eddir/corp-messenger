@@ -85,16 +85,24 @@ export default {
     },
 
     computed: {
-        ...mapGetters('AppStore', [
-            'userLogin'
-        ]),
+        ...mapGetters('AppStore', {
+            userInfo: 'user'
+        }),
 
         login() {
-            return this.userLogin || 'login'
+            return this.userInfo?.login || 'login'
         },
     },
 
     methods: {
+        init() {
+            Object.assign(this.user.fio, {
+                firstName: this.userInfo.first_name,
+                lastName: this.userInfo.last_name,
+                middleName: this.userInfo.middle_name,
+            })
+        },
+
         edit(isEdit) {
             this.isEdit = isEdit
 
@@ -114,6 +122,10 @@ export default {
         locale(text) {
             return localization[text]
         }
+    },
+
+    mounted() {
+        this.init()
     },
 
     components: {
