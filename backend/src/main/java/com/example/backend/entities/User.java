@@ -36,14 +36,26 @@ public class User
 
     @Enumerated(EnumType.STRING)
     @Column(name = "role", nullable = false)
-    //@ColumnTransformer(write = "ROLE + ?")
     protected ApplicationRole applicationRole;
 
-    @OneToMany(mappedBy = "userOwner")
-    protected Set<Company> company = new HashSet<>();
+    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
+    protected Set<Company> companies = new HashSet<>();
 
     @Column(name = "img_url")
     protected String imgUrl;
+
+    public Set<Company> getCompanies() {
+        return companies;
+    }
+
+    public void setCompanies(Set<Company> companies) {
+        this.companies = companies;
+    }
+
+    public void addCompany(Company company)
+    {
+        this.companies.add(company);
+    }
 
     public Calendar getCreate() {
         return create;
@@ -61,17 +73,6 @@ public class User
         this.lastVisitDate = lastVisitDate;
     }
 
-    public Set<Company> getCompany() {
-        if(company != null)
-            return company;
-        else
-            return new HashSet<>();
-    }
-
-    public void setCompany(Set<Company> company) {
-        this.company = company;
-    }
-
     public String getImgUrl() {
         return imgUrl;
     }
@@ -81,7 +82,7 @@ public class User
     }
 
     public Profile getProfile() {
-        return profile;
+        return this.profile == null ? Profile.emptyProfile : this.profile;
     }
 
     public void setProfile(Profile profile) {

@@ -2,11 +2,15 @@ package com.example.backend.entities;
 
 import javax.persistence.Column;
 import javax.persistence.Embeddable;
+import javax.persistence.Transient;
 
 
 @Embeddable
 public class Profile
 {
+    @Transient
+    public final static Profile emptyProfile = new Profile();
+
     @Column(name = "first_name")
     protected String firstName;
 
