@@ -77,7 +77,7 @@ paths:
                       name: Apple
                     img_url: 'https://picsum.photos/200'
                     is_online: true
-          description: Пользователь успешно зарегистрирован
+          description: Пользователь успешно зарегистрирован.
         '400':
           content:
             application/json:
@@ -1495,6 +1495,163 @@ paths:
                   middle_name: string
                   last_name: string
                   company_id: 1
+  /companies:
+    post:
+      summary: Создать компанию
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyInstance'
+              examples:
+                Example 3:
+                  value:
+                    id: 1
+                    name: Apple
+                    owner:
+                      id: 1
+                      login: steve
+                      first_name: Steve
+                      middle_name: Paul
+                      last_name: Jobs
+                      companies:
+                        - {}
+                      img_url: 'https://picsum.photos/200'
+                      is_online: true
+      operationId: post-companies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+            examples:
+              Example 1:
+                value:
+                  id: 1
+                  name: string
+                  owner_id: 0
+  '/company/{companyId}':
+    parameters:
+      - schema:
+          type: string
+        name: companyId
+        in: path
+        required: true
+    get:
+      summary: Получить информацию о компании
+      tags:
+        - company
+      responses: {}
+      operationId: get-company-companyId
+      description: Получить информацию о компании
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyInstance'
+            examples:
+              Example 1:
+                value:
+                  id: 1
+                  name: Apple
+                  owner:
+                    id: 1
+                    login: steve
+                    first_name: Steve
+                    middle_name: Paul
+                    last_name: Jobs
+                    companies:
+                      - {}
+                    img_url: 'https://picsum.photos/200'
+                    is_online: true
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: companyId
+          required: true
+    post:
+      summary: Отредактировать компанию
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyInstance'
+              examples:
+                Example 2:
+                  value:
+                    id: 1
+                    name: Apple
+                    owner:
+                      id: 1
+                      login: steve
+                      first_name: Steve
+                      middle_name: Paul
+                      last_name: Jobs
+                      companies:
+                        - {}
+                      img_url: 'https://picsum.photos/200'
+                      is_online: true
+      operationId: post-company-companyId
+      description: ''
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: companyId
+          required: true
+    delete:
+      summary: Удалить компанию
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyInstance'
+              examples:
+                Example 1:
+                  value:
+                    id: 1
+                    '': string
+                    owner:
+                      id: 1
+                      login: string
+                      first_name: Steve
+                      middle_name: Paul
+                      last_name: Jobs
+                      companies:
+                        - {}
+                      img_url: 'https://picsum.photos/200'
+                      is_online: true
+      operationId: delete-company-companyId
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: companyId
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+            examples:
+              Example 1:
+                value:
+                  id: 1
+                  name: string
+                  owner_id: 0
 components:
   schemas:
     Tokens:
@@ -1510,13 +1667,37 @@ components:
           format: uuid
     UserInstance:
       type: object
+      x-examples:
+        Example 1:
+          id: 1
+          login: string
+          first_name: Steve
+          middle_name: Paul
+          last_name: Jobs
+          companies:
+            - id: 1
+              '': string
+              owner:
+                id: 1
+                login: string
+                first_name: Steve
+                middle_name: Paul
+                last_name: Jobs
+                companies:
+                  - {}
+                img_url: 'https://picsum.photos/200'
+                is_online: true
+          img_url: 'https://picsum.photos/200'
+          is_online: true
       properties:
         id:
           format: int64
           type: integer
+          minimum: 1
         login:
           type: string
           minLength: 1
+          example: steve
         first_name:
           type: string
           example: Steve
@@ -1529,8 +1710,10 @@ components:
           type: string
           example: Jobs
           minLength: 1
-        company:
-          $ref: '#/components/schemas/Company'
+        companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyInstance'
         img_url:
           type: string
           format: url
@@ -1538,21 +1721,10 @@ components:
         is_online:
           type: boolean
       required:
+        - login
         - first_name
         - last_name
-        - company
-      x-examples:
-        Example 1:
-          id: -9223372036854776000
-          login: string
-          first_name: Steve
-          middle_name: Paul
-          last_name: Jobs
-          company:
-            id: 0
-            name: string
-          img_url: 'https://picsum.photos/200'
-          is_online: true
+        - companies
     Users:
       type: array
       items:
@@ -1571,6 +1743,11 @@ components:
             is_online: true
     Company:
       type: object
+      x-examples:
+        Example 2:
+          id: 1
+          name: string
+          owner_id: 0
       properties:
         id:
           format: int64
@@ -1578,12 +1755,10 @@ components:
           minimum: 1
         name:
           type: string
+        owner_id:
+          type: integer
       required:
         - name
-      x-examples:
-        Example 1:
-          id: 1
-          name: Apple
     Chat:
       description: Краткая информация о чате для заполнения
       type: object
@@ -2046,6 +2221,40 @@ components:
       properties:
         success:
           type: boolean
+    CompanyInstance:
+      title: CompanyInstance
+      x-stoplight:
+        id: gswf4vqr4yqux
+      type: object
+      x-examples:
+        Example 1:
+          id: 1
+          '': string
+          owner:
+            id: 0
+            login: string
+            first_name: Steve
+            middle_name: Paul
+            last_name: Jobs
+            company:
+              id: 1
+              name: string
+              owner_id: 0
+            img_url: 'https://picsum.photos/200'
+            is_online: true
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        name:
+          type: string
+          example: Apple
+        owner:
+          $ref: '#/components/schemas/UserInstance'
+      required:
+        - id
+        - name
+        - owner
   securitySchemes:
     AccessToken:
       type: apiKey
