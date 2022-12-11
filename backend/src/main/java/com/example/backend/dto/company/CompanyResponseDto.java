@@ -2,6 +2,7 @@ package com.example.backend.dto.company;
 
 import com.example.backend.entities.Company;
 import com.example.backend.entities.User;
+import com.example.backend.entities.UserCompany;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 

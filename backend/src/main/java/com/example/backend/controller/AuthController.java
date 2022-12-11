@@ -110,6 +110,10 @@ public class AuthController
     public ResponseEntity<?> register(@RequestBody UserRequestDto userRequestDto)
     {
         try{
+            //ИЗМЕНИТЬ РЕГИСТРАЦИЮ
+
+
+
 
             User user = new User(userRequestDto.getLogin(),userRequestDto.getPassword(), ApplicationRole.USER, new Profile(userRequestDto.getFirst_name(),userRequestDto.getMiddle_name(),userRequestDto.getLast_name()));
             if(userRequestDto.getCompanyId() != null)

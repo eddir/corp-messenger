@@ -3,6 +3,7 @@ package com.example.backend.dto.user;
 import com.example.backend.dto.company.CompanyResponseDto;
 import com.example.backend.entities.Company;
 import com.example.backend.entities.User;
+import com.example.backend.entities.UserCompany;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import java.util.*;
@@ -33,10 +34,10 @@ public class UserResponseDto
         this.middle_name = user.getProfile().getMiddleName();
         this.imgUrl = user.getImgUrl();
         this.company = new HashSet<>();
-        Set<Company> companies = user.getCompanies();
-            for(Company comp : companies)
+        Set<UserCompany> userCompanies = user.getCompanies();
+            for(UserCompany userCompany : userCompanies)
             {
-                this.company.add(new CompanyResponseDto(comp));
+                this.company.add(new CompanyResponseDto(userCompany.getCompany()));
             }
     }
 
