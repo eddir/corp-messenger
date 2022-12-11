@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table
+@Table(name = "user_chat")
 @Immutable
 public class Member
 {
@@ -26,6 +26,8 @@ public class Member
     protected Boolean isOwner;
     protected Boolean isAdmin;
     protected Boolean isPinned;
+
+    public Member(){}
 
     public Member(Chat chat, User user, Boolean isOwner, Boolean isAdmin, Boolean isPinned)
     {
