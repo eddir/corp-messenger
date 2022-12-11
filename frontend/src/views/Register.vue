@@ -48,6 +48,7 @@ import { defineComponent, reactive, ref } from 'vue'
 import { reduce } from 'lodash'
 
 import api from '@/api'
+import router from '@/router'
 
 export default defineComponent({
     setup() {
@@ -103,16 +104,22 @@ export default defineComponent({
                     api.app.register(dto)
                         .then((res) => {
                             console.log(res.data)
+                            goTo('/login')
                         })
                         .catch((e) => console.error(e))
                 })
+        }
+
+        const goTo = (path) => {
+            router.push(path)
         }
 
         return {
             formRef,
             formState,
             rules,
-            register
+            register,
+            goTo
         }
     }
 })
