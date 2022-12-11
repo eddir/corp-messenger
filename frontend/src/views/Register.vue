@@ -8,9 +8,7 @@
             ref="formRef"
             :model="formState" 
             :rules="rules" 
-            @finish="handleFinish"
-            @validate="handleValidate"
-            @finishFailed="handleFinishFailed"
+            @finish="register"
         >
             <AFormItem class="auth-sider__form__item" label="Логин" name="login" has-feedback>
                 <AInput v-model:value="formState.login" placeholder="Логин" />
@@ -38,7 +36,7 @@
             <div class="auth-sider__form__links">
                 <AButton @click="goTo('/login')" type="link">Есть учетная запись?</AButton>
             </div>
-            <AButton type="primary" html-type="submit" @click="register">Зарегистрироваться</AButton>
+            <AButton type="primary" html-type="submit">Зарегистрироваться</AButton>
         </AForm>
     </div>
 </template>
