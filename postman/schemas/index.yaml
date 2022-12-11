@@ -23,6 +23,7 @@ tags:
   - name: messages
   - name: search
   - name: users
+  - name: company
 paths:
   /auth/register:
     post:
@@ -1408,7 +1409,7 @@ paths:
                   first_name: Steve
                   middle_name: Paul
                   last_name: Jobs
-                  img_url: null
+                  img_url: ''
                   compaines:
                     - 1
         required: true
@@ -1544,6 +1545,7 @@ paths:
                   id: 1
                   name: string
                   owner_id: 0
+      description: Создание новой компании с заданным владельцем
   '/company/{companyId}':
     parameters:
       - schema:
@@ -1555,7 +1557,28 @@ paths:
       summary: Получить информацию о компании
       tags:
         - company
-      responses: {}
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyInstance'
+              examples:
+                Example 1:
+                  value:
+                    id: 1
+                    name: Apple
+                    owner:
+                      id: 1
+                      login: steve
+                      first_name: Steve
+                      middle_name: Paul
+                      last_name: Jobs
+                      companies:
+                        - {}
+                      img_url: 'https://picsum.photos/200'
+                      is_online: true
       operationId: get-company-companyId
       description: Получить информацию о компании
       requestBody:
@@ -1611,7 +1634,7 @@ paths:
                       img_url: 'https://picsum.photos/200'
                       is_online: true
       operationId: post-company-companyId
-      description: ''
+      description: Обновить информацию о компании - сменить владельца или название.
       parameters:
         - schema:
             type: number
@@ -1662,6 +1685,7 @@ paths:
                   id: 1
                   name: string
                   owner_id: 0
+      description: Удалить компанию.
 components:
   schemas:
     Tokens:
@@ -2294,7 +2318,7 @@ components:
           example: Jobs
         img_url:
           type: string
-          default: null
+          default: ''
         compaines:
           type: array
           items:
