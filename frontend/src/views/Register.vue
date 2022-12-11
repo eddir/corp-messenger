@@ -1,64 +1,121 @@
 <template>
     <div class="auth-sider">
-        <!-- <UserOutlined class="auth-sider__icon" /> -->
         <ADivider class="auth-sider__title">Регистрация</ADivider>
-        <AForm class="auth-sider__form" :v-model="formState" layout="vertical">
-            <AFormItem class="auth-sider__form__item" label="Логин" name="login" >
-                <AInput :v-model:value="formState.login" placeholder="Логин" />
+        <AForm 
+            class="auth-sider__form" 
+            layout="vertical" 
+            autocomplete="off"
+            ref="formRef"
+            :model="formState" 
+            :rules="rules" 
+            @finish="handleFinish"
+            @validate="handleValidate"
+            @finishFailed="handleFinishFailed"
+        >
+            <AFormItem class="auth-sider__form__item" label="Логин" name="login" has-feedback>
+                <AInput v-model:value="formState.login" placeholder="Логин" />
             </AFormItem>
             <ASpace>
-                <AFormItem class="auth-sider__form__item" label="Фамилия" name="lastName" >
-                    <AInput :v-model:value="formState.lastName" placeholder="Фамилия" />
+                <AFormItem class="auth-sider__form__item" label="Фамилия" name="last_name" has-feedback>
+                    <AInput v-model:value="formState.last_name" placeholder="Фамилия" />
                 </AFormItem>
-                <AFormItem class="auth-sider__form__item" label="Имя" name="firstName" >
-                    <AInput :v-model:value="formState.firstName" placeholder="Имя" />
+                <AFormItem class="auth-sider__form__item" label="Имя" name="first_name" has-feedback>
+                    <AInput v-model:value="formState.first_name" placeholder="Имя" />
                 </AFormItem>
-                <AFormItem class="auth-sider__form__item" label="Отчество" name="middleName" >
-                    <AInput :v-model:value="formState.middleName" placeholder="Отчество" />
+                <AFormItem class="auth-sider__form__item" label="Отчество" name="middle_name" >
+                    <AInput v-model:value="formState.middle_name" placeholder="Отчество" />
                 </AFormItem>
             </ASpace>
-            <AFormItem class="auth-sider__form__item" label="Пароль" name="password">
-                <AInput :v-model:value="formState.password" type="password" placeholder="Пароль" />
+            <AFormItem class="auth-sider__form__item" label="Пароль" name="password" has-feedback>
+                <AInput v-model:value="formState.password" type="password" placeholder="Пароль" />
             </AFormItem>
-            <AFormItem class="auth-sider__form__item" label="Повторить пароль" name="rePassword">
-                <AInput :v-model:value="formState.rePassword" type="password" placeholder="Пароль" />
+            <AFormItem class="auth-sider__form__item" label="Повторить пароль" name="rePassword" has-feedback>
+                <AInput v-model:value="formState.rePassword" type="password" placeholder="Повторить пароль" />
+            </AFormItem>
+            <AFormItem class="auth-sider__form__item" label="Ключ компании" name="company_id">
+                <AInput v-model:value="formState.company_id" type="password" placeholder="Ключ компании" />
             </AFormItem>
             <div class="auth-sider__form__links">
                 <AButton @click="goTo('/login')" type="link">Есть учетная запись?</AButton>
             </div>
-            <AButton @click="goTo('/login')" type="primary">Зарегистрироваться</AButton>
+            <AButton type="primary" html-type="submit" @click="register">Зарегистрироваться</AButton>
         </AForm>
     </div>
 </template>
 
 <script>
-// import { UserOutlined } from '@ant-design/icons-vue'
+import { defineComponent, reactive, ref } from 'vue'
+import { reduce } from 'lodash'
 
-export default {
-    data() {
-        return {
-            formState: {
-                login: null,
-                firstName: null,
-                lastName: null,
-                middleName: null,
-                password: null,
-                rePassword: null,
-                secretCorpKey: null
-            }
+import api from '@/api'
+
+export default defineComponent({
+    setup() {
+        const formRef = ref()
+        const formState = reactive({
+            login: null,
+            first_name: null,
+            last_name: null,
+            middle_name: null,
+            password: null,
+            rePassword: null,
+            company_id: null
+        })
+
+        const validatePas = async (_rule, value) => {
+            if (!value)
+                return Promise.reject('Поле обязательно для заполнения!')
+            
+            if (formState.rePassword) 
+                formRef.value.validateFields('rePassword')
+                
+            return Promise.resolve()
         }
-    },
 
-    methods: {
-        goTo(path) {
-            this.$router.push(path)
+        const validateRePas = async (_rule, value) => {
+            if (!value) 
+                return Promise.reject('Поле обязательно для заполнения!')
+
+            if (value !== formState.password)
+                return Promise.reject('Пароли не совпадают!')
+            
+            return Promise.resolve()
+        }
+
+        const rules = {
+            login: [{ required: true, message: 'Поле обязательно для заполнения!', trigger: 'change' }],
+            first_name: [{ required: true, message: 'Поле обязательно для заполнения!', trigger: 'change' }],
+            last_name: [{ required: true, message: 'Поле обязательно для заполнения!', trigger: 'change' }],
+            password: [{ required: true, validator: validatePas, trigger: 'change' }],
+            rePassword: [{ required: true, validator: validateRePas, trigger: 'change' }],
+        }
+
+        const register = () => {
+            formRef.value.validateFields()
+                .then(() => {
+                    const dto = reduce(formState, (dto, value, key) => {
+                        if (key === 'rePassword')
+                            return dto
+
+                        return { ...dto, [key]: value }
+                    }, {})
+                    
+                    api.app.register(dto)
+                        .then((res) => {
+                            console.log(res.data)
+                        })
+                        .catch((e) => console.error(e))
+                })
+        }
+
+        return {
+            formRef,
+            formState,
+            rules,
+            register
         }
     }
-
-    // components: {
-    //     UserOutlined
-    // }
-}
+})
 </script>
 
 <style lang="less" scoped>

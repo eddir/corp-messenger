@@ -1,5 +1,5 @@
 import api from '@/api'
-import { parseJWT } from '@/utils/helpers'
+import parseJWT from '@/helpers/parseJWT'
 
 export const mutation = {
 	SET_AUTHORIZATION: 'SET_AUTHORIZATION',

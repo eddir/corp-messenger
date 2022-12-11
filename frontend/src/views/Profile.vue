@@ -40,7 +40,7 @@
 import { mapGetters } from 'vuex'
 import { UserOutlined, MinusOutlined } from '@ant-design/icons-vue'
 
-import { localization } from '@/utils/helpers'
+import localization from '@/helpers/localization'
 
 export default {
     data() {
