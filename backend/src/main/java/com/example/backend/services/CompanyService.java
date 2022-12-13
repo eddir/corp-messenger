@@ -4,6 +4,7 @@ import com.example.backend.entities.Company;
 import com.example.backend.entities.User;
 import com.example.backend.repositories.CompanyRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,12 +15,15 @@ import java.util.List;
 public class CompanyService
 {
     private CompanyRepository companyRepository;
+    private UserCompanyService userCompanyService;
+
     @PersistenceContext
     private EntityManager em;
 
     @Autowired
-    public CompanyService(CompanyRepository companyRepository) {
+    public CompanyService(CompanyRepository companyRepository, UserCompanyService userCompanyService) {
         this.companyRepository = companyRepository;
+        this.userCompanyService = userCompanyService;
     }
 
     public List<Company> findAll()
@@ -27,13 +31,15 @@ public class CompanyService
         return companyRepository.findAll();
     }
 
+    //@PreAuthorize("hasAnyAuthority('ADMIN', 'SUPER_ADMIN')")
     @Transactional
-    public Company save(Company company) throws EntityExistsException
+    public Company save(Company company, User user) throws EntityExistsException
     {
         if(companyRepository.getCompanyByName(company.getName()) != null)
             throw new EntityExistsException("Компания с таким названием уже существует.");
         company = companyRepository.save(company);
-        company.addUserIntoCompany(company.getUserOwner());
+        userCompanyService.addUserToCompany(user, company, true);
+        //company.addUserIntoCompany(company.getUserOwner());
         return company;
     }
 

@@ -33,7 +33,7 @@ public class UserController
         User user = userService.findUserById(id);
         //Если User не найден, какой код ошибки выкидывать?
         if(user == null)
-            ResponseEntity.ok().body(null);
+            return ResponseEntity.notFound().build();
         return ResponseEntity.ok().body(new UserResponseDto(user));
     }
 

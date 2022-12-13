@@ -125,7 +125,7 @@ public class AuthController
         }
         catch (EntityExistsException err)
         {
-            return ResponseEntity.status(409).body(err.getMessage());
+            return ResponseEntity.status(409).body("Пользователь с таким логином уже существует!");
         }
         catch (EntityNotFoundException err)
         {

@@ -20,7 +20,7 @@ public class Company {
     protected Set<UserCompany> usersCompany = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_owner", nullable = false)
+    @JoinColumn(name = "user_owner", nullable = true)
     protected User userOwner;
 
     public Company(){}

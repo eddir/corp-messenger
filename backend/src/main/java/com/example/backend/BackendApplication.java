@@ -33,7 +33,9 @@ public class BackendApplication {
             {
                 if (userService.findUserByLogin("eduard") != null)
                 {
-                    companyService.save(new Company("Microsoft", Ed));
+                    Company company = new Company();
+                    company.setName("Microsoft");
+                    companyService.save(company, Ed);
                 }
             }
         };
