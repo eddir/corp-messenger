@@ -33,25 +33,28 @@ public class CompanyService
 
     //@PreAuthorize("hasAnyAuthority('ADMIN', 'SUPER_ADMIN')")
     @Transactional
-    public Company save(Company company, User user) throws EntityExistsException
+    public Company save(Company company) throws EntityExistsException
     {
         if(companyRepository.getCompanyByName(company.getName()) != null)
             throw new EntityExistsException("Компания с таким названием уже существует.");
         company = companyRepository.save(company);
-        userCompanyService.addUserToCompany(user, company, true);
+        userCompanyService.addUserToCompany(company.getUserOwner(), company, true);
         //company.addUserIntoCompany(company.getUserOwner());
         return company;
     }
 
+    /*
     @Transactional
     public User addUserIntoCompany(User user, Long companyId) throws EntityNotFoundException
     {
         Company company = companyRepository.getCompanyById(companyId);
         if(company == null)
             throw new EntityNotFoundException("Компания с id = \'" + companyId + "\'не существует.");
-        company.addUserIntoCompany(user);
+        company.addUserIntoCompany();
         return user;
     }
+
+     */
 
     @Transactional
     public Company getCompanyById(Long id)

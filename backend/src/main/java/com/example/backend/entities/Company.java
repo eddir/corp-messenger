@@ -37,11 +37,11 @@ public class Company {
 
 
 
-    public void addUserIntoCompany(User usersCompany)
+    public void addUserIntoCompany(UserCompany userCompany)
     {
         //Добавить новую запись в UserCompany
-
-        throw new RuntimeException("НЕЛЬЗЯ");
+        this.usersCompany.add(userCompany);
+        //throw new RuntimeException("НЕЛЬЗЯ");
        // usersCompany.add(usersCompany);
         //user.addCompany(this);
     }

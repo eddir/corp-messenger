@@ -24,5 +24,6 @@ public class UserCompanyService
     {
         UserCompany userCompany = new UserCompany(user, company, isApproved);
         userCompanyRepository.save(userCompany);
+        company.addUserIntoCompany(userCompany);
     }
 }

@@ -35,7 +35,8 @@ public class BackendApplication {
                 {
                     Company company = new Company();
                     company.setName("Microsoft");
-                    companyService.save(company, Ed);
+                    company.setUserOwner(Ed);
+                    companyService.save(company);
                 }
             }
         };

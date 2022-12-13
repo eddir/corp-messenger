@@ -34,13 +34,13 @@ public class CompanyController
     public ResponseEntity<?> createCompany(@RequestBody CompanyRequestDto companyRequestDto)
     {
         Company company = new Company();
-
         company.setName(companyRequestDto.getName());
         try{
             User user = userService.findUserById(companyRequestDto.getOwner_id());
             if(user == null)
                 throw new EntityNotFoundException();
-            companyService.save(company,user);
+            company.setUserOwner(user);
+            companyService.save(company);
             return ResponseEntity.status(HttpStatus.CREATED).body(new CompanyResponseDto(company));
         }
         catch (EntityExistsException err)
