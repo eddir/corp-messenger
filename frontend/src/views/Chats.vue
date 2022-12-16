@@ -1,30 +1,42 @@
 <template>
-    <div class="chat__empty">
-        <div class="chat__empty-icon">
-            <InfoCircleOutlined />
-        </div>
-        <div class="chat__empty-text">
-            Выберите чат или канал
+    <div class="chat-layout">
+        <ChatView v-if="selectedChat" :chat="selectedChat" />
+        <div v-else class="chat-layout__empty">
+            <div class="chat-layout__empty-icon">
+                <InfoCircleOutlined />
+            </div>
+            <div class="chat-layout__empty-text">
+                Выберите чат или канал
+            </div>
         </div>
     </div>
 </template>
 
 <script>
 import { InfoCircleOutlined } from '@ant-design/icons-vue'
+import { mapGetters } from 'vuex'
+
+import { ChatView } from '@/components'
 
 export default {
     data() {
         
     },
 
+    computed: {
+        ...mapGetters('ChatsStore', [
+            'selectedChat'
+        ])
+    },
+
     components: {
-        InfoCircleOutlined
+        InfoCircleOutlined, ChatView
     }
 }
 </script>
 
 <style lang="less" scoped>
-    .chat {
+    .chat-layout {
         &__empty {
             &-icon {
                 display: flex;
