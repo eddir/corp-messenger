@@ -2,19 +2,17 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.chat.ChatRequestDto;
 import com.example.backend.dto.chat.PersonalChatResponseDto;
+import com.example.backend.dto.message.MessageResponseDto;
+import com.example.backend.dto.message.interval.IntervalMessagesRequest;
 import com.example.backend.entities.*;
 import com.example.backend.security.jwt.user.JwtUser;
-import com.example.backend.services.ChatService;
-import com.example.backend.services.CompanyService;
-import com.example.backend.services.MemberService;
-import com.example.backend.services.UserService;
+import com.example.backend.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreFilter;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.*;
@@ -28,13 +26,17 @@ public class ChatController
     private MemberService memberService;
     private UserService userService;
     private CompanyService companyService;
+    private MessageService messageService;
+    private UserCompanyService userCompanyService;
 
     @Autowired
-    public ChatController(ChatService chatService, MemberService memberService,UserService userService,CompanyService companyService) {
+    public ChatController(ChatService chatService, MemberService memberService,UserService userService,CompanyService companyService, MessageService messageService, UserCompanyService userCompanyService) {
         this.chatService = chatService;
         this.memberService = memberService;
         this.userService = userService;
         this.companyService = companyService;
+        this.messageService = messageService;
+        this.userCompanyService = userCompanyService;
     }
 
 
@@ -54,6 +56,7 @@ public class ChatController
         return ResponseEntity.ok().body(chatsToUser);
     }
 
+    @Transactional
     @PostMapping
     public ResponseEntity<?> createChat(@RequestBody ChatRequestDto chatRequestDto)
     {
@@ -63,15 +66,14 @@ public class ChatController
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = userService.findUserById(jwtUser.getId());
         Company company = companyService.getCompanyById(chatRequestDto.getCompanyId());
-        List<UserCompany> companies = user.getCompanies();
-        if(!user.getCompanies().contains(company))
+        if(!userCompanyService.existsUserIntoCompany(user,company))
         {
             if(user.getApplicationRole().equals(ApplicationRole.USER))
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("У вас нет прав создавать чат в данной компании");
         }
         else
         {
-            UserCompany userCompany = companies.get(chatRequestDto.getCompanyId().intValue());
+            UserCompany userCompany = userCompanyService.getUserCompanyByPK(user, company);
             if(!userCompany.isApproved())
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Для создания чатов в компании необходимо быть подтвержденным сотрудником. Пожалуйста, подождите...");
         }
@@ -99,5 +101,11 @@ public class ChatController
         Member member = memberService.getMemberByPK(new PrimaryKey(chat.getId(), user.getId()));
         return ResponseEntity.ok().body(new PersonalChatResponseDto(chat, null, member));
         //return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/{chatId}/messages")
+    public List<MessageResponseDto> getListOfMessagesIntoChat(@RequestBody IntervalMessagesRequest intervalMessagesRequest)
+    {
+        return null;
     }
 }

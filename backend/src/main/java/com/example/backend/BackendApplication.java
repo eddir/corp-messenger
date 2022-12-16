@@ -37,7 +37,7 @@ public class BackendApplication {
                     company.setName("Microsoft");
                     company.setUserOwner(Ed);
                     companyService.save(company);
-                    userCompanyService.addUserToCompany(anton,company,false);
+                    userCompanyService.addUserToCompany(anton,company,true);
                     userCompanyService.addUserToCompany(mikhail, company, true);
 
 

@@ -34,4 +34,13 @@ public class UserCompanyService
             return false;
         return true;
     }
+
+    @Transactional
+    public UserCompany getUserCompanyByPK(User user,Company company)
+    {
+        UserCompany.Id id = new UserCompany.Id();
+        id.setUserId(user.getId());
+        id.setCompanyId(company.getId());
+        return userCompanyRepository.getReferenceById(id);
+    }
 }
