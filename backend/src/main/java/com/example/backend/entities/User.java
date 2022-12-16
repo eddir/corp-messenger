@@ -39,16 +39,16 @@ public class User
     protected ApplicationRole applicationRole;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    protected Set<UserCompany> companies = new HashSet<>();
+    protected List<UserCompany> companies = new HashSet<>();
 
     @Column(name = "img_url")
     protected String imgUrl;
 
-    public Set<UserCompany> getCompanies() {
+    public List<UserCompany> getCompanies() {
         return companies;
     }
 
-    public void setCompanies(Set<UserCompany> companies) {
+    public void setCompanies(List<UserCompany> companies) {
         this.companies = companies;
     }
 

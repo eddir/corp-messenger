@@ -34,7 +34,7 @@ public class UserResponseDto
         this.middle_name = user.getProfile().getMiddleName();
         this.imgUrl = user.getImgUrl();
         this.company = new HashSet<>();
-        Set<UserCompany> userCompanies = user.getCompanies();
+        List<UserCompany> userCompanies = user.getCompanies();
             for(UserCompany userCompany : userCompanies)
             {
                 this.company.add(new CompanyResponseDto(userCompany.getCompany()));

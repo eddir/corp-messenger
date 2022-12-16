@@ -1,11 +1,7 @@
 package com.example.backend;
 
-import com.example.backend.entities.ApplicationRole;
-import com.example.backend.entities.Company;
-import com.example.backend.entities.User;
-import com.example.backend.services.CompanyService;
-import com.example.backend.services.UserCompanyService;
-import com.example.backend.services.UserService;
+import com.example.backend.entities.*;
+import com.example.backend.services.*;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -20,7 +16,7 @@ public class BackendApplication {
     }
 
     @Bean
-    CommandLineRunner run(UserService userService, CompanyService companyService,UserCompanyService userCompanyService)
+    CommandLineRunner run(UserService userService, CompanyService companyService, UserCompanyService userCompanyService, ChatService chatService, MemberService memberService)
     {
         User anton = new User("anton", "1", ApplicationRole.USER);
         User mikhail = new User("mikhail", "1", ApplicationRole.ADMIN);
@@ -34,6 +30,7 @@ public class BackendApplication {
                 userService.save(Ed);
             if(companyService.getCompanyByName("Microsoft") == null)
             {
+
                 if (userService.findUserByLogin("eduard") != null)
                 {
                     Company company = new Company();
@@ -43,9 +40,20 @@ public class BackendApplication {
                     userCompanyService.addUserToCompany(anton,company,false);
                     userCompanyService.addUserToCompany(mikhail, company, true);
 
+
+
+                    Chat chat = new Chat();
+                    chat.setCompanyId(company);
+                    chat.setTitle("Тест1");
+                    chatService.createNewChat(chat);
+                    Member member = new Member(chat,Ed,true,false,true);
+                    memberService.addUserIntoChat(member);
+
                 }
 
+
             }
+
 
         };
     }

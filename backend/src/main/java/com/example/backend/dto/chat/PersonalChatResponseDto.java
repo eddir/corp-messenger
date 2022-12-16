@@ -40,7 +40,8 @@ public class PersonalChatResponseDto
         this.companyId = chat.getCompanyId().getId();
         //TODO: 16.12.2022 Поправить
         this.unread = 0;
-        this.lastMessage = new MessageResponseDto(lastMessage);
+        if(lastMessage != null)
+            this.lastMessage = new MessageResponseDto(lastMessage);
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         Iterator<Member> iter = chat.getMembers().iterator();
         /*

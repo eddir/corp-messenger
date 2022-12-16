@@ -48,6 +48,7 @@ public class MessageResponseDto
         this.chatId = message.getChat().getId();
         this.isPinned = message.getPinned();
         //Если НИКТО не прочитал - false
+        // TODO: 16.12.2022 Реализовать!
         this.isRead = false;
     }
 

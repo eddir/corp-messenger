@@ -32,17 +32,22 @@ public class Chat
     @JoinColumn(name = "company_id", nullable = false)
     protected Company companyId;
 
+    /*
     @Column(name = "is_public")
     protected Boolean isPublic;
+     */
 
-    @Column(name = "is_closed")
-    protected Boolean isClosed;
+
 
     @Column(name = "is_private")
     protected Boolean isPrivate;
 
     @Column(name = "is_pinned")
     protected Boolean isPinned;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "type")
+    protected ChatType type = ChatType.GROUP;
 
     // TODO: 16.12.2022 Проверить, использую ОкО в первый раз!
     @OneToOne
@@ -53,9 +58,9 @@ public class Chat
     protected Set<Message> listOfMessages = new HashSet<>();
 
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
-    protected List<Member> members = new ArrayList<>();
+    protected List members = new ArrayList<>();
 
-    public List<Member> getMembers() {
+    public List getMembers() {
         return members;
     }
 
@@ -95,6 +100,7 @@ public class Chat
         this.companyId = companyId;
     }
 
+    /*
     public Boolean getPublic() {
         return isPublic;
     }
@@ -102,14 +108,8 @@ public class Chat
     public void setPublic(Boolean aPublic) {
         isPublic = aPublic;
     }
+     */
 
-    public Boolean getClosed() {
-        return isClosed;
-    }
-
-    public void setClosed(Boolean closed) {
-        isClosed = closed;
-    }
 
     public Boolean getPrivate() {
         return isPrivate;
@@ -149,5 +149,13 @@ public class Chat
 
     public void setLastMessage(Message lastMessage) {
         this.lastMessage = lastMessage;
+    }
+
+    public ChatType getType() {
+        return type;
+    }
+
+    public void setType(ChatType type) {
+        this.type = type;
     }
 }

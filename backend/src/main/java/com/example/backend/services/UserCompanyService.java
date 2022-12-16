@@ -26,4 +26,12 @@ public class UserCompanyService
         userCompanyRepository.save(userCompany);
         company.addUserIntoCompany(userCompany);
     }
+
+    @Transactional
+    public boolean existsUserIntoCompany(User user, Company company)
+    {
+        if(userCompanyRepository.existsUserIntoCompany(user,company) == null)
+            return false;
+        return true;
+    }
 }
