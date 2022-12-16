@@ -4,9 +4,10 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Calendar;
+import java.util.Set;
 
 @Entity
-@Table()
+@Table(name = "chat")
 public class Chat
 {
     @Id
@@ -43,6 +44,20 @@ public class Chat
 
     @Column(name = "is_pinned")
     protected Boolean isPinned;
+
+    @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
+    protected Set<Message> listOfMessages;
+
+    @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
+    protected Set<Member> members;
+
+    public Set<Member> getMembers() {
+        return members;
+    }
+
+    public Set<Message> getListOfMessages() {
+        return listOfMessages;
+    }
 
     public String getTitle() {
         return title;

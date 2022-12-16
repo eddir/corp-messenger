@@ -4,6 +4,7 @@ import com.example.backend.entities.ApplicationRole;
 import com.example.backend.entities.Company;
 import com.example.backend.entities.User;
 import com.example.backend.services.CompanyService;
+import com.example.backend.services.UserCompanyService;
 import com.example.backend.services.UserService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -19,13 +20,15 @@ public class BackendApplication {
     }
 
     @Bean
-    CommandLineRunner run(UserService userService, CompanyService companyService)
+    CommandLineRunner run(UserService userService, CompanyService companyService,UserCompanyService userCompanyService)
     {
+        User anton = new User("anton", "1", ApplicationRole.USER);
+        User mikhail = new User("mikhail", "1", ApplicationRole.ADMIN);
         return (args) -> {
             if(userService.findUserByLogin("anton") == null)
-                userService.save(new User("anton", "1", ApplicationRole.USER));
+                userService.save(anton);
             if(userService.findUserByLogin("mikhail") == null)
-                userService.save(new User("mikhail", "1", ApplicationRole.ADMIN));
+                userService.save(mikhail);
             User Ed = new User("eduard", "1", ApplicationRole.SUPER_ADMIN);
             if(userService.findUserByLogin("eduard") == null)
                 userService.save(Ed);
@@ -37,8 +40,12 @@ public class BackendApplication {
                     company.setName("Microsoft");
                     company.setUserOwner(Ed);
                     companyService.save(company);
+                    userCompanyService.addUserToCompany(anton,company,false);
+                    userCompanyService.addUserToCompany(mikhail, company, true);
                 }
+
             }
+
         };
     }
 

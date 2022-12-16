@@ -27,5 +27,8 @@ public class ChatService
         return chatRepository.findAll();
     }
 
-
+    public Chat createNewChat(Chat chat)
+    {
+        return chatRepository.save(chat);
+    }
 }

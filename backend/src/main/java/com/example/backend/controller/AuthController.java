@@ -131,9 +131,5 @@ public class AuthController
         {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err.getMessage());
         }
-        //catch (IllegalArgumentException err)
-        //{
-            //return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        //}
     }
 }

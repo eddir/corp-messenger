@@ -21,8 +21,13 @@ public class Member
     @JoinColumn(name = "user_id",insertable = false,updatable = false)
     protected User user;
 
+    @Column(name = "is_owner")
     protected Boolean isOwner;
+
+    @Column(name = "is_admin")
     protected Boolean isAdmin;
+
+    @Column(name = "is_pinned")
     protected Boolean isPinned;
 
     public Member(){}

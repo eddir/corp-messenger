@@ -69,6 +69,17 @@ public class UserCompany
     @Column(name = "is_approved", nullable = false)
     protected boolean isApproved = false;
 
+    @Column(name = "is_hr")
+    protected boolean isHR = false;
+
+    protected String position;
+
+    protected String department;
+
+    protected String division;
+
+    protected String team;
+
     public UserCompany(){}
 
     public UserCompany(User user, Company company, boolean isApproved)
@@ -96,5 +107,45 @@ public class UserCompany
 
     public void setApproved(boolean approved) {
         isApproved = approved;
+    }
+
+    public boolean isHR() {
+        return isHR;
+    }
+
+    public void setHR(boolean HR) {
+        isHR = HR;
+    }
+
+    public String getPosition() {
+        return position;
+    }
+
+    public void setPosition(String position) {
+        this.position = position;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getDivision() {
+        return division;
+    }
+
+    public void setDivision(String division) {
+        this.division = division;
+    }
+
+    public String getTeam() {
+        return team;
+    }
+
+    public void setTeam(String team) {
+        this.team = team;
     }
 }
