@@ -1,4 +1,9 @@
+import api from '@/api'
+
 export const mutation = {
+    SET_MESSAGES: 'SET_MESSAGES',
+    SET_MEMBERS:  'SET_MEMBERS',
+    SET_SELECTED_CHAT:  'SET_SELECTED_CHAT',
 	SET_CHATS_LIST: 'SET_CHATS_LIST',
     SAVE_CHAT: 'SAVE_CHAT',
     DELETE_CHAT: 'DELETE_CHAT'
@@ -8,16 +13,43 @@ export default {
     namespaced: true,
 
 	state: {
-        chatsList: null
+        chatsList: null,
+        selectedChat: null,
+        members: null,
+        messages: null
 	},
 
  	getters: {
-        getChatsList: state => {
+        chatsList: state => {
             return state.chatsList
+        },
+
+        selectedChat: state => {
+            return state.selectedChat
+        },
+
+        members: state => {
+            return state.members
+        },
+
+        messages: state => {
+            return state.messages
         }
 	},
 
 	mutations: {
+        [mutation.SET_MESSAGES]: (state, payload) => {
+            state.messages = payload
+        },
+
+        [mutation.SET_MEMBERS]: (state, payload) => {
+            state.members = payload
+        },
+
+        [mutation.SET_SELECTED_CHAT]: (state, payload) => {
+            state.selectedChat = payload
+        },
+
 		[mutation.SET_CHATS_LIST]: (state, payload) => {
             state.chatsList = payload
         },
@@ -37,6 +69,34 @@ export default {
 	},
 
 	actions: {
+        getMessages: async ({ commit, state }) => {
+            await api.chats.getMessages(state.selectedChat.id)
+                .then(({ data }) => {
+                    commit(mutation.SET_MESSAGES, data.messages)
+                })
+                .catch((e) => console.error(e))
+        },
+
+        selectChat: async ({ dispatch, commit }, id) => {
+            await api.chats.find(id)
+                .then(({ data }) => {
+                    commit(mutation.SET_SELECTED_CHAT, data.chat)
+                    commit(mutation.SET_MEMBERS, data.members)
+                })
+                .then(() => {
+                    dispatch('getMessages')
+                })
+                .catch((e) => console.error(e))
+        },
+
+        getChats: async ({ commit }) => {
+            await api.chats.getAll()
+                .then(({ data }) => {
+                    commit(mutation.SET_CHATS_LIST, data)
+                })
+                .catch((e) => console.error(e))
+        },
+
         saveChat: ({ commit }, payload) => {
             commit(mutation.SAVE_CHAT, payload)
         }, 

@@ -16,7 +16,7 @@ public class Chat
 
     @Temporal(TemporalType.TIMESTAMP)
     @CreationTimestamp
-    @Column(name = "created_dateaa", updatable = false)
+    @Column(name = "created_date", updatable = false)
     protected Calendar createdDate;
 
     @Column(name = "title")

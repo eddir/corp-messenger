@@ -5,7 +5,7 @@
                 <template :v-show="collapsed" #icon>
                     <div class="avatar"><UserOutlined /></div>
                 </template>
-                <span class="username">{{ login }}</span>
+                <span class="username">{{ username }}</span>
             </AMenuItem>
             <AMenuItem key="chats" class="navbar__menu__item" @click="goTo('/chats')">
                 <template #icon><WechatOutlined /></template>
@@ -40,15 +40,20 @@ export default {
 
     computed: {
         ...mapGetters('AppStore', [
-            'userLogin'
+            'user'
         ]),
 
         viewChatsNavbar() {
             return this.selectedKeys.includes('chats')
         },
         
-        login() {
-            return this.userLogin || 'user'
+        username() {
+            let name = this.user?.login || ''
+
+            if (this.user?.first_name) name = this.user?.first_name
+            if (this.user?.last_name) name = `${name} ${this.user?.last_name}`
+
+            return name
         }
     },
 
