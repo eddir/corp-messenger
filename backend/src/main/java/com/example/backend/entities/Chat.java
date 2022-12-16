@@ -58,7 +58,7 @@ public class Chat
     protected Set<Message> listOfMessages = new HashSet<>();
 
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
-    protected List members = new ArrayList<>();
+    protected List<Member> members = new ArrayList<>();
 
     public List getMembers() {
         return members;

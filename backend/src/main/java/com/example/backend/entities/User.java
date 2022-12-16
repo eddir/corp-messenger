@@ -39,7 +39,7 @@ public class User
     protected ApplicationRole applicationRole;
 
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
-    protected List<UserCompany> companies = new HashSet<>();
+    protected List<UserCompany> companies = new ArrayList<>();
 
     @Column(name = "img_url")
     protected String imgUrl;
