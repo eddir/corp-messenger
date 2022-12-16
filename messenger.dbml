@@ -21,6 +21,7 @@ Table messenger.chats {
   description text
   img_url varchar
   company_id int
+  owner_id int
   is_closed bool
   is_private bool
 }
@@ -43,7 +44,6 @@ Table messenger.users {
 Table messenger.members {
   chat_id int
   user_id int
-  is_owner bool
   is_admin bool
   is_pinned bool
 }
