@@ -14,7 +14,7 @@
                     <template #extra>
                         <PlusOutlined @click.native.stop="openModal('editChatModal')" />
                     </template>
-                    <ChatItem v-for="chat in chats" :key="chat.id" :chat="chat" />
+                    <ChatItem v-for="chat in chatList" :key="chat.id" :chat="chat" @click="selectChat('chat', chat.id)" />
                 </ACollapsePanel>
             </ACollapse>
         </div>
@@ -33,7 +33,8 @@ export default {
         return {
             activeKey: ['1', '2'],
             editChatModal: false,
-            editChanelModal: false
+            editChanelModal: false,
+            chatList: []
         }
     },
 
@@ -54,11 +55,31 @@ export default {
 
         openModal(type) {
             this[type] = true
+        },
+
+        selectChat(type, id) {
+            if (type === 'chat') {
+                this.chatList = this.chatList.map((chat) => ({
+                    ...chat,
+                    isSelected: chat.id === id
+                }))
+            }
         }
     },
 
     mounted() {
         this.init()
+    },
+
+    watch: {
+        chats(val) {
+            if (val) {
+                this.chatList = val.map((chat) => ({
+                    ...chat,
+                    isSelected: false
+                }))
+            }
+        }
     },
 
     components: {

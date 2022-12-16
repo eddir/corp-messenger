@@ -1,5 +1,5 @@
 <template>
-    <div class="chat-item">
+    <div :class="classnames">
         <div class="chat-item__icon">
             <img :src="chat.img_url" alt="Иконка чата">
         </div>
@@ -16,7 +16,10 @@
 
 export default {
     props: {
-        chat: Object
+        chat: {
+            type: Object,
+            required: true
+        }
     },
 
     data() {
@@ -26,7 +29,9 @@ export default {
     },
 
     computed: {
-        
+        classnames() {
+            return `chat-item ${this.chat.isSelected ? 'selected' : ''}`
+        }
     },
 
     methods: {
@@ -47,8 +52,15 @@ export default {
     .chat-item {
         display: flex;
         align-items: center;
+        margin: 0 -32px;
         margin-top: 16px;
+        padding: 4px 32px;
         cursor: pointer;
+
+        &.selected {
+            background-color: #1890FF;
+            color: #FFF;
+        }
 
         &__icon {
             img {
