@@ -4,6 +4,7 @@ import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -46,10 +47,10 @@ public class Chat
     protected Boolean isPinned;
 
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
-    protected Set<Message> listOfMessages;
+    protected Set<Message> listOfMessages = new HashSet<>();
 
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
-    protected Set<Member> members;
+    protected Set<Member> members = new HashSet<>();
 
     public Set<Member> getMembers() {
         return members;

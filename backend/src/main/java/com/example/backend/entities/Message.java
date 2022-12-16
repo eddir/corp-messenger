@@ -5,6 +5,8 @@ import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.*;
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "message")
@@ -39,6 +41,17 @@ public class Message
 
     @Column(name = "is_deleted")
     protected Boolean isDeleted;
+
+
+    //Тут нужно уточнить
+    @ManyToMany()
+    @JoinTable(
+            name = "message_message",
+            joinColumns = @JoinColumn(name = "child_id"),
+            inverseJoinColumns = @JoinColumn(name =  "parent_id")
+    )
+    protected Set<Message> childsMessage = new HashSet<>();
+
 
     public Message(){}
 
@@ -92,5 +105,13 @@ public class Message
 
     public void setDeleted(Boolean deleted) {
         isDeleted = deleted;
+    }
+
+    public Set<Message> getChildsMessage() {
+        return childsMessage;
+    }
+
+    public void setChildsMessage(Set<Message> childsMessage) {
+        this.childsMessage = childsMessage;
     }
 }
