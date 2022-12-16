@@ -75,10 +75,11 @@ public class ChatController
             if(!userCompany.isApproved())
                 return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Для создания чатов в компании необходимо быть подтвержденным сотрудником. Пожалуйста, подождите...");
         }
+
+        if(company == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Компания с заданным id = \'" + chatRequestDto.getCompanyId() + "\' не найдена");
         Chat chat = new Chat();
         chat.setTitle(chatRequestDto.getName());
-        if(company == null)
-            return ResponseEntity.notFound().build();
         chat.setCompanyId(company);
         ChatType chatType;
         try{
@@ -94,6 +95,9 @@ public class ChatController
         chat.setImgUrl(chatRequestDto.getImgUrl());
         chat.setPinned(chatRequestDto.isPinned());
         chat.setPrivate(chatRequestDto.getPrivate());
-        return ResponseEntity.ok().body(chatService.createNewChat(chat));
+        chat = chatService.createNewChat(chat, user);
+        Member member = memberService.getMemberByPK(new PrimaryKey(chat.getId(), user.getId()));
+        return ResponseEntity.ok().body(new PersonalChatResponseDto(chat, null, member));
+        //return ResponseEntity.ok().build();
     }
 }

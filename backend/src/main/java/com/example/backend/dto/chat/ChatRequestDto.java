@@ -1,14 +1,20 @@
 package com.example.backend.dto.chat;
 
 import com.example.backend.entities.Chat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import org.springframework.web.bind.annotation.GetMapping;
 
 public class ChatRequestDto
 {
     protected Long id;
     protected String name;
+
+    @JsonProperty("company_id")
     protected Long companyId;
     protected Boolean isPinned;
     protected Boolean isPrivate;
+
+    @JsonProperty("img_url")
     protected String imgUrl;
     protected String type;
 
@@ -50,7 +56,7 @@ public class ChatRequestDto
         this.companyId = companyId;
     }
 
-    public boolean isPinned() {
+    public Boolean isPinned() {
         return isPinned;
     }
 
@@ -58,7 +64,7 @@ public class ChatRequestDto
         isPinned = pinned;
     }
 
-    public boolean isPrivate() {
+    public Boolean isPrivate() {
         return isPrivate;
     }
 
@@ -82,6 +88,7 @@ public class ChatRequestDto
         this.type = type;
     }
 
+    @GetMapping("is_pinned")
     public Boolean getPinned() {
         return isPinned;
     }
@@ -90,6 +97,7 @@ public class ChatRequestDto
         isPinned = pinned;
     }
 
+    @GetMapping("is_private")
     public Boolean getPrivate() {
         return isPrivate;
     }

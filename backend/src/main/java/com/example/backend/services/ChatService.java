@@ -1,6 +1,8 @@
 package com.example.backend.services;
 
 import com.example.backend.entities.Chat;
+import com.example.backend.entities.Member;
+import com.example.backend.entities.User;
 import com.example.backend.repositories.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,11 +18,13 @@ public class ChatService
 {
 
     protected ChatRepository chatRepository;
+    protected MemberService memberService;
 
     @Autowired
-    public ChatService(ChatRepository chatRepository)
+    public ChatService(ChatRepository chatRepository, MemberService memberService)
     {
         this.chatRepository = chatRepository;
+        this.memberService = memberService;
     }
 
     public List<Chat> getAllChats()
@@ -28,8 +32,12 @@ public class ChatService
         return chatRepository.findAll();
     }
 
-    public Chat createNewChat(Chat chat)
+    //member - как OUT в c#
+    public Chat createNewChat(Chat chat, User creator)
     {
+        chatRepository.save(chat);
+        Member member = new Member(chat,creator,true,false,false);
+        memberService.addUserIntoChat(member);
         return chatRepository.save(chat);
     }
 

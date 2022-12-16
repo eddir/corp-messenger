@@ -35,8 +35,8 @@ public class MemberService
     public Member addUserIntoChat(Member member) throws PersistenceException
     {
         //Проверка, состоит ли юзер в компании, к которой относится чат
-        //if(!userCompanyService.existsUserIntoCompany(member.getUser(), member.getChat().getCompanyId()))
-           // throw new PersistenceException("Пользователь не состоит в компании чата!");
+        if(!userCompanyService.existsUserIntoCompany(member.getUser(), member.getChat().getCompanyId()))
+            throw new PersistenceException("Пользователь не состоит в компании чата!");
         return memberRepository.save(member);
     }
 }

@@ -45,10 +45,7 @@ public class BackendApplication {
                     Chat chat = new Chat();
                     chat.setCompanyId(company);
                     chat.setTitle("Тест1");
-                    chatService.createNewChat(chat);
-                    Member member = new Member(chat,Ed,true,false,true);
-                    memberService.addUserIntoChat(member);
-
+                    chatService.createNewChat(chat,Ed);
                 }
 
 

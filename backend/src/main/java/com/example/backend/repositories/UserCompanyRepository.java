@@ -11,5 +11,5 @@ import org.springframework.stereotype.Repository;
 public interface UserCompanyRepository extends JpaRepository<UserCompany, UserCompany.Id>
 {
     @Query("select uc from UserCompany uc where uc.user = :user AND uc.company = :company")
-    public User existsUserIntoCompany(User user, Company company);
+    public UserCompany existsUserIntoCompany(User user, Company company);
 }

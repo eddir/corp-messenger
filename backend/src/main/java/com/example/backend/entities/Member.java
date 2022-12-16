@@ -32,8 +32,15 @@ public class Member
 
     public Member(){}
 
+    public Member(Chat chat, User user)
+    {
+        this.id.chatId = chat.id;
+        this.id.userId = user.id;
+    }
+
     public Member(Chat chat, User user, Boolean isOwner, Boolean isAdmin, Boolean isPinned)
     {
+        this(chat, user);
         this.chat = chat;
         this.user = user;
         this.isOwner = isOwner;
