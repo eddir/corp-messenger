@@ -130,7 +130,8 @@ export default {
 
             &__search {
                 margin-left: 32px;
-                width: 252px;
+                max-width: 252px;
+                width: 100%;
             }
 
             &__more {
@@ -151,6 +152,7 @@ export default {
         }
 
         &__messages {
+            overflow: auto;
             width: 100%;
             height: calc(100% - 140px);
             padding: 24px 32px;
