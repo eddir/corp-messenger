@@ -16,16 +16,11 @@ public class Company {
     protected String name;
 
     //@ManyToMany(mappedBy = "companies")
-    @ManyToMany(fetch = FetchType.LAZY)
-    @JoinTable(
-            name = "user_company",
-            joinColumns = {@JoinColumn(name = "company_id")},
-            inverseJoinColumns = {@JoinColumn(name = "user_id")}
-    )
-    protected Set<User> users = new HashSet<>();
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
+    protected Set<UserCompany> usersCompany = new HashSet<>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "user_owner", nullable = false)
+    @JoinColumn(name = "user_owner", nullable = true)
     protected User userOwner;
 
     public Company(){}
@@ -40,19 +35,15 @@ public class Company {
         return id;
     }
 
-    public Set<User> getUsers() {
-        return users;
-    }
 
-    public void setUsers(Set<User> users)
-    {
-        this.users = users;
-    }
 
-    public void addUserIntoCompany(User user)
+    public void addUserIntoCompany(UserCompany userCompany)
     {
-        users.add(user);
-        user.addCompany(this);
+        //Добавить новую запись в UserCompany
+        this.usersCompany.add(userCompany);
+        //throw new RuntimeException("НЕЛЬЗЯ");
+       // usersCompany.add(usersCompany);
+        //user.addCompany(this);
     }
 
     public String getName() {

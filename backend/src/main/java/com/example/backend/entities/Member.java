@@ -10,8 +10,6 @@ import java.io.Serializable;
 @Immutable
 public class Member
 {
-
-
     @EmbeddedId
     protected PrimaryKey id = new PrimaryKey();
 
@@ -23,14 +21,26 @@ public class Member
     @JoinColumn(name = "user_id",insertable = false,updatable = false)
     protected User user;
 
+    @Column(name = "is_owner")
     protected Boolean isOwner;
+
+    @Column(name = "is_admin")
     protected Boolean isAdmin;
+
+    @Column(name = "is_pinned")
     protected Boolean isPinned;
 
     public Member(){}
 
+    public Member(Chat chat, User user)
+    {
+        this.id.chatId = chat.id;
+        this.id.userId = user.id;
+    }
+
     public Member(Chat chat, User user, Boolean isOwner, Boolean isAdmin, Boolean isPinned)
     {
+        this(chat, user);
         this.chat = chat;
         this.user = user;
         this.isOwner = isOwner;
@@ -63,5 +73,21 @@ public class Member
 
     public void setPinned(Boolean pinned) {
         isPinned = pinned;
+    }
+
+    public Chat getChat() {
+        return chat;
+    }
+
+    public void setChat(Chat chat) {
+        this.chat = chat;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }
