@@ -14,7 +14,7 @@
                     <template #extra>
                         <PlusOutlined @click.native.stop="openModal('editChatModal')" />
                     </template>
-                    <ChatItem v-for="chat in chatList" :key="chat.id" :chat="chat" @click="select(chat)" />
+                    <ChatItem v-for="chat in chatList" :key="chat.id" :chat="chat" @click="select(chat.id)" />
                 </ACollapsePanel>
             </ACollapse>
         </div>
@@ -58,13 +58,13 @@ export default {
             this[type] = true
         },
 
-        select(chat) {
-            this.chatList = this.chatList.map((x) => ({
+        select(id) {
+            this.chatList = this.chatList.map((chat) => ({
                 ...chat,
-                isSelected: x.id === chat.id
+                isSelected: chat.id === id
             }))
 
-            this.selectChat(chat)
+            this.selectChat(id)
         }
     },
 

@@ -1,7 +1,7 @@
 <template>
     <div :class="classnames">
         <div class="chat-item__icon">
-            <img :src="chat.img_url" alt="Иконка чата">
+            <img :src="chat.img_url" alt="Иконка чата" />
         </div>
         <div class="chat-item__name">
             {{ chat.name }}
