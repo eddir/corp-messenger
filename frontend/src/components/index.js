@@ -1,3 +1,4 @@
+export { default as Preloader } from './Preloader'
 export { default as InputSearch } from './InputSearch'
 export { default as ChatView } from './ChatView'
 export { default as ChatItem } from './ChatItem'

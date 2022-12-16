@@ -1,7 +1,10 @@
 <template>
-    <component :is="layout">
-        <router-view />
-    </component>
+    <div>
+        <component :is="layout">
+            <router-view />
+        </component>
+        <Preloader />
+    </div>
 </template>
 
 <script>
@@ -9,6 +12,8 @@ import { mapActions } from 'vuex'
 
 import AuthLayout from "@/layouts/AuthLayout.vue"
 import MainLayout from "@/layouts/MainLayout.vue"
+
+import { Preloader } from '@/components'
 
 export default {
     computed: {
@@ -39,7 +44,7 @@ export default {
     },
 
     components: {
-        AuthLayout, MainLayout
+        AuthLayout, MainLayout, Preloader
     }
 }
 </script>
