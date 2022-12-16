@@ -6,7 +6,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "user_chat")
+@Table(name = "members")
 @Immutable
 public class Member
 {
