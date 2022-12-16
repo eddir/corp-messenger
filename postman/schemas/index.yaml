@@ -279,7 +279,7 @@ paths:
         - chats
       summary: Создание нового чата
       description: Создание нового чата
-  '/chat/{chatId}':
+  '/chats/{chatId}':
     get:
       parameters:
         - name: chatId
@@ -419,7 +419,13 @@ paths:
         - chat
       summary: Удаление чата
       description: Удаление чата
-  '/chat/{chatId}/leave':
+    parameters:
+      - schema:
+          type: string
+        name: chatId
+        in: path
+        required: true
+  '/chats/{chatId}/leave':
     post:
       parameters:
         - name: chatId
@@ -462,7 +468,13 @@ paths:
         - chat
       summary: Покинуть чат
       description: Покинуть чат
-  '/chat/{chatId}/member/{userId}':
+    parameters:
+      - schema:
+          type: string
+        name: chatId
+        in: path
+        required: true
+  '/chats/{chatId}/member/{userId}':
     post:
       parameters:
         - name: chatId
@@ -569,7 +581,18 @@ paths:
         - chat
       summary: Исключение пользователя из чата
       description: Исключение пользователя из чата
-  '/chat/{chatId}/pin':
+    parameters:
+      - schema:
+          type: string
+        name: chatId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+  '/chats/{chatId}/pin':
     post:
       parameters:
         - name: chatId
@@ -675,7 +698,13 @@ paths:
         - chat
       summary: Открепление чата
       description: Открепление чата из списка чатов
-  '/chat/{chatId}/messages':
+    parameters:
+      - schema:
+          type: string
+        name: chatId
+        in: path
+        required: true
+  '/chats/{chatId}/messages':
     get:
       parameters:
         - name: chatId
@@ -1008,6 +1037,12 @@ paths:
         - messages
       summary: Создание нового сообщения
       description: Создание нового сообщения
+    parameters:
+      - schema:
+          type: string
+        name: chatId
+        in: path
+        required: true
   '/message/{messageId}':
     delete:
       parameters:
