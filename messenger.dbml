@@ -21,7 +21,6 @@ Table messenger.chats {
   description text
   img_url varchar
   company_id int
-  is_public bool
   is_closed bool
   is_private bool
 }
