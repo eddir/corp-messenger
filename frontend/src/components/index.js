@@ -1,3 +1,4 @@
+export { default as ChatItem } from './ChatItem'
 export { default as InputSearch } from './InputSearch'
 export { default as EditChatModal } from './Modals/EditChatModal'
 export { default as EditChanelModal } from './Modals/EditChanelModal'

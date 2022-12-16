@@ -4,7 +4,7 @@
             <InputSearch />
         </div>
         <div class="chats-navbar__sections">
-            <ACollapse>
+            <ACollapse v-model:activeKey="activeKey">
                 <ACollapsePanel key="1" header="Каналы">
                     <template #extra>
                         <PlusOutlined @click.native.stop="openModal('editChanelModal')" />
@@ -14,6 +14,7 @@
                     <template #extra>
                         <PlusOutlined @click.native.stop="openModal('editChatModal')" />
                     </template>
+                    <ChatItem v-for="chat in chats" :key="chat.id" :chat="chat" />
                 </ACollapsePanel>
             </ACollapse>
         </div>
@@ -24,24 +25,44 @@
 
 <script>
 import { PlusOutlined } from '@ant-design/icons-vue'
-import { InputSearch, EditChatModal, EditChanelModal } from '@/components'
+import { InputSearch, EditChatModal, EditChanelModal, ChatItem } from '@/components'
+import { mapActions, mapGetters } from 'vuex'
 
 export default {
     data() {
         return {
+            activeKey: ['1', '2'],
             editChatModal: false,
             editChanelModal: false
         }
     },
 
+    computed: {
+        ...mapGetters('ChatsStore', {
+            chats: 'getChatsList'
+        })
+    },
+
     methods: {
+        ...mapActions('ChatsStore', [
+            'getChats'
+        ]),
+
+        init() {
+            this.getChats()
+        },
+
         openModal(type) {
             this[type] = true
         }
     },
 
+    mounted() {
+        this.init()
+    },
+
     components: {
-        InputSearch, PlusOutlined, EditChatModal, EditChanelModal
+        InputSearch, PlusOutlined, EditChatModal, EditChanelModal, ChatItem
     }
 }
 </script>

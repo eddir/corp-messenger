@@ -1,3 +1,5 @@
+import api from '@/api'
+
 export const mutation = {
 	SET_CHATS_LIST: 'SET_CHATS_LIST',
     SAVE_CHAT: 'SAVE_CHAT',
@@ -37,6 +39,14 @@ export default {
 	},
 
 	actions: {
+        getChats: async ({ commit }) => {
+            await api.chats.getAll()
+                .then(({ data }) => {
+                    commit(mutation.SET_CHATS_LIST, data)
+                })
+                .catch((e) => console.error(e))
+        },
+
         saveChat: ({ commit }, payload) => {
             commit(mutation.SAVE_CHAT, payload)
         }, 
