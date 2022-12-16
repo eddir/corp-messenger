@@ -1,7 +1,7 @@
 <template>
     <div class="layout auth-layout">
         <div class="auth-layout__preview">
-            HELLO WORLD!!!
+            <img src="@/assets/home.png" alt="" />
         </div>
         <div class="auth-layout__content">
             <router-view />
