@@ -100,8 +100,7 @@ export default defineComponent({
                     }, {})
                     
                     api.app.register(dto)
-                        .then((res) => {
-                            console.log(res.data)
+                        .then(() => {
                             goTo('/login')
                         })
                         .catch((e) => console.error(e))
