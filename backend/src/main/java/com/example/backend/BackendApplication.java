@@ -42,6 +42,7 @@ public class BackendApplication {
                     companyService.save(company);
                     userCompanyService.addUserToCompany(anton,company,false);
                     userCompanyService.addUserToCompany(mikhail, company, true);
+
                 }
 
             }

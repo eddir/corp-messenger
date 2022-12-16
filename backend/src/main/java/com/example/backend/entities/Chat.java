@@ -44,6 +44,11 @@ public class Chat
     @Column(name = "is_pinned")
     protected Boolean isPinned;
 
+    // TODO: 16.12.2022 Проверить, использую ОкО в первый раз!
+    @OneToOne
+    @JoinColumn(name = "last_message_id")
+    protected Message lastMessage;
+
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
     protected Set<Message> listOfMessages = new HashSet<>();
 
@@ -136,5 +141,13 @@ public class Chat
 
     public void setMembers(List<Member> members) {
         this.members = members;
+    }
+
+    public Message getLastMessage() {
+        return lastMessage;
+    }
+
+    public void setLastMessage(Message lastMessage) {
+        this.lastMessage = lastMessage;
     }
 }

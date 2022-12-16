@@ -11,8 +11,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.Iterator;
 
-//Не для поиска!Хотя...
-public class ChatResponseDto
+//Используем для получения СВОИХ чатов
+public class PersonalChatResponseDto
 {
     protected Long id;
 
@@ -33,17 +33,17 @@ public class ChatResponseDto
 
     protected Boolean isPrivate;
 
-    public ChatResponseDto(Chat chat, Message lastMessage) {
+    public PersonalChatResponseDto(Chat chat, Message lastMessage, Member member) {
         this.id = chat.getId();
         this.name = chat.getTitle();
         this.imgUrl = chat.getImgUrl();
         this.companyId = chat.getCompanyId().getId();
         //TODO: 16.12.2022 Поправить
         this.unread = 0;
-        // TODO: 16.12.2022 Поправить
         this.lastMessage = new MessageResponseDto(lastMessage);
         String userName = SecurityContextHolder.getContext().getAuthentication().getName();
         Iterator<Member> iter = chat.getMembers().iterator();
+        /*
         while(iter.hasNext())
         {
             Member mem = iter.next();
@@ -53,9 +53,12 @@ public class ChatResponseDto
                     this.isPinned = true;
             }
         }
-        //if(this.isPinned == null)
-        //    throw new RuntimeException("Юзер хочет получить информацию о чатах в которых не состоит!");
+        if(this.isPinned == null)
+            throw new RuntimeException("Юзер хочет получить информацию о чатах в которых не состоит!");
+
+         */
         this.isPrivate = chat.getPrivate();
+        this.isPinned = member.getPinned();
     }
 
     public Long getId() {
