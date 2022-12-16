@@ -3,9 +3,7 @@ package com.example.backend.entities;
 import org.hibernate.annotations.CreationTimestamp;
 
 import javax.persistence.*;
-import java.util.Calendar;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "chat")
@@ -50,9 +48,9 @@ public class Chat
     protected Set<Message> listOfMessages = new HashSet<>();
 
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
-    protected Set<Member> members = new HashSet<>();
+    protected List<Member> members = new ArrayList<>();
 
-    public Set<Member> getMembers() {
+    public List<Member> getMembers() {
         return members;
     }
 
@@ -130,5 +128,13 @@ public class Chat
 
     public Calendar getCreatedDate() {
         return createdDate;
+    }
+
+    public void setListOfMessages(Set<Message> listOfMessages) {
+        this.listOfMessages = listOfMessages;
+    }
+
+    public void setMembers(List<Member> members) {
+        this.members = members;
     }
 }
