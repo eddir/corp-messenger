@@ -1,6 +1,7 @@
 import api from '@/api'
 
 export const mutation = {
+    SET_MESSAGES: 'SET_MESSAGES',
     SET_MEMBERS:  'SET_MEMBERS',
     SET_SELECTED_CHAT:  'SET_SELECTED_CHAT',
 	SET_CHATS_LIST: 'SET_CHATS_LIST',
@@ -14,7 +15,8 @@ export default {
 	state: {
         chatsList: null,
         selectedChat: null,
-        members: null
+        members: null,
+        messages: null
 	},
 
  	getters: {
@@ -28,10 +30,18 @@ export default {
 
         members: state => {
             return state.members
+        },
+
+        messages: state => {
+            return state.messages
         }
 	},
 
 	mutations: {
+        [mutation.SET_MESSAGES]: (state, payload) => {
+            state.messages = payload
+        },
+
         [mutation.SET_MEMBERS]: (state, payload) => {
             state.members = payload
         },
@@ -59,11 +69,22 @@ export default {
 	},
 
 	actions: {
-        selectChat: async ({ commit }, id) => {
+        getMessages: async ({ commit, state }) => {
+            await api.chats.getMessages(state.selectedChat.id)
+                .then(({ data }) => {
+                    commit(mutation.SET_MESSAGES, data.messages)
+                })
+                .catch((e) => console.error(e))
+        },
+
+        selectChat: async ({ dispatch, commit }, id) => {
             await api.chats.find(id)
                 .then(({ data }) => {
                     commit(mutation.SET_SELECTED_CHAT, data.chat)
                     commit(mutation.SET_MEMBERS, data.members)
+                })
+                .then(() => {
+                    dispatch('getMessages')
                 })
                 .catch((e) => console.error(e))
         },

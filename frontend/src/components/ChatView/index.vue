@@ -12,7 +12,20 @@
         </div>
 
         <div class="chat-view__messages">
-            
+            <AComment v-for="message in messages" :key="message.id" class="chat-view__messages__message">
+                <template #author>{{ getUsername(message.user_id) }}</template>
+                <template #avatar>
+                    <img :src="getUser(message.user_id).img_url" alt="Автарка пользователя" />
+                </template>
+                <template #content>
+                    {{ message.text }}
+                </template>
+                <template #datetime>
+                    <ATooltip :title="getDate('auto', message.created_at)">
+                        <span>{{ getDate('fromNow', message.created_at) }}</span>
+                    </ATooltip>
+                </template>
+            </AComment>
         </div>
 
         <ASpace class="chat-view__sender">
@@ -22,7 +35,7 @@
             <div class="chat-view__sender__attach">
                 <PaperClipOutlined />
             </div>
-            <AInput class="chat-view__sender__input" :placeholder="`Написать в ${chat.name}...`" />
+            <AInput class="chat-view__sender__input" v-model:value="model.text" :placeholder="`Написать в ${chat.name}...`" />
             <div class="chat-view__sender__send">
                 <SendOutlined />
             </div>
@@ -33,6 +46,7 @@
 <script>
 import { TeamOutlined, MoreOutlined, SmileOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons-vue'
 import { mapActions, mapGetters } from 'vuex'
+import moment from "moment/moment";
 
 import { InputSearch } from '@/components'
 
@@ -46,24 +60,34 @@ export default {
 
     data() {
         return {
-
+            model: {
+                text: null
+            }
         }
     },
 
     computed: {
         ...mapGetters('ChatsStore', [
-            'members'
+            'members',
+            'messages'
         ])
     },
 
     methods: {
-        init() {
-            
-        }
-    },
+        getUsername(id) {
+            const user = this.getUser(id)
+            return `${user.last_name} ${user.first_name}`
+        },
 
-    mounted() {
-        this.init()
+        getDate(type, date) {
+            if (type === 'fromNow')
+                return moment(date).fromNow()
+            else return moment(date).format('HH:mm DD.MM.YYYY')
+        },
+
+        getUser(id) {
+            return this.members.find((x) => x.id + 1 === id)
+        }
     },
 
     components: {
@@ -123,6 +147,18 @@ export default {
                 &:hover {
                     background-color: #D9D9D9;
                 }
+            }
+        }
+
+        &__messages {
+            width: 100%;
+            height: calc(100% - 140px);
+            padding: 24px 32px;
+
+            /deep/ .ant-comment-content-author-name {
+                font-size: 14px;
+                color: #000;
+                font-weight: 500;
             }
         }
 
