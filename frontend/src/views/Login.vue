@@ -40,11 +40,12 @@ export default {
         login() {
             // this.authorize({ accessToken: '123', refreshToken: '123' })
             // this.goTo('/chats')
+            sessionStorage.setItem('ERROR_DESCRIPTION', 'Неправильный логин или пароль')
             this.$api.app.login(this.formState)
                 .then(({ data }) => {
                     this.authorize(data)
+                    this.goTo('/chats')
                 })
-                .then(() => this.goTo('/chats'))
                 .catch((e) => console.error(e))
         },
 

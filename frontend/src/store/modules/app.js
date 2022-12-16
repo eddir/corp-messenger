@@ -2,6 +2,7 @@ import api from '@/api'
 import parseJWT from '@/helpers/parseJWT'
 
 export const mutation = {
+    SET_PRELOADER: 'SET_PRELOADER',
 	SET_AUTHORIZATION: 'SET_AUTHORIZATION',
     SET_USER: 'SET_USER'
 }
@@ -10,6 +11,7 @@ export default {
     namespaced: true,
 
 	state: {
+        preloader: false,
         isAuth: false,
         user: null,
         access_token: null,
@@ -29,10 +31,18 @@ export default {
 
         getTokens: state => {
             return [ state.access_token, state.refresh_token ]
+        },
+
+        preloader: state => {
+            return state.preloader
         }
 	},
 
 	mutations: {
+		[mutation.SET_PRELOADER]: (state, payload) => {
+            state.preloader = payload
+        },
+
 		[mutation.SET_AUTHORIZATION]: (state, payload) => {
             let isAuth = false
 
@@ -64,6 +74,10 @@ export default {
 	},
 
 	actions: {
+        setPreloader: ({ commit }, payload) => {
+            commit(mutation.SET_PRELOADER, payload)
+        },
+
 		authorize: ({ dispatch, commit }, payload) => {
             commit(mutation.SET_AUTHORIZATION, payload)
             commit(mutation.SET_USER, payload.user_id)
