@@ -24,7 +24,6 @@ Table messenger.chats {
   is_public bool
   is_closed bool
   is_private bool
-  is_pinned bool
 }
 
 Table messenger.users {
