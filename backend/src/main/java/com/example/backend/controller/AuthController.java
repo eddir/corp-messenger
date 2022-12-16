@@ -7,6 +7,7 @@ import com.example.backend.dto.user.UserResponseDto;
 import com.example.backend.entities.ApplicationRole;
 import com.example.backend.entities.Profile;
 import com.example.backend.entities.User;
+import com.example.backend.entities.UserCompany;
 import com.example.backend.security.jwt.providers.JwtTokenProvider;
 import com.example.backend.security.jwt.user.UserDetailsFactory;
 import com.example.backend.services.CompanyService;
@@ -118,8 +119,14 @@ public class AuthController
         try{
 
             User user = new User(userRequestDto.getLogin(),userRequestDto.getPassword(), ApplicationRole.USER, new Profile(userRequestDto.getFirst_name(),userRequestDto.getMiddle_name(),userRequestDto.getLast_name()));
-            UserDetails userDetails = (UserDetails) SecurityContextHolder.getContext().getAuthentication().getDetails();
-            boolean isApprovedUser = !userDetails.getAuthorities().contains(new SimpleGrantedAuthority(ApplicationRole.USER.name()));
+            Object userObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            boolean isApprovedUser = false;
+            if((userObj instanceof UserDetails))
+            {
+                UserDetails userDetails = (UserDetails)  userObj;
+                List<GrantedAuthority> grantedAuthorities = Arrays.asList(new SimpleGrantedAuthority(ApplicationRole.ADMIN.name()), new SimpleGrantedAuthority(ApplicationRole.SUPER_ADMIN.name()));
+                isApprovedUser = (userDetails.getAuthorities().contains(new SimpleGrantedAuthority(ApplicationRole.ADMIN.name())) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority(ApplicationRole.SUPER_ADMIN.name())));
+            }
             userService.save(user,userRequestDto.getCompanyId(),isApprovedUser);
             return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDto(user));
         }
