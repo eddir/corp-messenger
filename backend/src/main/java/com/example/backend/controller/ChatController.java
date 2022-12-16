@@ -103,7 +103,7 @@ public class ChatController
         //return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/asdasd")
+    @GetMapping("/{chatId}/messages")
     public List<MessageResponseDto> getListOfMessagesIntoChat(@RequestBody IntervalMessagesRequest intervalMessagesRequest)
     {
         return null;
