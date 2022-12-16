@@ -11,7 +11,7 @@ module.exports = defineConfig({
     devServer: {
 		proxy: {
 			'/api': {
-                target: 'http://messenger.rostkov.me',
+                target: 'https://messenger.rostkov.me',
                 pathRewriten: {
                     '^/api': '/api',
                 },
