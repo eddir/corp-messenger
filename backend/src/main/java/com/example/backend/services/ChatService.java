@@ -38,7 +38,7 @@ public class ChatService
         chatRepository.save(chat);
         Member member = new Member(chat,creator,true,false,false);
         memberService.addUserIntoChat(member);
-        return chatRepository.save(chat);
+        return chat;
     }
 
     public List<Chat> getChatsByUserId(Long userId)
@@ -71,6 +71,8 @@ public class ChatService
     public boolean userHasAdminOrOwnerRightsIntoChat(User user, Chat chat)
     {
         Member member = memberService.getMemberByPK(new PrimaryKey(chat.getId(), user.getId()));
+        if(member == null)
+            return false;
         if(member.getAdmin() || member.getOwner())
             return true;
         return false;

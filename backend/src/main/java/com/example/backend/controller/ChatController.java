@@ -2,6 +2,7 @@ package com.example.backend.controller;
 
 import com.example.backend.dto.chat.ChatRequestDto;
 import com.example.backend.dto.chat.PersonalChatResponseDto;
+import com.example.backend.dto.member.MemberResponseDto;
 import com.example.backend.dto.message.MessageResponseDto;
 import com.example.backend.dto.message.interval.IntervalMessagesRequest;
 import com.example.backend.entities.*;
@@ -15,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.PersistenceException;
 import java.util.*;
 
 @RestController
@@ -56,7 +58,6 @@ public class ChatController
         return ResponseEntity.ok().body(chatsToUser);
     }
 
-    @Transactional
     @PostMapping
     public ResponseEntity<?> createChat(@RequestBody ChatRequestDto chatRequestDto)
     {
@@ -120,5 +121,26 @@ public class ChatController
             mesResponseList.add(new MessageResponseDto(mes));
         }
         return ResponseEntity.ok().body(mesResponseList);
+    }
+
+    @PostMapping("/{chatId}/member/{userId}")
+    public ResponseEntity<?> invateNewMemberIntoChat(@PathVariable Long chatId, @PathVariable Long userId)
+    {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User invitingUser = userService.findUserByLogin(username);
+        Chat chat = chatService.getChatById(chatId);
+        if(chat == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Чат с id = \'" + chatId + "\' не найден.");
+        Member member = memberService.getMemberByPK(new PrimaryKey(chatId,userId));
+        if(member != null)
+            ResponseEntity.status(400).body("Пользователь уже состоит в чате.");
+        User invitedUser = userService.findUserById(userId);
+        if(!chatService.userHasAdminOrOwnerRightsIntoChat(invitingUser,chat))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("У вас нет прав добавлять новых участников в чат с id = " + chatId);
+        if(invitedUser == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("User с id = \'" + userId + "\' не найден.");
+        member = new Member(chat, invitedUser,false,false,false);
+        memberService.addUserIntoChat(member);
+        return ResponseEntity.ok().body(new MemberResponseDto(member));
     }
 }
