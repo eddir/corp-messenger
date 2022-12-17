@@ -52,17 +52,15 @@ public class CompanyController
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Пользователь с заданным id не найден!");
 
         }
-
-
     }
 
     @GetMapping
     @RequestMapping("/{id}")
-    public ResponseEntity<?> getCompanyById(@PathVariable("companyId") Long id)
+    public ResponseEntity<?> getCompanyById(@PathVariable("id") Long id)
     {
         Company company = companyService.getCompanyById(id);
         if(company == null)
             return ResponseEntity.notFound().build();
-        return ResponseEntity.ok().body(company);
+        return ResponseEntity.ok().body(new CompanyResponseDto(company));
     }
 }

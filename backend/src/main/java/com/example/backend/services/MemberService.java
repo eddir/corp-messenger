@@ -9,11 +9,13 @@ import com.example.backend.repositories.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityExistsException;
 import javax.persistence.PersistenceException;
 
 @Service
+@Transactional
 public class MemberService
 {
 
