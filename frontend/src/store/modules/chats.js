@@ -69,10 +69,18 @@ export default {
 	},
 
 	actions: {
+        send: async ({ dispatch, commit }, payload) => {
+            await api.chats.send(payload)
+                .then(() => {
+                    dispatch('getMessages')
+                })
+                .catch((e) => console.error(e))
+        },
+
         getMessages: async ({ commit, state }) => {
             await api.chats.getMessages(state.selectedChat.id)
                 .then(({ data }) => {
-                    commit(mutation.SET_MESSAGES, data)
+                    commit(mutation.SET_MESSAGES, data.reverse())
                 })
                 .catch((e) => console.error(e))
         },

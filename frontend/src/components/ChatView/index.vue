@@ -29,7 +29,7 @@
             </AComment>
         </div>
 
-        <ASpace class="chat-view__sender">
+        <ASpace class="chat-view__sender" :size="8">
             <div class="chat-view__sender__emoji">
                 <SmileOutlined />
             </div>
@@ -37,9 +37,9 @@
                 <PaperClipOutlined />
             </div>
             <AInput class="chat-view__sender__input" v-model:value="model.text" :placeholder="`Написать в ${chat.name}...`" />
-            <div class="chat-view__sender__send">
+            <AButton type="text" class="chat-view__sender__send" @click="save()">
                 <SendOutlined />
-            </div>
+            </AButton>
         </ASpace>
     </div>
 </template>
@@ -62,7 +62,9 @@ export default {
     data() {
         return {
             model: {
-                text: null
+                chat_id: this.chat.id,
+                text: null,
+                isPinned: false
             }
         }
     },
@@ -71,10 +73,22 @@ export default {
         ...mapGetters('ChatsStore', [
             'members',
             'messages'
+        ]),
+        ...mapGetters('AppStore', [
+            'user'
         ])
     },
 
     methods: {
+        ...mapActions('ChatsStore', [
+            'send'
+        ]),
+
+        save() {
+            this.send(this.model)
+            this.model.text = null
+        },
+
         getUsername(id) {
             const { last_name, first_name, login } = this.getUser(id)
 
@@ -207,6 +221,7 @@ export default {
             }
 
             &__send {
+                padding: 0;
                 color: #1890FF;
                 cursor: pointer;
             }

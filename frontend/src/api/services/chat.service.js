@@ -37,7 +37,7 @@ export default api => {
         send(data) {
             return api.instance.request({
                 method: 'post',
-                url: `chats/${id}/send`,
+                url: `chats/${data.chatId}/messages/send`,
                 data,
             })
         },
