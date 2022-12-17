@@ -11,7 +11,7 @@ public class Chat
 {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    @Column(name = "chat_id")
+    @Column(name = "id")
     protected Long id;
 
     @Temporal(TemporalType.TIMESTAMP)
