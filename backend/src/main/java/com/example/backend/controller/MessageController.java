@@ -1,9 +1,11 @@
 package com.example.backend.controller;
 
+import com.example.backend.dto.member.MemberResponseDto;
 import com.example.backend.dto.message.MessageRequestDto;
 import com.example.backend.dto.message.MessageResponseDto;
 import com.example.backend.entities.*;
 import com.example.backend.services.*;
+import com.pusher.rest.Pusher;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Collections;
+import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/chats")
@@ -25,15 +30,18 @@ public class MessageController
     protected ChatService chatService;
     protected UserCompanyService userCompanyService;
     protected CompanyService companyService;
+    protected Pusher pusher;
+
 
     @Autowired
-    public MessageController(MessageService messageService, UserService userService, MemberService memberService, ChatService chatService, UserCompanyService userCompanyService,CompanyService companyService) {
+    public MessageController(MessageService messageService, UserService userService, MemberService memberService, ChatService chatService, UserCompanyService userCompanyService,CompanyService companyService,Pusher pusher) {
         this.messageService = messageService;
         this.userService = userService;
         this.memberService = memberService;
         this.chatService = chatService;
         this.userCompanyService = userCompanyService;
         this.companyService = companyService;
+        this.pusher = pusher;
     }
 
     @PostMapping("/{chatId}/messages")
@@ -64,6 +72,14 @@ public class MessageController
         message.setText(messageRequestDto.getText());
         message.setSender(userSender);
         messageService.createMessage(message);
+
+        chat.getMembers().forEach(member -> {
+            if(!member.getUser().equals(userSender))
+            {
+                pusher.trigger("messages-" + member.getUser().getId(), "message_added", new com.example.backend.pusher.message.MessageResponseDto(message.getId(),message.getCreatedDate(),message.getUpdatedDate(),message.getText(),userSender.getId(), chat.getId()));
+            }
+        });
+
         return ResponseEntity.ok().body(new MessageResponseDto(message));
     }
 }
