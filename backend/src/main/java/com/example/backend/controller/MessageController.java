@@ -27,7 +27,6 @@ public class MessageController
     protected CompanyService companyService;
 
     @Autowired
-
     public MessageController(MessageService messageService, UserService userService, MemberService memberService, ChatService chatService, UserCompanyService userCompanyService,CompanyService companyService) {
         this.messageService = messageService;
         this.userService = userService;
