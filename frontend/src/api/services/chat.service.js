@@ -27,6 +27,13 @@ export default api => {
                 method: 'get',
                 url: `chats/${id}/messages`
             })
+        },
+        
+        addMembers(chatId, memberId) {
+            return api.instance.request({
+                method: 'post',
+                url: `chats/${chatId}/member/${memberId}`
+            })
         }
     }
 }

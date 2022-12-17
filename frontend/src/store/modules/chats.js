@@ -97,10 +97,23 @@ export default {
                 .catch((e) => console.error(e))
         },
 
+        addMembers: async ({ dispatch, commit }, { chatId, members }) => {
+            let promises = []
+
+            if (Array.isArray(members)) {
+                promises = members.map((id) => api.chats.addMembers(chatId, id))
+            } else {
+                promises = [ api.chats.addMembers(chatId, members) ]
+            }
+
+            return Promise.all(promises)
+        },
+
         saveChat: async ({ dispatch, commit }, payload) => {
-            await api.chats.createChat(payload)
-                .then(() => {
-                    dispatch('getChats')
+            await api.chats.createChat(payload.chat)
+                .then(({ data }) => {
+                    dispatch('addMembers', { chatId: data.id, members: payload.members })
+                        .then(() => dispatch('getChats'))
                 })
                 .catch((e) => console.error(e))
         }, 

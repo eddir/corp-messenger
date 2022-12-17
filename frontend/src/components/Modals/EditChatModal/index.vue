@@ -18,6 +18,11 @@
                     <AInput v-model:value="formState.name" />
                 </AFormItem>
             </div>
+            <AFormItem label="Пользователи:" name="userId">
+                <ASelect v-model:value="membersIds" placeholder="Выберите пользователя..." allowClear :mode="mode">
+                    <ASelectOption v-for="employee in employees" :key="employee.id" :value="employee.id">{{ getUsername(employee) }}</ASelectOption>
+                </ASelect>
+            </AFormItem>
             <div class="col">
                 <ACheckbox v-model:checked="formState.is_private">Закрытый чат</ACheckbox>
                 <ACheckbox v-model:checked="formState.is_pinned">Закрепить</ACheckbox>
@@ -40,14 +45,26 @@ export default {
                 is_private: false,
                 img_url: null,
                 type: "INDIVIDUAL" // GROUP,INDIVIDUAL,CHANNEL
-            }
+            },
+            membersIds: [],
+            employees: []
         }
     },
 
     computed: {
         ...mapGetters('AppStore', [
             'user'
-        ])
+        ]),
+
+        mode() {
+            if (this.formState.type === 'GROUP') {
+                this.membersIds = []
+                return 'multiple'
+            }
+
+            this.membersIds = null
+            return ''
+        }
     },
 
     methods: {
@@ -55,8 +72,26 @@ export default {
             'saveChat'
         ]),
 
+        getUsers() {
+            this.$api.company.getInfo(this.user.company[0].id)
+                .then(({ data }) => {
+                    this.employees = data.employers.filter((x) => x.id !== this.user.id)
+                })
+                .catch((e) => console.error(e))
+        },
+
+        getUsername(user) {
+            const { first_name, last_name, login } = user
+            
+            if (first_name && last_name) {
+                return `${first_name} ${last_name}`
+            }
+
+            return login
+        },
+
         save() {
-            this.saveChat(this.formState)
+            this.saveChat({ chat: this.formState, members: this.membersIds })
             this.$emit('close-modal')
         }
     },
@@ -65,6 +100,7 @@ export default {
         user(val) {
             if (val) {
                 this.formState.company_id = val.company[0].id
+                this.getUsers()
             }
         }
     },
