@@ -43,6 +43,12 @@ class Api {
 
 				this.requestsArray.push(config)
 
+				const { access_token } = store().getters['AppStore/getTokens']
+				
+				if (access_token) {
+					config.headers['Authorization'] = 'Bearer '.concat(access_token)
+				}
+
 				return config;
 			},
 			(err) => Promise.reject(err),

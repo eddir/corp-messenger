@@ -18,8 +18,8 @@
                 </ACollapsePanel>
             </ACollapse>
         </div>
-        <EditChanelModal v-model:visible="editChanelModal" />
-        <EditChatModal v-model:visible="editChatModal" />
+        <EditChanelModal v-model:visible="editChanelModal" @close-modal="closeModal('editChanelModal')" />
+        <EditChatModal v-model:visible="editChatModal" @close-modal="closeModal('editChatModal')" />
     </div>
 </template>
 
@@ -56,6 +56,10 @@ export default {
 
         openModal(type) {
             this[type] = true
+        },
+
+        closeModal(type) {
+            this[type] = false
         },
 
         select(id) {

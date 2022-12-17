@@ -39,17 +39,27 @@ export default {
         },
 
         subscribe() {
-                let pusher = new Pusher(1435118, { cluster: 'eu' })
+            if (this.user) {
+                const pusher = new Pusher('4ba335c841e4fa4ead86', { cluster: 'eu' })
+            
                 pusher.subscribe('messages-' + this.user.id)
                 pusher.bind('message_added', data => {
                     console.log(data)
                 })
-            
+            }
         }
     },
 
     mounted() {
         this.init()
+    },
+
+    watch: {
+        user(val) {
+            if (val) {
+                this.subscribe
+            }
+        }
     },
 
     components: {

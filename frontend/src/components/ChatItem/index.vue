@@ -1,7 +1,9 @@
 <template>
     <div :class="classnames">
         <div class="chat-item__icon">
-            <img :src="chat.img_url" alt="Иконка чата" />
+            <img v-if="chat.img_url" :src="chat.img_url" alt="Иконка чата" />
+            <TeamOutlined v-else-if="chat?.type === 'GROUP'" />
+            <UserOutlined v-else />
         </div>
         <div class="chat-item__name">
             {{ chat.name }}
@@ -10,9 +12,7 @@
 </template>
 
 <script>
-// import { PlusOutlined } from '@ant-design/icons-vue'
-// import { InputSearch, EditChatModal, EditChanelModal } from '@/components'
-// import { mapActions, mapGetters } from 'vuex'
+import { TeamOutlined, UserOutlined } from '@ant-design/icons-vue'
 
 export default {
     props: {
@@ -43,7 +43,7 @@ export default {
     },
 
     components: {
-        
+        TeamOutlined, UserOutlined
     }
 }
 </script>
@@ -63,6 +63,16 @@ export default {
         }
 
         &__icon {
+            width: 32px;
+            height: 32px;
+            background-color: #FFF;
+            border-radius: 2px;
+            color: #8F8F8F;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 18px;
+
             img {
                 width: 32px;
                 height: 32px;
