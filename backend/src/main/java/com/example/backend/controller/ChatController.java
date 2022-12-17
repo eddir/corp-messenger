@@ -1,6 +1,7 @@
 package com.example.backend.controller;
 
 import com.example.backend.dto.chat.ChatRequestDto;
+import com.example.backend.dto.chat.ChatResponseDto;
 import com.example.backend.dto.chat.PersonalChatResponseDto;
 import com.example.backend.dto.member.MemberResponseDto;
 import com.example.backend.dto.message.MessageResponseDto;
@@ -134,5 +135,14 @@ public class ChatController {
         member = new Member(chat, invitedUser, false, false, false);
         memberService.addUserIntoChat(member);
         return ResponseEntity.ok().body(new MemberResponseDto(member));
+    }
+
+    @GetMapping("/{chatId}")
+    public ResponseEntity<?> getChatById(@PathVariable Long chatId)
+    {
+        Chat chat = chatService.getChatById(chatId);
+        if(chat == null)
+            return ResponseEntity.notFound().build();
+        return ResponseEntity.ok().body(new ChatResponseDto(chat));
     }
 }
