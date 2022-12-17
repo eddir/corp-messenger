@@ -67,7 +67,7 @@ export default {
             height: 32px;
             background-color: #FFF;
             border-radius: 2px;
-            color: #8F8F8F;
+            color: #D9D9D9;
             display: flex;
             justify-content: center;
             align-items: center;
