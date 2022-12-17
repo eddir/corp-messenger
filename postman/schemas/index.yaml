@@ -1644,7 +1644,7 @@ paths:
                   name: string
                   owner_id: 0
       description: Создание новой компании с заданным владельцем
-  '/company/{companyId}':
+  '/companies/{companyId}':
     parameters:
       - schema:
           type: string
@@ -2383,6 +2383,8 @@ components:
           example: Apple
         owner:
           $ref: '#/components/schemas/UserInstance'
+        users:
+          $ref: '#/components/schemas/Users'
       required:
         - id
         - name
