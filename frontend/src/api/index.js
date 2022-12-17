@@ -59,6 +59,8 @@ class Api {
 					}
 				}, 200);
 
+				sessionStorage.clear()
+
 				return config;
 			},
 			(error) => {
