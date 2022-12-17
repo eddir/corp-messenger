@@ -7,6 +7,9 @@ import com.example.backend.entities.UserCompany;
 import com.fasterxml.jackson.annotation.JsonGetter;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.util.HashSet;
+import java.util.Set;
+
 public class CompanyResponseDto
 {
     @JsonProperty("id")
@@ -14,6 +17,7 @@ public class CompanyResponseDto
     protected String name;
     @JsonProperty("owner_company")
     protected Long user;
+    protected Set<UserSimpleResponseDto> employers = new HashSet<UserSimpleResponseDto>();
 
     public CompanyResponseDto(){}
 
@@ -22,6 +26,11 @@ public class CompanyResponseDto
         this.id = company.getId();
         this.name = company.getName();
         this.user = company.getUserOwner().getId();
+
+        for(UserCompany u : company.getUsersCompany())
+        {
+            this.employers.add(new UserSimpleResponseDto(u.getUser()));
+        }
     }
 
     public Long getId() {
@@ -46,5 +55,13 @@ public class CompanyResponseDto
 
     public void setUser(Long user) {
         this.user = user;
+    }
+
+    public Set<UserSimpleResponseDto> getEmployers() {
+        return employers;
+    }
+
+    public void setEmployers(Set<UserSimpleResponseDto> employers) {
+        this.employers = employers;
     }
 }

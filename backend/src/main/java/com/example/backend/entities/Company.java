@@ -77,4 +77,12 @@ public class Company {
     public int hashCode() {
         return getClass().hashCode();
     }
+
+    public Set<UserCompany> getUsersCompany() {
+        return usersCompany;
+    }
+
+    public void setUsersCompany(Set<UserCompany> usersCompany) {
+        this.usersCompany = usersCompany;
+    }
 }
