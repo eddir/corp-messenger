@@ -1,17 +1,17 @@
-# corp-messenger
+# YAM
 [![Project check](https://github.com/eddir/corp-messenger/actions/workflows/deployment.yml/badge.svg)](https://github.com/eddir/corp-messenger/actions/workflows/deployment.yml)
 ![Codacy grade](https://img.shields.io/codacy/grade/9edfafacb39f4a688102ee109f155140)
-## Установка
 
+## Install
 ```bash
 git clone https://github.com/eddir/corp-messenger.git
 cd corp-messenger
 docker-compose up -d
 ```
 
-## Использование
+## Usage
 
-### База данных
+### Database
 ```
 host: localhost
 port: 5432
@@ -26,8 +26,8 @@ user: admin@messenger.rostkov.me
 password: admin
 ```
 
-### Spring
+### Spring REST API
 http://localhost:8080/api
 
-### Веб-приложение Vue
+### Vue App
 http://localhost:8080

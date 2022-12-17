@@ -7,19 +7,24 @@ import com.example.backend.dto.user.UserResponseDto;
 import com.example.backend.entities.ApplicationRole;
 import com.example.backend.entities.Profile;
 import com.example.backend.entities.User;
+import com.example.backend.entities.UserCompany;
 import com.example.backend.security.jwt.providers.JwtTokenProvider;
 import com.example.backend.security.jwt.user.UserDetailsFactory;
 import com.example.backend.services.CompanyService;
+import com.example.backend.services.UserCompanyService;
 import com.example.backend.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.hibernate5.SpringSessionContext;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -38,14 +43,16 @@ public class AuthController
     private UserService userService;
     private BCryptPasswordEncoder passwordEncoder;
     private CompanyService companyService;
+    private UserCompanyService userCompanyService;
 
     @Autowired
-    public AuthController(AuthenticationManager authManager, JwtTokenProvider jwtTokenProvider, UserService userService, @Qualifier("customBCryptPasswordEncoder") BCryptPasswordEncoder passwordEncoder, CompanyService companyService) {
+    public AuthController(AuthenticationManager authManager, JwtTokenProvider jwtTokenProvider, UserService userService, @Qualifier("customBCryptPasswordEncoder") BCryptPasswordEncoder passwordEncoder, CompanyService companyService,UserCompanyService userCompanyService) {
         this.authManager = authManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.userService = userService;
         this.passwordEncoder = passwordEncoder;
         this.companyService = companyService;
+        this.userCompanyService = userCompanyService;
     }
 
     @PostMapping("/login")
@@ -112,23 +119,24 @@ public class AuthController
         try{
 
             User user = new User(userRequestDto.getLogin(),userRequestDto.getPassword(), ApplicationRole.USER, new Profile(userRequestDto.getFirst_name(),userRequestDto.getMiddle_name(),userRequestDto.getLast_name()));
-            if(userRequestDto.getCompanyId() != null)
-                userService.save(user, userRequestDto.getCompanyId());
-            else
-                userService.save(user);
+            Object userObj = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            boolean isApprovedUser = false;
+            if((userObj instanceof UserDetails))
+            {
+                UserDetails userDetails = (UserDetails)  userObj;
+                List<GrantedAuthority> grantedAuthorities = Arrays.asList(new SimpleGrantedAuthority(ApplicationRole.ADMIN.name()), new SimpleGrantedAuthority(ApplicationRole.SUPER_ADMIN.name()));
+                isApprovedUser = (userDetails.getAuthorities().contains(new SimpleGrantedAuthority(ApplicationRole.ADMIN.name())) || userDetails.getAuthorities().contains(new SimpleGrantedAuthority(ApplicationRole.SUPER_ADMIN.name())));
+            }
+            userService.save(user,userRequestDto.getCompanyId(),isApprovedUser);
             return ResponseEntity.status(HttpStatus.CREATED).body(new UserResponseDto(user));
         }
         catch (EntityExistsException err)
         {
-            return ResponseEntity.status(409).body(err.getMessage());
+            return ResponseEntity.status(409).body("Пользователь с таким логином уже существует!");
         }
         catch (EntityNotFoundException err)
         {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(err.getMessage());
         }
-        //catch (IllegalArgumentException err)
-        //{
-            //return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
-        //}
     }
 }

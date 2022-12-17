@@ -22,13 +22,15 @@ public class UserService
     protected UserRepository userRepository;
     protected CompanyService companyService;
     protected BCryptPasswordEncoder passwordEncoder;
+    protected UserCompanyService userCompanyService;
 
     @Autowired
-    public UserService(UserRepository userRepository, @Qualifier("customBCryptPasswordEncoder") BCryptPasswordEncoder bCryptPasswordEncoder, CompanyService companyService)
+    public UserService(UserRepository userRepository, @Qualifier("customBCryptPasswordEncoder") BCryptPasswordEncoder bCryptPasswordEncoder, CompanyService companyService,UserCompanyService userCompanyService)
     {
         this.userRepository = userRepository;
         this.passwordEncoder = bCryptPasswordEncoder;
         this.companyService = companyService;
+        this.userCompanyService = userCompanyService;
     }
 
 
@@ -40,14 +42,14 @@ public class UserService
         return userRepository.save(user);
     }
 
-    @PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
-    public User save(User user,Long companyId) throws EntityExistsException
+    //@PreAuthorize("hasAnyAuthority('ADMIN','SUPER_ADMIN')")
+    public User save(User user,Long companyId,boolean isApproved) throws EntityExistsException
     {
         save(user);
         Company company = companyService.getCompanyById(companyId);
         if(company == null)
             throw new EntityNotFoundException("Компания с id = " + companyId + " не существует.");
-        company.addUserIntoCompany(user);
+        userCompanyService.addUserToCompany(user, company,isApproved);
         return user;
     }
 

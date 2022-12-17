@@ -38,23 +38,18 @@ public class User
     @Column(name = "role", nullable = false)
     protected ApplicationRole applicationRole;
 
-    @ManyToMany(mappedBy = "users", fetch = FetchType.LAZY)
-    protected Set<Company> companies = new HashSet<>();
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    protected List<UserCompany> companies = new ArrayList<>();
 
     @Column(name = "img_url")
     protected String imgUrl;
 
-    public Set<Company> getCompanies() {
+    public List<UserCompany> getCompanies() {
         return companies;
     }
 
-    public void setCompanies(Set<Company> companies) {
+    public void setCompanies(List<UserCompany> companies) {
         this.companies = companies;
-    }
-
-    public void addCompany(Company company)
-    {
-        this.companies.add(company);
     }
 
     public Calendar getCreate() {

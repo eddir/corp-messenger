@@ -53,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter
                     .antMatchers("/api/admin/**").hasAnyAuthority(ApplicationRole.ADMIN.name(), ApplicationRole.SUPER_ADMIN.name())
                     .antMatchers("/api/super-admin/**").hasAuthority(ApplicationRole.SUPER_ADMIN.name())
                     .antMatchers("/api/users").authenticated()
+                    .antMatchers("/api/chats").authenticated()
                     //.antMatchers("/api/auth/register").hasAnyAuthority(ApplicationRole.ADMIN.name(),ApplicationRole.SUPER_ADMIN.name())
                     .antMatchers("/api/auth/login").permitAll();
         http.apply(new JwtConfig(jwtTokenProvider));
