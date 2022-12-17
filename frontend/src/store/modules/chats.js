@@ -80,8 +80,8 @@ export default {
         selectChat: async ({ dispatch, commit }, id) => {
             await api.chats.find(id)
                 .then(({ data }) => {
-                    commit(mutation.SET_SELECTED_CHAT, data.chat)
-                    commit(mutation.SET_MEMBERS, data.members)
+                    commit(mutation.SET_SELECTED_CHAT, data)
+                    commit(mutation.SET_MEMBERS, data.employees)
                 })
                 .then(() => {
                     dispatch('getMessages')
