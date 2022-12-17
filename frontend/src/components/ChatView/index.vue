@@ -80,12 +80,17 @@ export default {
     },
 
     methods: {
+        ...mapActions('AppStore', [
+            'setBlockPreloader'
+        ]),
+
         ...mapActions('ChatsStore', [
             'send'
         ]),
 
         save() {
-            this.send(this.model)
+            this.setBlockPreloader(true)
+            this.send(this.model).then(() => this.setBlockPreloader(true))
             this.model.text = null
         },
 

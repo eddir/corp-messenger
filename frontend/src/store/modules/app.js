@@ -2,6 +2,7 @@ import api from '@/api'
 import parseJWT from '@/helpers/parseJWT'
 
 export const mutation = {
+    SET_BLOCK_PRELOADER: 'SET_BLOCK_PRELOADER',
     SET_PRELOADER: 'SET_PRELOADER',
 	SET_AUTHORIZATION: 'SET_AUTHORIZATION',
     SET_USER: 'SET_USER'
@@ -12,6 +13,7 @@ export default {
 
 	state: {
         preloader: false,
+        isBlockedPreloader: false,
         isAuth: false,
         user: null,
         access_token: null,
@@ -39,8 +41,13 @@ export default {
 	},
 
 	mutations: {
+		[mutation.SET_BLOCK_PRELOADER]: (state, payload) => {
+            state.isBlockedPreloader = payload
+        },
+
 		[mutation.SET_PRELOADER]: (state, payload) => {
-            state.preloader = payload
+            if (!state.isBlockedPreloader)
+                state.preloader = payload
         },
 
 		[mutation.SET_AUTHORIZATION]: (state, payload) => {
@@ -74,6 +81,10 @@ export default {
 	},
 
 	actions: {
+        setBlockPreloader: ({ commit }, payload) => {
+            commit(mutation.SET_BLOCK_PRELOADER, payload)
+        },
+
         setPreloader: ({ commit }, payload) => {
             commit(mutation.SET_PRELOADER, payload)
         },
