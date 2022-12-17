@@ -104,8 +104,17 @@ public class ChatController
     }
 
     @GetMapping("/{chatId}/messages")
-    public List<MessageResponseDto> getListOfMessagesIntoChat(@RequestBody IntervalMessagesRequest intervalMessagesRequest)
+    public ResponseEntity<List<MessageResponseDto>> getListOfMessagesIntoChat(@RequestBody IntervalMessagesRequest intervalMessagesRequest)
     {
-        return null;
+        Chat chat = chatService.getChatById(intervalMessagesRequest.getChatId());
+        Message message = messageService.getMessageById(intervalMessagesRequest.getStartMessageId());
+        Long count = intervalMessagesRequest.getCount();
+        List<Message> listMes = messageService.getMessageByChatByCountAntIntervalDefaultOrd(chat, count, message);
+        List<MessageResponseDto> mesResponseList = new LinkedList<>();
+        for(Message mes : listMes)
+        {
+            mesResponseList.add(new MessageResponseDto(mes));
+        }
+        return ResponseEntity.ok().body(mesResponseList);
     }
 }
