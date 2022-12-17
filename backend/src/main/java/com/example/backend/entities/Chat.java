@@ -60,7 +60,7 @@ public class Chat
     @OneToMany(mappedBy = "chat", fetch = FetchType.LAZY)
     protected List<Member> members = new ArrayList<>();
 
-    public List getMembers() {
+    public List<Member> getMembers() {
         return members;
     }
 
