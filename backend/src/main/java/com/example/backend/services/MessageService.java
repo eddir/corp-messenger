@@ -21,10 +21,8 @@ public class MessageService
 
     public List<Message> getMessageByChatByCountAntIntervalDefaultOrd(Chat chat, Long count,Message startMessage)
     {
-        System.out.println("ТРИ ГЕРОЯ!");
         if(count > 0)
             return messageRepo.getMessageByChatByCountAntIntervalDefaultOrd(chat.getId(), count,startMessage.getId());
-        System.out.println("Три БОГАТЫРЯ!");
         return messageRepo.getMessageByChatByCountAntIntervalInverseOrd(chat.getId(), Math.abs(count),startMessage.getId());
     }
 
