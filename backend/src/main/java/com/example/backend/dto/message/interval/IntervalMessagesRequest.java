@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class IntervalMessagesRequest
 {
+    @JsonProperty("chat_id")
     protected Long chatId;
 
     protected Long count;
