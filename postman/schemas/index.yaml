@@ -3,27 +3,36 @@ info:
   title: Corp Messenger API
   version: 1.0.0
   description: Retrieve and send messages
+  contact:
+    name: Eduard Rostkov
+    url: 'https://rostkov.me'
+    email: ea@rostkov.me
+  license:
+    name: GNU GPL V3.0
+    url: 'https://www.gnu.org/licenses/gpl-3.0.en.html'
 servers:
   - url: 'http://messenger.rostkov.me/api'
     description: Продуктовый сервер
   - url: 'http://beta.messenger.rostkov.me/api'
     description: Тестовый сервер
+tags:
+  - name: auth
+    description: Авторизация и регистрация
+  - name: chats
+  - name: chat
+  - name: messages
+  - name: search
+  - name: users
+  - name: company
 paths:
   /auth/register:
     post:
       requestBody:
-        description: Данные для регистрации нового пользователя
+        description: 'Новый сотрудник компании ТОЛЬКО что устроился на работу и стучится в бэк, умоляет зарегистрировать ему учётку, шоб он мог наконец-то приступить к работе над проектами и заработать свои кровные рубли. У меня семья и кот. Ему говорит HR: регайся ТВАРЬ. А тот слёхно умоляет - пощадите!! я хочу устроится(( дайте учётку... Вот пароль, вот логин. ПЖЖЖЖЖЖ.'
         content:
           application/json:
             schema:
               type: object
-              required:
-                - login
-                - password
-                - first_name
-                - middle_name
-                - last_name
-                - company_id
               properties:
                 login:
                   type: string
@@ -40,6 +49,15 @@ paths:
                 last_name:
                   type: string
                   description: Фамилия
+                company_id:
+                  type: integer
+                  minimum: 1
+              required:
+                - login
+                - password
+                - first_name
+                - middle_name
+                - last_name
         required: true
       responses:
         '201':
@@ -58,9 +76,9 @@ paths:
                     company:
                       id: 1
                       name: Apple
-                    img_url: string
+                    img_url: 'https://picsum.photos/200'
                     is_online: true
-          description: Пользователь успешно зарегистрирован
+          description: Пользователь успешно зарегистрирован.
         '400':
           content:
             application/json:
@@ -76,7 +94,7 @@ paths:
       operationId: registerUser
       tags:
         - auth
-      summary: Регистрация нового пользователя
+      summary: Самостоятельная регистрация
       description: Регистрация нового пользователя в системе
       security: []
   /auth/login:
@@ -101,10 +119,8 @@ paths:
                 properties:
                   token:
                     $ref: '#/components/schemas/Tokens'
-                    description: Токены для доступа к API
                   user:
                     $ref: '#/components/schemas/UserInstance'
-                    description: Данные пользователя
               examples:
                 Example 1:
                   value:
@@ -120,7 +136,7 @@ paths:
                       company:
                         id: 1
                         name: Apple
-                      img_url: string
+                      img_url: 'https://picsum.photos/200'
                       is_online: true
           description: Авторизация прошла успешно
         '401':
@@ -183,7 +199,7 @@ paths:
               examples:
                 Example 1:
                   value:
-                    - id: 0
+                    - id: 1
                       name: Разработчики
                       img_url: 'https://picsum.photos/200'
                       company_id: 1
@@ -199,12 +215,12 @@ paths:
                         is_pinned: true
                         is_read: true
                         attachments:
-                          - id: 0
+                          - id: 1
                             created_at: '2019-08-24T14:15:22Z'
                             type: image
                             url: 'https://picsum.photos/200'
                             thumbnail_url: 'https://picsum.photos/200'
-                            size: 0
+                            size: 140000
                             name: photo.jpeg
                       is_pinned: true
                       is_private: true
@@ -231,12 +247,12 @@ paths:
             examples:
               Example 1:
                 value:
-                  id: 0
+                  id: 1
                   name: string
-                  company_id: 0
+                  company_id: 1
                   is_pinned: true
                   is_private: true
-                  img_url: string
+                  img_url: 'https://picsum.photos/200'
                   type: group
         required: true
       responses:
@@ -263,7 +279,7 @@ paths:
         - chats
       summary: Создание нового чата
       description: Создание нового чата
-  '/chat/{chatId}':
+  '/chats/{chatId}':
     get:
       parameters:
         - name: chatId
@@ -281,7 +297,6 @@ paths:
                 properties:
                   chat:
                     $ref: '#/components/schemas/Chat'
-                    description: Данные чата
                   members:
                     type: array
                     items:
@@ -404,7 +419,13 @@ paths:
         - chat
       summary: Удаление чата
       description: Удаление чата
-  '/chat/{chatId}/leave':
+    parameters:
+      - schema:
+          type: string
+        name: chatId
+        in: path
+        required: true
+  '/chats/{chatId}/leave':
     post:
       parameters:
         - name: chatId
@@ -447,7 +468,13 @@ paths:
         - chat
       summary: Покинуть чат
       description: Покинуть чат
-  '/chat/{chatId}/member/{userId}':
+    parameters:
+      - schema:
+          type: string
+        name: chatId
+        in: path
+        required: true
+  '/chats/{chatId}/member/{userId}':
     post:
       parameters:
         - name: chatId
@@ -554,7 +581,18 @@ paths:
         - chat
       summary: Исключение пользователя из чата
       description: Исключение пользователя из чата
-  '/chat/{chatId}/pin':
+    parameters:
+      - schema:
+          type: string
+        name: chatId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+  '/chats/{chatId}/pin':
     post:
       parameters:
         - name: chatId
@@ -660,7 +698,13 @@ paths:
         - chat
       summary: Открепление чата
       description: Открепление чата из списка чатов
-  '/chat/{chatId}/messages':
+    parameters:
+      - schema:
+          type: string
+        name: chatId
+        in: path
+        required: true
+  '/chats/{chatId}/messages':
     get:
       parameters:
         - name: chatId
@@ -709,7 +753,22 @@ paths:
                         parent_id: 0
                         created_at: '2019-08-24T14:15:22Z'
                         updated_at: '2019-08-24T14:15:22Z'
-                        text: Все
+                        text: Сообщение 1
+                        user_id: 1
+                        chat_id: 1
+                        is_pinned: true
+                        is_read: true
+                        event:
+                          id: 1
+                          created_at: '2019-08-24T14:15:22Z'
+                          type: user_joined
+                          message_id: 1
+                          payload: '{}'
+                      - id: 2
+                        parent_id: 0
+                        created_at: '2019-08-24T14:15:22Z'
+                        updated_at: '2019-08-24T14:15:22Z'
+                        text: Сообщение 2
                         user_id: 1
                         chat_id: 1
                         is_pinned: true
@@ -722,12 +781,69 @@ paths:
                             thumbnail_url: 'https://picsum.photos/200'
                             size: 1
                             name: image.jpeg
-                        event:
-                          id: 1
-                          created_at: '2019-08-24T14:15:22Z'
-                          type: user_joined
-                          message_id: 1
-                          payload: '{}'
+                      - id: 3
+                        parent_id: 0
+                        created_at: '2019-08-24T14:15:22Z'
+                        updated_at: '2019-08-24T14:18:22Z'
+                        text: qwerty
+                        user_id: 1
+                        chat_id: 1
+                        is_pinned: true
+                        is_read: true
+                      - id: 4
+                        parent_id: 0
+                        created_at: '2019-08-24T14:16:22Z'
+                        updated_at: '2019-08-24T14:18:22Z'
+                        text: qwerty
+                        user_id: 1
+                        chat_id: 1
+                        is_pinned: true
+                        is_read: true
+                      - id: 5
+                        parent_id: 0
+                        created_at: '2019-08-24T14:17:22Z'
+                        updated_at: '2019-08-24T14:18:22Z'
+                        text: qwerty
+                        user_id: 1
+                        chat_id: 1
+                        is_pinned: true
+                        is_read: true
+                      - id: 6
+                        parent_id: 0
+                        created_at: '2019-08-24T15:15:22Z'
+                        updated_at: '2019-08-24T14:18:22Z'
+                        text: qwerty
+                        user_id: 1
+                        chat_id: 1
+                        is_pinned: true
+                        is_read: true
+                      - id: 11
+                        parent_id: 0
+                        created_at: '2019-08-24T16:15:22Z'
+                        updated_at: '2019-08-24T14:18:22Z'
+                        text: qwerty
+                        user_id: 1
+                        chat_id: 1
+                        is_pinned: true
+                        is_read: true
+                      - id: 15
+                        parent_id: 0
+                        created_at: '2019-08-24T18:15:22Z'
+                        updated_at: '2019-08-24T14:18:22Z'
+                        text: qwerty
+                        user_id: 1
+                        chat_id: 1
+                        is_pinned: true
+                        is_read: true
+                      - id: 19
+                        parent_id: 0
+                        created_at: '2019-08-24T19:15:22Z'
+                        updated_at: '2019-08-24T14:18:22Z'
+                        text: qwerty
+                        user_id: 1
+                        chat_id: 1
+                        is_pinned: true
+                        is_read: true
                     users:
                       - id: 0
                         login: string
@@ -921,6 +1037,12 @@ paths:
         - messages
       summary: Создание нового сообщения
       description: Создание нового сообщения
+    parameters:
+      - schema:
+          type: string
+        name: chatId
+        in: path
+        required: true
   '/message/{messageId}':
     delete:
       parameters:
@@ -1202,6 +1324,17 @@ paths:
                   example: Привет
         required: true
       responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  messages:
+                    $ref: '#/components/schemas/Messages'
+                  chats:
+                    $ref: '#/components/schemas/Chats'
         '400':
           content:
             application/json:
@@ -1366,8 +1499,291 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserInstance'
+              $ref: '#/components/schemas/User'
+            examples:
+              Example 1:
+                value:
+                  login: steve
+                  first_name: Steve
+                  middle_name: Paul
+                  last_name: Jobs
+                  img_url: ''
+                  compaines:
+                    - 1
         required: true
+  '/user/{id}/approve':
+    post:
+      summary: Подтверждение пользователя
+      operationId: post-users-approve
+      tags:
+        - auth
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInstance'
+          description: ''
+      description: 'Подтверждение аккаунта. Пользователь зарегистрировался. Нужно, чтобы HR подтвердил его аккаунт, убедился в личности и выдал тем самым права к чатам компании. '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                company_id:
+                  type: integer
+                  minimum: 1
+                  description: По этому company_id пользователь получит доступ
+              required:
+                - company_id
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+  /users/create:
+    post:
+      summary: Регистрация пользователя от админа
+      operationId: post-users-create
+      tags:
+        - auth
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserInstance'
+              examples:
+                Example 1:
+                  value:
+                    id: 0
+                    login: string
+                    first_name: Steve
+                    middle_name: Paul
+                    last_name: Jobs
+                    company:
+                      id: 1
+                      name: string
+                    img_url: 'https://picsum.photos/200'
+                    is_online: true
+      description: 'Создание нового пользователя. Админ решил зарегать сам учётку для нового сотрудника. Прямо вот так лично в руки выдать распечатку с логином и паролем. И этот пользователь будет сразу же подтверждён. '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                login:
+                  type: string
+                password:
+                  type: string
+                first_name:
+                  type: string
+                middle_name:
+                  type: string
+                last_name:
+                  type: string
+                company_id:
+                  type: integer
+                  minimum: 1
+              required:
+                - login
+                - password
+                - first_name
+                - last_name
+                - company_id
+            examples:
+              Example 1:
+                value:
+                  login: string
+                  password: string
+                  first_name: string
+                  middle_name: string
+                  last_name: string
+                  company_id: 1
+  /companies:
+    post:
+      summary: Создать компанию
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyInstance'
+              examples:
+                Example 3:
+                  value:
+                    id: 1
+                    name: Apple
+                    owner:
+                      id: 1
+                      login: steve
+                      first_name: Steve
+                      middle_name: Paul
+                      last_name: Jobs
+                      companies:
+                        - {}
+                      img_url: 'https://picsum.photos/200'
+                      is_online: true
+      operationId: post-companies
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+            examples:
+              Example 1:
+                value:
+                  id: 1
+                  name: string
+                  owner_id: 0
+      description: Создание новой компании с заданным владельцем
+  '/companies/{companyId}':
+    parameters:
+      - schema:
+          type: string
+        name: companyId
+        in: path
+        required: true
+    get:
+      summary: Получить информацию о компании
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyInstance'
+              examples:
+                Example 1:
+                  value:
+                    id: 1
+                    name: Apple
+                    owner:
+                      id: 1
+                      login: steve
+                      first_name: Steve
+                      middle_name: Paul
+                      last_name: Jobs
+                      companies:
+                        - {}
+                      img_url: 'https://picsum.photos/200'
+                      is_online: true
+      operationId: get-company-companyId
+      description: Получить информацию о компании
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompanyInstance'
+            examples:
+              Example 1:
+                value:
+                  id: 1
+                  name: Apple
+                  owner:
+                    id: 1
+                    login: steve
+                    first_name: Steve
+                    middle_name: Paul
+                    last_name: Jobs
+                    companies:
+                      - {}
+                    img_url: 'https://picsum.photos/200'
+                    is_online: true
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: companyId
+          required: true
+    post:
+      summary: Отредактировать компанию
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyInstance'
+              examples:
+                Example 2:
+                  value:
+                    id: 1
+                    name: Apple
+                    owner:
+                      id: 1
+                      login: steve
+                      first_name: Steve
+                      middle_name: Paul
+                      last_name: Jobs
+                      companies:
+                        - {}
+                      img_url: 'https://picsum.photos/200'
+                      is_online: true
+      operationId: post-company-companyId
+      description: Обновить информацию о компании - сменить владельца или название.
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: companyId
+          required: true
+    delete:
+      summary: Удалить компанию
+      tags:
+        - company
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompanyInstance'
+              examples:
+                Example 1:
+                  value:
+                    id: 1
+                    '': string
+                    owner:
+                      id: 1
+                      login: string
+                      first_name: Steve
+                      middle_name: Paul
+                      last_name: Jobs
+                      companies:
+                        - {}
+                      img_url: 'https://picsum.photos/200'
+                      is_online: true
+      operationId: delete-company-companyId
+      parameters:
+        - schema:
+            type: number
+          in: query
+          name: companyId
+          required: true
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Company'
+            examples:
+              Example 1:
+                value:
+                  id: 1
+                  name: string
+                  owner_id: 0
+      description: Удалить компанию.
 components:
   schemas:
     Tokens:
@@ -1381,45 +1797,39 @@ components:
           description: Токен обновления
           type: string
           format: uuid
-    User:
+    UserInstance:
       type: object
       x-examples:
         Example 1:
-          id: 123
-          username: Steve
-          password: pa$$word
-          company_id: 21
+          id: 1
+          login: string
+          first_name: Steve
+          middle_name: Paul
+          last_name: Jobs
+          companies:
+            - id: 1
+              '': string
+              owner:
+                id: 1
+                login: string
+                first_name: Steve
+                middle_name: Paul
+                last_name: Jobs
+                companies:
+                  - {}
+                img_url: 'https://picsum.photos/200'
+                is_online: true
+          img_url: 'https://picsum.photos/200'
+          is_online: true
       properties:
         id:
           format: int64
           type: integer
           minimum: 1
-        username:
-          type: string
-          example: Steve
-          minLength: 2
-          maxLength: 32
-        password:
-          format: password
-          type: string
-        company_id:
-          format: string
-          description: 'ID компании, к которой принадлежит пользователь (шестнадцатеричный UUID)'
-          type: integer
-          example: 21
-          minimum: 1
-      required:
-        - username
-        - password
-    UserInstance:
-      type: object
-      properties:
-        id:
-          format: int64
-          type: integer
         login:
           type: string
           minLength: 1
+          example: steve
         first_name:
           type: string
           example: Steve
@@ -1432,8 +1842,10 @@ components:
           type: string
           example: Jobs
           minLength: 1
-        company:
-          $ref: '#/components/schemas/Company'
+        companies:
+          type: array
+          items:
+            $ref: '#/components/schemas/CompanyInstance'
         img_url:
           type: string
           format: url
@@ -1441,21 +1853,10 @@ components:
         is_online:
           type: boolean
       required:
+        - login
         - first_name
         - last_name
-        - company
-      x-examples:
-        Example 1:
-          id: -9223372036854776000
-          login: string
-          first_name: Steve
-          middle_name: Paul
-          last_name: Jobs
-          company:
-            id: 0
-            name: string
-          img_url: 'https://picsum.photos/200'
-          is_online: true
+        - companies
     Users:
       type: array
       items:
@@ -1474,6 +1875,11 @@ components:
             is_online: true
     Company:
       type: object
+      x-examples:
+        Example 2:
+          id: 1
+          name: string
+          owner_id: 0
       properties:
         id:
           format: int64
@@ -1481,12 +1887,10 @@ components:
           minimum: 1
         name:
           type: string
+        owner_id:
+          type: integer
       required:
         - name
-      x-examples:
-        Example 1:
-          id: 1
-          name: Apple
     Chat:
       description: Краткая информация о чате для заполнения
       type: object
@@ -1832,7 +2236,7 @@ components:
           minimum: 1
         payload:
           type: string
-          format: json-pointer
+          format: string
           example: '{}'
       required:
         - created_at
@@ -1949,6 +2353,77 @@ components:
       properties:
         success:
           type: boolean
+    CompanyInstance:
+      title: CompanyInstance
+      x-stoplight:
+        id: gswf4vqr4yqux
+      type: object
+      x-examples:
+        Example 1:
+          id: 1
+          '': string
+          owner:
+            id: 0
+            login: string
+            first_name: Steve
+            middle_name: Paul
+            last_name: Jobs
+            company:
+              id: 1
+              name: string
+              owner_id: 0
+            img_url: 'https://picsum.photos/200'
+            is_online: true
+      properties:
+        id:
+          type: integer
+          minimum: 1
+        name:
+          type: string
+          example: Apple
+        owner:
+          $ref: '#/components/schemas/UserInstance'
+        users:
+          $ref: '#/components/schemas/Users'
+      required:
+        - id
+        - name
+        - owner
+    User:
+      title: User
+      x-stoplight:
+        id: r3mmj42i966rl
+      type: object
+      x-examples:
+        Example 1:
+          login: steve
+          first_name: Steve
+          middle_name: Paul
+          last_name: Jobs
+          img_url: null
+          compaines:
+            - 1
+      properties:
+        login:
+          type: string
+          example: steve
+        first_name:
+          type: string
+          example: Steve
+        middle_name:
+          type: string
+          example: Paul
+        last_name:
+          type: string
+          example: Jobs
+        img_url:
+          type: string
+          default: ''
+        compaines:
+          type: array
+          items:
+            type: integer
+            minimum: 1
   securitySchemes:
     AccessToken:
       type: apiKey

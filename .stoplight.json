@@ -1,0 +1,23 @@
+{
+  "exclude": [],
+  "formats": {
+    "openapi": {
+      "rootDir": "postman/schemas",
+      "include": [
+        "**"
+      ]
+    },
+    "json_schema": {
+      "rootDir": "postman",
+      "include": [
+        "**"
+      ]
+    },
+    "markdown": {
+      "rootDir": "postman"
+    },
+    "image": {
+      "rootDir": "postman"
+    }
+  }
+}
