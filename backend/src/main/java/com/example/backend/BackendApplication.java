@@ -18,6 +18,9 @@ public class BackendApplication {
     @Bean
     CommandLineRunner run(UserService userService, CompanyService companyService, UserCompanyService userCompanyService, ChatService chatService, MemberService memberService)
     {
+        Pusher pusher = new Pusher("1435118", "1ef11d89fbc36ea5e77b", "948cf29e1394fdabdcdc");
+        pusher.setCluster("eu");
+
         User anton = new User("anton", "1", ApplicationRole.USER);
         User mikhail = new User("mikhail", "1", ApplicationRole.ADMIN);
         return (args) -> {

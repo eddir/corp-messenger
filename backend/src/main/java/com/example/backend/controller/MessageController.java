@@ -64,6 +64,14 @@ public class MessageController
         message.setText(messageRequestDto.getText());
         message.setSender(userSender);
         messageService.createMessage(message);
+
+        chat.getMembers().forEach(member -> {
+            if(!member.getUser().equals(userSender))
+            {
+                pusher.trigger("messages-" + member.id, "message_added", Collections.singletonMap("message", "Hello World"));
+            }
+        });
+
         return ResponseEntity.ok().body(new MessageResponseDto(message));
     }
 }
