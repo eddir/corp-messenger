@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions, mapGetters } from 'vuex'
 import Pusher from 'pusher-js'
 import { InfoCircleOutlined } from '@ant-design/icons-vue'
 
@@ -34,30 +34,36 @@ export default {
     },
 
     methods: {
-        init() {
-            this.subscribe()
-        },
+        ...mapActions('AppStore', [
+            'setBlockPreloader'
+        ]),
+        
+        ...mapActions('ChatsStore', [
+            'getMessages'
+        ]),
+
 
         subscribe() {
             if (this.user) {
-                const pusher = new Pusher('4ba335c841e4fa4ead86', { cluster: 'eu' })
+                const pusher = new Pusher('1ef11d89fbc36ea5e77b', { cluster: 'eu' })
             
+                pusher.unsubscribe('messages-' + this.user.id)
                 pusher.subscribe('messages-' + this.user.id)
+                
                 pusher.bind('message_added', data => {
-                    console.log(data)
+                    if (data) {
+                        this.setBlockPreloader(true)
+                        this.getMessages().then(() => this.setBlockPreloader(false))
+                    }
                 })
             }
         }
     },
 
-    mounted() {
-        this.init()
-    },
-
     watch: {
         user(val) {
             if (val) {
-                this.subscribe
+                this.subscribe()
             }
         }
     },

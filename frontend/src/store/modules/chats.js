@@ -70,7 +70,7 @@ export default {
 
 	actions: {
         send: async ({ dispatch, commit }, payload) => {
-            await api.chats.send(payload)
+            return await api.chats.send(payload)
                 .then(() => {
                     dispatch('getMessages')
                 })
@@ -78,7 +78,7 @@ export default {
         },
 
         getMessages: async ({ commit, state }) => {
-            await api.chats.getMessages(state.selectedChat.id)
+            return await api.chats.getMessages(state.selectedChat.id)
                 .then(({ data }) => {
                     commit(mutation.SET_MESSAGES, data.reverse())
                 })
