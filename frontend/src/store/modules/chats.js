@@ -72,7 +72,7 @@ export default {
         getMessages: async ({ commit, state }) => {
             await api.chats.getMessages(state.selectedChat.id)
                 .then(({ data }) => {
-                    commit(mutation.SET_MESSAGES, data.messages)
+                    commit(mutation.SET_MESSAGES, data)
                 })
                 .catch((e) => console.error(e))
         },

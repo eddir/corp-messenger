@@ -15,7 +15,8 @@
             <AComment v-for="message in messages" :key="message.id" class="chat-view__messages__message">
                 <template #author>{{ getUsername(message.user_id) }}</template>
                 <template #avatar>
-                    <img :src="getUser(message.user_id).img_url" alt="Автарка пользователя" />
+                    <img v-if="getUser(message.user_id).img_url" :src="getUser(message.user_id).img_url" alt="Автарка пользователя" />
+                    <UserOutlined v-else />
                 </template>
                 <template #content>
                     {{ message.text }}
@@ -44,7 +45,7 @@
 </template>
 
 <script>
-import { TeamOutlined, MoreOutlined, SmileOutlined, PaperClipOutlined, SendOutlined } from '@ant-design/icons-vue'
+import { TeamOutlined, MoreOutlined, SmileOutlined, PaperClipOutlined, SendOutlined, UserOutlined } from '@ant-design/icons-vue'
 import { mapActions, mapGetters } from 'vuex'
 import moment from "moment/moment";
 
@@ -75,8 +76,13 @@ export default {
 
     methods: {
         getUsername(id) {
-            const user = this.getUser(id)
-            return `${user.last_name} ${user.first_name}`
+            const { last_name, first_name, login } = this.getUser(id)
+
+            if (first_name && last_name) {
+                return `${user.last_name} ${user.first_name}`
+            }
+
+            return login
         },
 
         getDate(type, date) {
@@ -86,12 +92,12 @@ export default {
         },
 
         getUser(id) {
-            return this.members.find((x) => x.id + 1 === id)
+            return this.members.find((x) => x.id === id)
         }
     },
 
     components: {
-        InputSearch, TeamOutlined, MoreOutlined, SmileOutlined, PaperClipOutlined, SendOutlined
+        InputSearch, TeamOutlined, MoreOutlined, SmileOutlined, PaperClipOutlined, SendOutlined, UserOutlined
     }
 }
 </script>
@@ -161,6 +167,19 @@ export default {
                 font-size: 14px;
                 color: #000;
                 font-weight: 500;
+            }
+
+            /deep/ .ant-comment-avatar {
+                .anticon {
+                    width: 32px;
+                    height: 32px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    border-radius: 50%;
+                    border: 1px solid #D9D9D9;
+                    color: #D9D9D9;
+                }
             }
         }
 
