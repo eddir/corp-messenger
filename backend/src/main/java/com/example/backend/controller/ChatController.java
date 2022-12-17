@@ -104,10 +104,14 @@ public class ChatController
     }
 
     @GetMapping("/{chatId}/messages")
-    public ResponseEntity<List<MessageResponseDto>> getListOfMessagesIntoChat(@RequestBody IntervalMessagesRequest intervalMessagesRequest)
+    public ResponseEntity<?> getListOfMessagesIntoChat(@RequestBody IntervalMessagesRequest intervalMessagesRequest, @PathVariable Long chatId)
     {
-        Chat chat = chatService.getChatById(intervalMessagesRequest.getChatId());
+        Chat chat = chatService.getChatById(chatId);
+        if(chat == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Не удалось найти данный чат (не существует).");
         Message message = messageService.getMessageById(intervalMessagesRequest.getStartMessageId());
+        if(message == null)
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Не удалось найти стартовое сообщение (не существует).");
         Long count = intervalMessagesRequest.getCount();
         List<Message> listMes = messageService.getMessageByChatByCountAntIntervalDefaultOrd(chat, count, message);
         List<MessageResponseDto> mesResponseList = new LinkedList<>();

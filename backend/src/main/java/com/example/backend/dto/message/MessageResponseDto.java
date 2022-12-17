@@ -39,9 +39,11 @@ public class MessageResponseDto
     public MessageResponseDto(Message message)
     {
         this.id = message.getId();
-        for(Message mes : message.getChildsMessage())
-        {
-            this.messageChildsDto.add(new MessageResponseDto(mes));
+        if(message.getChildsMessage() != null){
+            for(Message mes : message.getChildsMessage())
+            {
+                this.messageChildsDto.add(new MessageResponseDto(mes));
+            }
         }
         this.text = message.getText();
         this.userId = message.getSender().getId();

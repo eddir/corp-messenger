@@ -1,10 +1,7 @@
 package com.example.backend.dto.chat;
 
 import com.example.backend.dto.message.MessageResponseDto;
-import com.example.backend.entities.Chat;
-import com.example.backend.entities.Member;
-import com.example.backend.entities.Message;
-import com.example.backend.entities.User;
+import com.example.backend.entities.*;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -33,6 +30,8 @@ public class PersonalChatResponseDto
 
     protected Boolean isPrivate;
 
+    protected String type;
+
     public PersonalChatResponseDto(Chat chat, Message lastMessage, Member member) {
         this.id = chat.getId();
         this.name = chat.getTitle();
@@ -60,6 +59,7 @@ public class PersonalChatResponseDto
          */
         this.isPrivate = chat.getPrivate();
         this.isPinned = member.getPinned();
+        this.type = chat.getType().name();
     }
 
     public Long getId() {
