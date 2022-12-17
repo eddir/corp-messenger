@@ -2,6 +2,7 @@ package com.example.backend.services;
 
 import com.example.backend.entities.Chat;
 import com.example.backend.entities.Member;
+import com.example.backend.entities.PrimaryKey;
 import com.example.backend.entities.User;
 import com.example.backend.repositories.ChatRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +33,6 @@ public class ChatService
         return chatRepository.findAll();
     }
 
-    //member - как OUT в c#
     public Chat createNewChat(Chat chat, User creator)
     {
         chatRepository.save(chat);
@@ -47,5 +47,32 @@ public class ChatService
         if(result == null)
             return new LinkedList<>();
         return new ArrayList<>(result);
+    }
+
+    public Chat getChatById(Long id)
+    {
+        return chatRepository.getChatById(id);
+    }
+
+    public boolean userHasAdminRightIntoChat(User user, Chat chat)
+    {
+        if(memberService.getMemberByPK(new PrimaryKey(chat.getId(), user.getId())).getAdmin())
+            return true;
+        return false;
+    }
+
+    public boolean userHasOwnerRightIntoChat(User user, Chat chat)
+    {
+        if(memberService.getMemberByPK(new PrimaryKey(chat.getId(), user.getId())).getOwner())
+            return true;
+        return false;
+    }
+
+    public boolean userHasAdminOrOwnerRightsIntoChat(User user, Chat chat)
+    {
+        Member member = memberService.getMemberByPK(new PrimaryKey(chat.getId(), user.getId()));
+        if(member.getAdmin() || member.getOwner())
+            return true;
+        return false;
     }
 }

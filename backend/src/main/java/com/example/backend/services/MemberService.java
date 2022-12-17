@@ -39,4 +39,13 @@ public class MemberService
             throw new PersistenceException("Пользователь не состоит в компании чата!");
         return memberRepository.save(member);
     }
+
+    // TODO: 17.12.2022 Дублирование с getMemberByOK!!!
+    /*
+    public Member existsUserIntoChat(User user, Chat chat)
+    {
+        return memberRepository.findByPrimaryKey(new PrimaryKey(chat.getId(), user.getId()));
+    }
+
+     */
 }

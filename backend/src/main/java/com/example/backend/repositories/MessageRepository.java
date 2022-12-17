@@ -11,6 +11,11 @@ import java.util.List;
 @Repository
 public interface MessageRepository extends JpaRepository<Message, Long>
 {
-    //@Query("select m from Message m where m.chat = :chat order by m.id")
-    //public List<Message> getMessageByChatByCountAntIntervalDefaultOrd(Chat chat, Long count,Message startMessage);
+    @Query(value = "select * from message m join chat c on m.chat_id = c.id WHERE c.id = :chatId AND m.id < :startMessage_id ORDER BY m.id LIMIT :count", nativeQuery = true)
+    public List<Message> getMessageByChatByCountAntIntervalDefaultOrd(Long chatId, Long count,Long startMessage_id);
+
+    @Query(value = "select * from message m join chat c on m.chat_id = c.id WHERE c.id = :chatId AND m.id > :startMessage_id ORDER BY m.id LIMIT :count", nativeQuery = true)
+    public List<Message> getMessageByChatByCountAntIntervalInverseOrd(Long chatId, Long count,Long startMessage_id);
+
+    public Message getMessageById(Long id);
 }
