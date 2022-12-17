@@ -5,16 +5,22 @@
         </div>
         <div class="chats-navbar__sections">
             <ACollapse v-model:activeKey="activeKey">
-                <ACollapsePanel key="1" header="Каналы">
+                <ACollapsePanel key="1" :header="getLabelChannel">
+                    <div v-if="!channelList.length" class="chats-navbar__sections__empty">
+                        Нет созданных каналов
+                    </div>
                     <template #extra>
                         <PlusOutlined @click.native.stop="openModal('editChanelModal')" />
                     </template>
                 </ACollapsePanel>
-                <ACollapsePanel key="2" header="Чаты">
+                <ACollapsePanel key="2" :header="getLabelChat">
                     <template #extra>
                         <PlusOutlined @click.native.stop="openModal('editChatModal')" />
                     </template>
-                    <ChatItem v-for="chat in chatList" :key="chat.id" :chat="chat" @click="select(chat.id)" />
+                    <div v-if="!chatList.length" class="chats-navbar__sections__empty">
+                        Нет созданных чатов
+                    </div>
+                    <ChatItem v-else v-for="chat in chatList" :key="chat.id" :chat="chat" @click="select(chat.id)" />
                 </ACollapsePanel>
             </ACollapse>
         </div>
@@ -34,6 +40,7 @@ export default {
             activeKey: ['1', '2'],
             editChatModal: false,
             editChanelModal: false,
+            channelList: [],
             chatList: []
         }
     },
@@ -41,7 +48,15 @@ export default {
     computed: {
         ...mapGetters('ChatsStore', {
             chats: 'chatsList'
-        })
+        }),
+
+        getLabelChannel() {
+            return `Каналы (${this.channelList.length})`
+        },
+
+        getLabelChat() {
+            return `Чаты (${this.chatList.length})`
+        }
     },
 
     methods: {
