@@ -26,6 +26,13 @@ public class MessageService
         return messageRepo.getMessageByChatByCountAntIntervalInverseOrd(chat.getId(), Math.abs(count),startMessage.getId());
     }
 
+    public List<Message> getMessageByChatByCountAntIntervalDefaultOrd(Chat chat, Long count)
+    {
+        if(count > 0)
+            return messageRepo.getMessageByChatByCountAntIntervalInverseOrd(chat.getId(), count);
+        return messageRepo.getMessageByChatByCountAntIntervalDefaultOrd(chat.getId(), Math.abs(count));
+    }
+
     public Message getMessageById(Long id)
     {
         return messageRepo.getMessageById(id);
