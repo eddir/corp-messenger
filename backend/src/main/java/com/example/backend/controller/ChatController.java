@@ -96,7 +96,7 @@ public class ChatController {
         //return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/{chatId}/messages")
+    @PostMapping("/{chatId}/messages")
     public ResponseEntity<?> getListOfMessagesIntoChat(@RequestBody IntervalMessagesRequest intervalMessagesRequest, @PathVariable Long chatId) {
         Chat chat = chatService.getChatById(chatId);
         if (chat == null)

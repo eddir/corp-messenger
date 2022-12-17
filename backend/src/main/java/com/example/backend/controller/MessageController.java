@@ -44,7 +44,7 @@ public class MessageController
         this.pusher = pusher;
     }
 
-    @PostMapping("/{chatId}/messages")
+    @PostMapping("/{chatId}/messages/send")
     public ResponseEntity<?> createMessage(@RequestBody MessageRequestDto messageRequestDto)
     {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
