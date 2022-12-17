@@ -97,8 +97,12 @@ export default {
                 .catch((e) => console.error(e))
         },
 
-        saveChat: ({ commit }, payload) => {
-            commit(mutation.SAVE_CHAT, payload)
+        saveChat: async ({ dispatch, commit }, payload) => {
+            await api.chats.createChat(payload)
+                .then(() => {
+                    dispatch('getChats')
+                })
+                .catch((e) => console.error(e))
         }, 
 
         deleteChat: ({ commit }, payload) => {

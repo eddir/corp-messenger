@@ -13,8 +13,9 @@
 </template>
 
 <script>
-import { InfoCircleOutlined } from '@ant-design/icons-vue'
 import { mapGetters } from 'vuex'
+import Pusher from 'pusher-js'
+import { InfoCircleOutlined } from '@ant-design/icons-vue'
 
 import { ChatView } from '@/components'
 
@@ -26,7 +27,39 @@ export default {
     computed: {
         ...mapGetters('ChatsStore', [
             'selectedChat'
+        ]),
+        ...mapGetters('AppStore', [
+            'user'
         ])
+    },
+
+    methods: {
+        init() {
+            this.subscribe()
+        },
+
+        subscribe() {
+            if (this.user) {
+                const pusher = new Pusher('4ba335c841e4fa4ead86', { cluster: 'eu' })
+            
+                pusher.subscribe('messages-' + this.user.id)
+                pusher.bind('message_added', data => {
+                    console.log(data)
+                })
+            }
+        }
+    },
+
+    mounted() {
+        this.init()
+    },
+
+    watch: {
+        user(val) {
+            if (val) {
+                this.subscribe
+            }
+        }
     },
 
     components: {

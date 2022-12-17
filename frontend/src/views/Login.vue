@@ -1,6 +1,9 @@
 <template>
     <div class="auth-sider">
-        <UserOutlined class="auth-sider__icon" />
+        <div class="auth-sider__appname">
+            <p>YAM</p>
+            <p>yet another messenger</p>
+        </div>
         <ADivider class="auth-sider__title">Авторизация</ADivider>
         <AForm class="auth-sider__form" :v-model="formState" layout="vertical">
             <AFormItem class="auth-sider__form__item" label="Логин" name="login">
@@ -61,6 +64,35 @@ export default {
 </script>
 
 <style lang="less" scoped>
+    .auth-sider {
+        position: relative;
+
+        &__appname {
+            position: absolute;
+            top: -50%;
+            left: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+
+            p {
+                margin: 0;
+                font-size: 50px;
+                font-weight: bold;
+                color: #fff;
+                letter-spacing: 5px;
+                text-align: center;
+
+                &:last-child {
+                    font-size: 16px;
+                    font-weight: normal;
+                    letter-spacing: 1px;
+                }
+            }
+        }
+    }
     .auth-sider__form {
         &__item /deep/ label {
             font-size: 16px;

@@ -3,24 +3,29 @@ export default api => {
         getAll() {
             return api.instance.request({
                 method: 'get',
-                baseURL: 'https://stoplight.io/mocks/corp-messenger/corp-messenger/104831872/',
+                url: 'chats'
+            })
+        },
+        
+        createChat(data) {
+            return api.instance.request({
+                method: 'post',
                 url: 'chats',
+                data
             })
         },
 
         find(id) {
             return api.instance.request({
                 method: 'get',
-                baseURL: 'https://stoplight.io/mocks/corp-messenger/corp-messenger/104831872/',
-                url: `chat/${id}`,
+                url: `chats/${id}`
             })
         },
 
         getMessages(id) {
             return api.instance.request({
                 method: 'get',
-                baseURL: 'https://stoplight.io/mocks/corp-messenger/corp-messenger/104831872/',
-                url: `chat/${id}/messages`,
+                url: `chats/${id}/messages`
             })
         }
     }

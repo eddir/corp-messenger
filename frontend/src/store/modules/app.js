@@ -30,7 +30,7 @@ export default {
         },
 
         getTokens: state => {
-            return [ state.access_token, state.refresh_token ]
+            return { access_token: state.access_token, refresh_token: state.refresh_token }
         },
 
         preloader: state => {
