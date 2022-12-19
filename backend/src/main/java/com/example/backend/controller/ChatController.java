@@ -12,6 +12,7 @@ import com.example.backend.services.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,6 +118,7 @@ public class ChatController {
         return ResponseEntity.ok().body(mesResponseList);
     }
 
+    // TODO: 18.12.2022 исправить опечатку в имени метода
     @PostMapping("/{chatId}/member/{userId}")
     public ResponseEntity<?> invateNewMemberIntoChat(@PathVariable Long chatId, @PathVariable Long userId) {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -125,6 +127,7 @@ public class ChatController {
         if (chat == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Чат с id = \'" + chatId + "\' не найден.");
         Member member = memberService.getMemberByPK(new PrimaryKey(chatId, userId));
+        System.out.println(member == null);
         if (member != null)
             ResponseEntity.status(400).body("Пользователь уже состоит в чате.");
         User invitedUser = userService.findUserById(userId);
@@ -144,5 +147,28 @@ public class ChatController {
         if(chat == null)
             return ResponseEntity.notFound().build();
         return ResponseEntity.ok().body(new ChatResponseDto(chat));
+    }
+
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN','SUPER_ADMIN')")
+    @PostMapping("/role")
+    public ResponseEntity<?> getRoleIntoChat(@RequestBody Map<String,String> params)
+    {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        User user = userService.findUserByLogin(username);
+
+        if(!params.containsKey("chat_id"))
+            return ResponseEntity.badRequest().body("Not found \'user_id\' parametr!");
+        Chat chat = chatService.getChatById(Long.valueOf(params.get("chat_id")));
+        if(chat == null)
+            return ResponseEntity.notFound().build();
+        Member member = memberService.getMemberByPK(new PrimaryKey(chat.getId(), user.getId()));
+        if(member == null)
+            return ResponseEntity.status(403).body("Вы не состоите в данном чате!");
+        String role = "user";
+        if(member.getOwner())
+            role = "owner";
+        else if(member.getAdmin())
+            role = "admin";
+        return ResponseEntity.ok().body("\"role\" : " + "\"" + role);
     }
 }
