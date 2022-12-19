@@ -1,11 +1,11 @@
-package com.example.backend.dto.company;
+package com.example.backend.dto.chat;
 
 import com.example.backend.entities.Member;
 import com.example.backend.entities.Profile;
 import com.example.backend.entities.User;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class UserSimpleResponseDto
+public class UserIntoChatResponseDTO
 {
     Long id;
     protected String login;
@@ -17,8 +17,10 @@ public class UserSimpleResponseDto
     protected String imgUrl;
 
     protected boolean isOnline;
+    protected String role;
 
-    public UserSimpleResponseDto(User user) {
+    public UserIntoChatResponseDTO(Member member) {
+        User user = member.getUser();
         this.id = user.getId();
         this.login = user.getLogin();
         Profile profile = user.getProfile();
@@ -29,6 +31,13 @@ public class UserSimpleResponseDto
         this.last_name = profile.getLastName();
         this.imgUrl = user.getImgUrl();
         this.isOnline = false;
+
+        if(member.getOwner())
+            role = "owner";
+        else if(member.getAdmin())
+            role = "admin";
+        else
+            role = "user";
     }
 
     public Long getId() {
@@ -86,4 +95,5 @@ public class UserSimpleResponseDto
     public void setOnline(boolean online) {
         isOnline = online;
     }
+
 }

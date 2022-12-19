@@ -21,7 +21,7 @@ public class ChatResponseDto
     protected String imgUrl;
     protected String type;
 
-    protected List<UserSimpleResponseDto> simpleResponseDto = new ArrayList<UserSimpleResponseDto>();
+    protected List<UserIntoChatResponseDTO> simpleResponseDto = new ArrayList<UserIntoChatResponseDTO>();
 
     public ChatResponseDto(Chat chat) {
         this.id = chat.getId();
@@ -33,7 +33,7 @@ public class ChatResponseDto
 
         for(Member member : chat.getMembers())
         {
-            simpleResponseDto.add(new UserSimpleResponseDto(member.getUser()));
+            simpleResponseDto.add(new UserIntoChatResponseDTO(member));
         }
     }
 
@@ -89,11 +89,11 @@ public class ChatResponseDto
     }
 
     @JsonProperty("employees")
-    public List<UserSimpleResponseDto> getSimpleResponseDto() {
+    public List<UserIntoChatResponseDTO> getSimpleResponseDto() {
         return simpleResponseDto;
     }
 
-    public void setSimpleResponseDto(List<UserSimpleResponseDto> simpleResponseDto) {
+    public void setSimpleResponseDto(List<UserIntoChatResponseDTO> simpleResponseDto) {
         this.simpleResponseDto = simpleResponseDto;
     }
 }
